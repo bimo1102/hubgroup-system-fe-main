@@ -1,0 +1,77 @@
+.b-panel.b-calendarpanel {
+    // Minimum valid values for these settings in CalendarPanel
+    --min-row-height   : 75;
+    --min-column-width : 75;
+    @include user-select-none();
+
+    &.b-outer {
+        display : inline-flex;
+    }
+
+    .b-week-number-cell {
+        display : none;
+    }
+
+    &.b-show-week-column {
+        .b-week-number-cell {
+            display        : flex;
+            flex-direction : column;
+        }
+    }
+
+    // The week days header
+    .b-calendar-weekdays {
+
+        // Day name cells
+        .b-calendar-day-header {
+            // `px` is required for IE11
+            flex       : 1 0 0px;
+            text-align : center;
+        }
+    }
+
+    .b-calendarpanel-content {
+        // MUST override flex-flow wrap from Panel
+        flex-flow   : column nowrap;
+
+        align-items : stretch;
+
+        .b-calendar-row {
+            display : flex;
+
+            &.b-calendar-week {
+                .b-calendar-cell {
+                    text-align      : center;
+                    display         : flex;
+                    flex-direction  : column;
+                    justify-content : center;
+                }
+            }
+        }
+
+        .b-calendar-days {
+            flex            : 1 1 auto;
+            display         : flex;
+            justify-content : space-around
+        }
+
+        .b-weeks-container {
+            display        : flex;
+            flex-direction : column;
+
+            &.b-min-columnwidth.b-horizontal-overflow {
+                align-items : flex-start;
+
+                .b-calendar-row {
+                    overflow : hidden;
+                }
+            }
+        }
+
+        &.b-hide-nonworking-days {
+            .b-calendar-day-header.b-nonworking-day, .b-calendar-cell.b-nonworking-day {
+                display : none;
+            }
+        }
+    }
+}

@@ -1,0 +1,90 @@
+.b-card-container {
+    display     : flex;
+    flex-flow   : row nowrap;
+    align-items : stretch;
+    overflow    : hidden;
+    padding     : 0;
+    position    : relative;
+
+    // Even if the app wants overflow to be visible, just during animated card change, because we have two
+    // visible at once to perform the visual trick, it has to be overflow : hidden
+    &.b-animating {
+        overflow : hidden;
+    }
+
+    > .b-card-item {
+        flex        : 1 0 100%;
+        align-items : stretch;
+        max-width   : 100%;
+    }
+
+    // Hide headers of immediate, inline child Panels if required
+    &.b-hide-child-headers {
+        > .b-panel:not(.b-positioned) > .b-panel-header {
+            display : none;
+        }
+    }
+}
+
+@keyframes b-card-slide-in-left {
+    0% {
+        transform : translateX(-100%);
+    }
+    100% {
+        transform : translateX(0);
+    }
+}
+
+@keyframes b-card-slide-out-right {
+    0% {
+        transform : translateX(-100%);
+    }
+    100% {
+        transform : translateX(0);
+    }
+}
+
+@keyframes b-card-slide-in-right {
+    0% {
+        transform : translateX(0);
+    }
+    100% {
+        transform : translateX(-100%);
+    }
+}
+
+@keyframes b-card-slide-out-left {
+    0% {
+        transform : translateX(0);
+    }
+    100% {
+        transform : translateX(-100%);
+    }
+}
+
+.b-slide-in-left {
+    animation : b-card-slide-in-left 0.3s ease 0s 1;
+}
+
+// In both selectors for cards sliding out below, the outgoing card becomes
+// non responsive to pointer events. This is because during slide out, the
+// card is logically hidden even though it is physically visible for the
+// animation duration. It should not be interactive during this short time.
+
+.b-slide-out-right {
+    pointer-events : none;
+    // Offset to clear the margin in a way that will not cause a ResizeObserver to fire
+    left           : $card-margin;
+    animation      : b-card-slide-out-right 0.3s ease 0s 1;
+}
+
+.b-slide-in-right {
+    animation : b-card-slide-in-right 0.3s ease 0s 1;
+}
+
+.b-slide-out-left {
+    pointer-events : none;
+    margin-left    : -$card-margin;
+    margin-right   : $card-margin;
+    animation      : b-card-slide-out-left 0.3s ease 0s 1;
+}

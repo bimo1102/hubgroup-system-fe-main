@@ -1,0 +1,37 @@
+@import '../../../variables.scss';
+
+.b-scale {
+    //background-color : #fff;
+    contain : strict;
+
+    svg {
+        * {
+            vector-effect : non-scaling-stroke;
+        }
+    }
+
+    &.b-scale-vertical {
+        text.b-scale-tick-label {
+            transform : translateY(0.3em);
+        }
+
+        &.b-align-right {
+            text-anchor : end;
+        }
+    }
+
+    &.b-scale-horizontal {
+        text.b-scale-tick-label {
+            text-anchor : middle;
+        }
+    }
+
+    path {
+        stroke         : $scale-line-color;
+        pointer-events : none;
+    }
+
+    text {
+        fill : $scale-label-color;
+    }
+}

@@ -1,0 +1,15 @@
+@if (isShow) {
+    <button [disabled]="isLoading || disabled" type="button" [title]="title || text"
+            [ngClass]="{'btn-icon' : buttonIcon}"
+            [class]="buttonClassBase + ' ' + buttonClassType + ' btn-sm ' + buttonClass"
+            (click)="onClick()">
+        @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        } @else {
+            <app-news-keenicon [name]="'file-up'" [class]="'fs-3'"></app-news-keenicon>
+        }
+        @if (!buttonIcon) {
+            {{ text }}
+        }
+    </button>
+}

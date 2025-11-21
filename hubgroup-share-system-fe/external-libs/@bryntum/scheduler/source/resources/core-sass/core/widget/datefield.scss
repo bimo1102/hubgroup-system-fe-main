@@ -1,0 +1,15 @@
+@import '../../variables.scss';
+
+.b-datefield {
+    &.b-open {
+        .b-fieldtrigger {
+            color : $main-color !important;
+        }
+    }
+
+    &.b-no-steppers {
+        .b-step-trigger {
+            display : none;
+        }
+    }
+}

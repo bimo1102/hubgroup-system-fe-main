@@ -1,0 +1,404 @@
+@import '../fontawesome/scss/variables';
+@import '../fontawesome/scss/mixins';
+@import '../fontawesome/scss/core';
+@import '../fontawesome/scss/larger';
+@import '../fontawesome/scss/fixed-width';
+@import '../fontawesome/scss/list';
+@import '../fontawesome/scss/bordered-pulled';
+@import '../fontawesome/scss/animated';
+@import '../fontawesome/scss/rotated-flipped';
+@import '../fontawesome/scss/stacked';
+@import '../fontawesome/scss/icons';
+@import '../fontawesome/scss/screen-reader';
+@import 'variables.scss';
+
+// some demos use fa icons
+.b-fa {
+    font-family            : inherit;
+    line-height            : inherit;
+    -webkit-font-smoothing : inherit;
+}
+
+.b-fa:before {
+    font-family : $icon-font;
+    font-weight : $icon-font-weight;
+}
+
+// our own icon class, to allow customization by client
+.b-icon:before {
+    @include fa-icon();
+    font-family    : $icon-font;
+    font-weight    : $icon-font-weight;
+    vertical-align : 0;
+}
+
+.b-fw-icon:before {
+    @include fa-icon();
+    @extend .b-fa-fw;
+    font-family    : $icon-font;
+    font-weight    : $icon-font-weight;
+    vertical-align : 0;
+}
+
+.b-content-icon {
+    @include fa-icon();
+    font-family    : $icon-font;
+    font-weight    : $icon-font-weight;
+    vertical-align : 0;
+}
+
+//region Actions
+
+.b-icon-add:before {
+    content : "#{ $fa-var-plus }";
+}
+
+.b-icon-remove:before {
+    content : "#{ $fa-var-times }";
+}
+
+.b-icon-clear:before {
+    content : "#{ $fa-var-times }";
+}
+
+.b-icon-close:before {
+    content : "#{ $fa-var-times }";
+}
+
+.b-icon-search:before {
+    content : "#{ $fa-var-search }";
+}
+
+.b-icon-search-plus:before {
+    content : "#{ $fa-var-search-plus }";
+}
+
+.b-icon-search-minus:before {
+    content : "#{ $fa-var-search-minus }";
+}
+
+.b-icon-hide:before {
+    content : "#{ $fa-var-times-circle }";
+}
+
+.b-icon-trash:before {
+    content : "#{ $fa-var-trash }";
+}
+
+.b-icon-edit:before {
+    content : "#{ $fa-var-pencil-alt }";
+}
+
+.b-icon-copy:before {
+    content : "#{ $fa-var-copy }";
+}
+
+.b-icon-cut:before {
+    content : "#{ $fa-var-cut }";
+}
+
+.b-icon-paste:before {
+    content : "#{ $fa-var-paste }";
+}
+
+.b-icon-expand-row:before {
+    content : "#{ $fa-var-angle-down }";
+}
+
+.b-icon-expand-column:before {
+    content : "#{ $fa-var-angle-right }";
+}
+
+.b-icon-expand {
+    content : "#{ $fa-var-expand }";
+}
+
+.b-icon-first:before {
+    content : "#{ $fa-var-angle-double-left }";
+}
+
+.b-icon-previous:before {
+    content : "#{ $fa-var-angle-left }";
+}
+
+.b-icon-next:before {
+    content : "#{ $fa-var-angle-right }";
+}
+
+.b-icon-last:before {
+    content : "#{ $fa-var-angle-double-right }";
+}
+
+.b-icon-reload:before {
+    content : "#{ $fa-var-redo }";
+}
+
+.b-icon-undo:before {
+    content: "#{ $fa-var-undo }";
+}
+
+.b-icon-redo:before {
+    content: "#{ $fa-var-redo }";
+}
+
+//endregion
+
+//region Docs
+
+.b-icon-code:before {
+    content : "#{ $fa-var-code }";
+}
+
+.b-icon-clipboard:before {
+    content : "#{ $fa-var-clipboard }";
+}
+
+//endregion
+
+//region Filter
+
+.b-icon-filter:before,
+.b-icon-filter-equal:before {
+    content : "#{ $fa-var-filter }";
+}
+
+.b-icon-filter-less:before,
+.b-icon-filter-before:before {
+    content : "#{ $fa-var-chevron-left }";
+}
+
+.b-icon-filter-more:before,
+.b-icon-filter-after:before {
+    content : "#{ $fa-var-chevron-right }";
+}
+
+//endregion
+
+//region Checkboxes
+
+.b-icon-check:before {
+    content : "#{ $fa-var-check }";
+}
+
+.b-icon-checked:before {
+    content : "#{ $fa-var-check-square }";
+}
+
+.b-icon-unchecked:before {
+    content : "#{ $fa-var-square }";
+}
+
+//endregion
+
+//region Date & Time
+
+.b-icon-calendar:before {
+    content : "#{ $fa-var-calendar }";
+}
+
+.b-icon-clock:before {
+    content : "#{ $fa-var-clock }";
+}
+
+.b-icon-recurring:before {
+    content : "#{ $fa-var-sync }";
+}
+
+.b-icon-duration:before {
+    content : "#{ $fa-var-hourglass }";
+}
+
+.b-icon-milestone:before {
+    content   : "#{ $fa-var-square }";
+    transform : rotate(45deg);
+    position  : relative;
+    top       : .1em;
+}
+
+//endregion
+
+//region Others
+
+.b-icon-user:before {
+    content : "#{ $fa-var-user }";
+}
+
+.b-icon-menu:before {
+    content : "#{ $fa-var-bars }";
+}
+
+.b-icon-menu-horizontal:before {
+    content : "#{ $fa-var-ellipsis-h }";
+}
+
+.b-icon-menu-vertical:before {
+    content : "#{ $fa-var-ellipsis-v }";
+}
+
+.b-icon-info:before {
+    content : "#{ $fa-var-info }";
+}
+
+.b-icon-sub-menu:before {
+    content : "#{ $fa-var-chevron-right }";
+}
+
+.b-icon-star:before {
+    content : "#{ $fa-var-star }";
+}
+
+.b-icon-warning:before {
+    content : "#{ $fa-var-exclamation-triangle }";
+}
+
+.b-icon-columns:before {
+    content : "#{ $fa-var-columns }";
+}
+
+.b-icon-picker:before {
+    content : "#{ $fa-var-caret-down }";
+    transition : transform .2s;
+}
+
+.b-icon-picker-rotated:before {
+    content : "#{ $fa-var-caret-down }";
+    transform  : rotate(180deg);
+    transition : transform .2s;
+}
+
+.b-icon-resize-horizontal:before {
+    content : "#{ $fa-var-arrows-alt-h }";
+}
+
+.b-icon-fullscreen:before {
+    content : "#{ $fa-var-arrows-alt }";
+}
+
+.b-icon-cog:before {
+    content : "#{ $fa-var-cog }";
+}
+
+.b-icon-file-download:before {
+    content : "#{ $fa-var-file-download }";
+}
+
+.b-icon-sync:before {
+    content : "#{ $fa-var-sync-alt }";
+}
+
+.b-icon-bad-mood-emoji:before {
+    content : "#{ $fa-var-frown }";
+}
+
+.b-icon-circle:before {
+    content : "#{ $fa-var-circle }";
+}
+
+.b-icon-square:before {
+    content : "#{ $fa-var-square }";
+}
+
+//endregion
+
+//region Arrows
+
+.b-icon-up:before {
+    content : "#{ $fa-var-arrow-up }";
+}
+
+.b-icon-down:before {
+    content : "#{ $fa-var-arrow-down }";
+}
+
+.b-icon-left:before {
+    content : "#{ $fa-var-arrow-left }";
+}
+
+.b-icon-right:before {
+    content : "#{ $fa-var-arrow-right }";
+}
+
+.b-icon-angle-left:before {
+    content : "#{ $fa-var-angle-left }";
+}
+
+.b-icon-angle-right:before {
+    content : "#{ $fa-var-angle-right }";
+}
+
+.b-icon-prev:before {
+    content : "#{ $fa-var-chevron-left }";
+}
+
+.b-icon-next:before {
+    content : "#{ $fa-var-chevron-right }";
+}
+
+.b-icon-move-left-right:before {
+    content : "#{ $fa-var-arrows-alt-h }";
+}
+
+.b-icon-move-up-down:before {
+    content : "#{ $fa-var-arrows-alt-v }";
+}
+
+//endregion
+
+//region Live clock
+
+.b-icon-clock-live {
+    background-color : $field-trigger-color;
+    border-radius    : 50%;
+    width            : 1em;
+    height           : 1em;
+    position         : relative;
+    animation-delay  : 0s;
+
+    &:before,
+    &:after {
+        position      : absolute;
+        display       : block;
+        font-size     : 1em !important;
+        content       : "";
+        width         : .10em !important;
+        left          : .44em; /* half width of clock - half width of hand */
+        background    : #fff;
+        border-radius : .5em;
+    }
+
+    &:before {
+        top                  : .15em;
+        // need !important since i:before has fixed height when used in fields etc. need to override it
+        height               : .4em !important; /* half the width/height of the clock */
+        transform-origin     : .05em .35em;
+        animation            : rotate 6s infinite linear;
+        animation-play-state : paused;
+        animation-delay      : inherit;
+    }
+
+    &:after {
+        top                  : .22em;
+        height               : .33em; /* top + height for little hand must = top + height for big hand */
+        transform-origin     : .05em .3em;
+        animation            : rotate 72s infinite linear; /* time should be big-hand time * 12 */
+        animation-play-state : paused;
+        animation-delay      : inherit;
+    }
+}
+
+/* Animations */
+@keyframes rotate {
+    0% {
+        transform : rotate(0deg);
+    }
+    100% {
+        transform : rotate(360deg);
+    }
+}
+
+//endregion
+
+.b-icon-spinner:before {
+    content   : "#{ $fa-var-spinner }";
+    animation : rotate 2s infinite linear;
+}

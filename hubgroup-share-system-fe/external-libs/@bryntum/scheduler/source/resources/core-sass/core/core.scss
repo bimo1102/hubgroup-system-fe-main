@@ -1,0 +1,196 @@
+@import '../variables.scss';
+@import '../functions.scss';
+
+.b-noselect {
+    @include user-select-none();
+}
+
+.b-released,
+.b-hide-display {
+    display : none !important;
+}
+
+.b-hide-visibility {
+    visibility : hidden !important;
+}
+
+.b-hide-offscreen {
+    visibility : hidden !important;
+    position   : absolute !important;
+    top        : -10000em;
+    left       : -10000em;
+}
+
+// An element, which, when the owner has the class b-show-yscroll-padding added to it
+// emulates a y scroller without showing scrolling furniture.
+// By default these are hidden and only shown inside widgets which show a visible scrollbar.
+.b-yscroll-pad {
+    display : none;
+}
+
+.b-visible-scrollbar {
+    // Only show a yscroll pad element when on a scrollbar showing platform
+    // and the b-show-yscroll-padding class is added to the containing element.
+    .b-show-yscroll-padding > .b-yscroll-pad {
+        display     : block;
+
+        // Look like a scrollbar
+        border-left : 1px solid $scrollbar-border-color;
+
+        // This gives it the correct size.
+        // visibility:hidden is needed for IE which always displays
+        // scroller furniture even if there is no overflow.
+        // Left margin makes it 1 narrower so that outer can display its left margin.
+        .b-yscroll-pad-sizer {
+            overflow-x  : hidden;
+            overflow-y  : scroll;
+            visibility  : hidden;
+            margin-left : -1px;
+            height      : 0;
+        }
+    }
+}
+
+// Used by DomHelper.highlight
+.b-fx-highlight {
+    z-index            : 9999;
+    animation-name     : b-fx-highlight-animation;
+    animation-duration : 1s;
+    animation          : b-fx-highlight-animation 1s ease 0s 1;
+}
+
+@keyframes b-fx-highlight-animation {
+    0% {
+        box-shadow : none;
+    }
+    50% {
+        box-shadow : 0 0 10px 5px rgba(253, 126, 20, .5);
+    }
+    100% {
+        box-shadow : none;
+    }
+}
+
+/**
+ * DomHelper size monitoring polyfill for when ResizeObserver not available
+ * now only necessary on IE.
+ */
+.b-no-resizeobserver.b-resize-monitored {
+    position : relative;
+
+    .b-resize-monitors {
+        position   : absolute;
+        left       : 0;
+        top        : 0;
+        width      : 100%;
+        height     : 100%;
+        visibility : hidden;
+        overflow   : hidden;
+
+        > * {
+            width    : 100%;
+            height   : 100%;
+            overflow : hidden;
+        }
+
+        > .b-resize-monitor-expand:after {
+            content : '';
+            display : block;
+            width   : 100000px;
+            height  : 100000px;
+        }
+
+        > .b-resize-monitor-shrink:after {
+            content    : '';
+            display    : block;
+            width      : 200%;
+            height     : 200%;
+            min-width  : 1px;
+            min-height : 1px;
+        }
+    }
+}
+
+// This is the element which lifts floating Widgets above the document.
+// Within this, they rely on DOM order for visual stacking.
+// A "to top" operation makes the Widget's element the last child in
+// its owning .b-float-root.
+.b-float-root {
+    position        : fixed;
+    top             : 0;
+    left            : 0;
+    right           : 0;
+    bottom          : 0;
+    pointer-events  : none;
+
+    // Safari occasionally selects the float root when doing row reorder on iPhone
+    &.b-safari {
+        @include user-select-none();
+    }
+
+    // What we want is that overflow:clip overrides any previous values *where supported*
+    // The issue is that overflow:hidden *may* still scroll, and starts a new formatting
+    // context. overflow : clip does not scroll at all.
+    // https://app.assembla.com/spaces/bryntum/tickets/5503 which is patched in GlobalEvents
+    // for browsers which do not yet support this.
+    overflow        : hidden;
+    overflow        : -moz-hidden-unscrollable;
+    overflow        : clip;
+    z-index         : $float-root-z-index;
+    contain         : strict;
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+
+    > .b-floating {
+        position       : absolute;
+        contain        : layout style;
+
+        .b-firefox & {
+            // `contain : style;` is not supported by Firefox
+            contain : layout;
+        }
+
+        pointer-events : all;
+        transition     : opacity 0.2s;
+        box-shadow     : $float-box-shadow;
+        top            : 0; // gets strange pos in safari otherwise
+        left           : 0; // gets strange pos in safari otherwise
+
+        // In Safari & IE11 active buttons in button groups overlaps floating pickers unless this is set,
+        // probably different z-index stacking rules
+        z-index        : $float-root-z-index + 1;
+        // Opacity of floating Widgets is animated to 1 upon show.
+        &.b-hidden {
+            opacity : 0;
+        }
+
+        // For Field dropdowns, it's visually desirable that the
+        // shadow must not shade the field it's aligned to, so flip
+        // the shadow orientation when aligned above.
+        // Only when flush, not when there's an anchor separating the widget boundaries.
+        &.b-aligned-above:not(.b-anchored) {
+            box-shadow : $aligned-above-float-box-shadow;
+        }
+    }
+}
+
+// This class is added to a child el of some element that wants to detect when it is drawn to the screen (i.e., it
+// occupies visible screen pixels). It uses a fake, super short animation and listens for the animationend event.
+// This technique works in IE11, Edge and all modern browsers.
+.b-drawable-el {
+    animation-duration : 0.001ms;
+    animation-name     : b-drawable-anim;
+    height             : 0 !important;
+    width              : 0 !important;
+    visibility         : hidden;
+}
+
+@keyframes b-drawable-anim {
+    from {
+        opacity : 1
+    }
+    to {
+        opacity : 1
+    }
+}

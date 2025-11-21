@@ -1,0 +1,209 @@
+@import '../../variables.scss';
+
+.b-datepicker {
+    &:focus {
+        outline : 0;
+    }
+
+    .b-datepicker-title {
+        font-weight : bold;
+    }
+
+    .b-field {
+        background-color : transparent;
+        border           : 0 none;
+        color            : $datepicker-header-color;
+        min-width        : 0;
+        display          : inline-flex;
+        flex             : none !important;
+        width            : auto;
+        margin-bottom    : 0 !important;
+        height           : 100%;
+        cursor           : pointer;
+
+        &:not(.b-readonly):hover {
+            opacity : 0.7;
+        }
+
+        .b-field-inner {
+            flex             : none;
+            border           : 0 none;
+            background-color : transparent;
+            align-self       : stretch;
+            padding          : 0;
+            box-shadow       : none;
+        }
+
+        div[type=text] {
+            outline : none;
+        }
+
+        &.b-datepicker-yearfield {
+            margin-left : 0.5em;
+        }
+    }
+
+    .b-toolbar.b-dock-top {
+        background-color : $datepicker-header-background-color;
+        color            : $datepicker-header-color;
+        border-bottom    : none;
+        min-height       : 0;
+        font-size        : 1.2em;
+
+        .b-toolbar-content {
+            padding : 0.5em 0.3em;
+
+            .b-widget:not(.b-last-visible-child) {
+                margin-right : 0;
+            }
+        }
+
+        .b-container {
+            flex-flow       : row nowrap;
+            justify-content : center;
+            margin          : 0 !important;
+        }
+
+        .b-icon {
+            color : $datepicker-header-icon-color;
+
+            &:before {
+                line-height : normal;
+            }
+        }
+
+        // Need to override the default button color / bg color.
+        .b-button {
+            border        : none;
+            background    : transparent !important;
+            border-radius : 50%;
+            min-width     : 0;
+            min-height    : 0;
+            width         : 2em;
+            height        : 2em;
+
+            &,
+            &:not(.b-tab):active:not([disabled]),
+            &:not(.b-tab):active:focus:not([disabled]) {
+                color : $datepicker-weekdays-color;
+            }
+
+            &:hover {
+                opacity : 0.7;
+            }
+        }
+    }
+
+    // The week days header
+    .b-calendar-weekdays {
+        background-color : $datepicker-header-background-color;
+        color            : $datepicker-weekdays-color;
+        font-size        : 0.85em;
+
+        // Day name cells
+        .b-calendar-day-header {
+            padding : 0.4em 0;
+        }
+    }
+
+    &.b-show-week-column {
+        .b-week-number-cell {
+            line-height : $datepicker-cell-size;
+            width       : $datepicker-cell-size;
+            margin      : $datepicker-cell-margin;
+            text-align  : center;
+        }
+    }
+
+    .b-calendarpanel-content {
+        padding         : 0;
+        justify-content : flex-start;
+
+        .b-calendar-row {
+            &.b-calendar-week {
+                .b-week-number-cell {
+                    color : $datepicker-week-number-color;
+                }
+
+                .b-calendar-cell {
+                    display       : flex;
+                    height        : $datepicker-cell-size;
+                    width         : $datepicker-cell-size;
+                    margin        : $datepicker-cell-margin;
+                    border-width  : $datepicker-cell-border-width;
+                    border-style  : solid;
+                    border-color  : transparent;
+                    border-radius : $datepicker-cell-border-radius;
+                    transition    : background-color .2s, color .2s;
+                    align-items   : center;
+
+                    &.b-today {
+                        color            : $datepicker-today-cell-color;
+                        background-color : $datepicker-today-cell-background-color;
+                        border-color     : $datepicker-today-cell-border-color;
+                        border-width     : $datepicker-today-cell-border-width;
+                    }
+
+                    &.b-active-date:not(.b-selected-date) {
+                        color            : $datepicker-active-cell-color;
+                        background-color : $datepicker-active-cell-background-color;
+                        border-color     : $datepicker-active-cell-border-color;
+                    }
+
+                    &.b-selected-date {
+                        color            : $datepicker-selected-cell-color;
+                        background-color : $datepicker-selected-cell-background-color;
+                        border-color     : $datepicker-selected-cell-border-color;
+                    }
+
+                    &.b-other-month {
+                        background-color : $datepicker-other-month-cell-background-color;
+                        color            : $datepicker-other-month-cell-color;
+                    }
+
+                    &:not(.b-disabled-date,.b-selected-date) {
+                        cursor : pointer;
+
+                        // Hover effect only when not disabled
+                        &:hover {
+                            color            : $datepicker-hover-cell-color;
+                            background-color : $datepicker-hover-cell-background-color;
+                            border-color     : $datepicker-hover-cell-border-color;
+
+                            &.b-today {
+                                color            : $datepicker-hover-today-cell-color;
+                                background-color : $datepicker-hover-today-cell-background-color;
+                                border-color     : $datepicker-hover-today-cell-border-color;
+                            }
+                        }
+                    }
+
+                    &.b-out-of-range {
+                        background-color : $datepicker-out-of-range-cell-background-color;
+                        color            : $datepicker-out-of-range-cell-color;
+                    }
+
+                    &.b-disabled-date {
+                        background-color : $datepicker-disabled-cell-background-color;
+                        color            : $datepicker-disabled-cell-color;
+                        opacity          : $datepicker-disabled-cell-opacity;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.b-readonly-combo-list {
+    &.b-empty {
+        display : none;
+    }
+
+    .b-list-item {
+        min-width : auto;
+
+        .b-visible-scrollbar & {
+            padding-right : 2em; // Some air ensuring scrollbar doesn't overlap with text
+        }
+    }
+}

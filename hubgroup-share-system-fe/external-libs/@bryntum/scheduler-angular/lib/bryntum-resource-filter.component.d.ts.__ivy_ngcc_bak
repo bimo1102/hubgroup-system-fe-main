@@ -1,0 +1,112 @@
+/**
+ * Angular wrapper for Bryntum ResourceFilter
+ */
+import { ElementRef, EventEmitter, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Base, Collection, CollectionConfig, EventStore, Mask, MaskConfig, Rectangle, Scroller, ScrollerConfig, Store, StoreConfig, Widget } from '@bryntum/scheduler/scheduler.lite.umd.js';
+import { ResourceFilter } from '@bryntum/scheduler/scheduler.lite.umd.js';
+export declare class BryntumResourceFilterComponent implements OnInit, OnDestroy {
+    static instanceClass: typeof ResourceFilter;
+    private static bryntumFeatureNames;
+    private static bryntumConfigs;
+    private static bryntumConfigsOnly;
+    private static bryntumProps;
+    private elementRef;
+    instance: ResourceFilter;
+    private bryntumConfig;
+    constructor(element: ElementRef);
+    activateOnMouseover: boolean;
+    adopt: HTMLElement | string;
+    align: object | string;
+    allowGroupSelect: boolean;
+    anchor: boolean;
+    appendTo: HTMLElement | string;
+    bubbleEvents: object;
+    centered: boolean;
+    cls: string | object;
+    config: object;
+    constrainTo: HTMLElement | Widget | Rectangle;
+    contentElementCls: string | object;
+    defaultBindProperty: string;
+    dock: string;
+    draggable: boolean | object;
+    eventStore: EventStore;
+    floating: boolean;
+    groupHeaderTpl: Function;
+    hideAnimation: boolean | object;
+    htmlCls: string | object;
+    insertBefore: HTMLElement | string;
+    insertFirst: HTMLElement | string;
+    itemTpl: Function;
+    listeners: object;
+    localeClass: Base;
+    localizableProperties: string[];
+    maskDefaults: object | Mask | Partial<MaskConfig>;
+    masked: boolean | string | object | Mask | Partial<MaskConfig>;
+    monitorResize: boolean;
+    multiSelect: boolean;
+    owner: Widget;
+    positioned: boolean;
+    preventTooltipOnTouch: boolean;
+    ripple: boolean | object;
+    rootElement: ShadowRoot;
+    scrollAction: string;
+    selectAllItem: boolean | string;
+    selected: Collection | object | Partial<CollectionConfig>;
+    showAnimation: boolean | object;
+    store: object | Store | Partial<StoreConfig>;
+    tab: boolean | object;
+    tag: string;
+    textAlign: string;
+    title: string;
+    toggleAllIfCtrlPressed: boolean;
+    weight: number;
+    alignSelf: string;
+    content: string;
+    dataset: object;
+    disabled: boolean;
+    extraData: boolean | number | object | string;
+    flex: number | string;
+    height: number | string;
+    hidden: boolean;
+    html: string;
+    id: string;
+    items: object[];
+    margin: number | string;
+    maxHeight: number | string;
+    maxWidth: number | string;
+    minHeight: number | string;
+    minWidth: number | string;
+    readOnly: boolean;
+    scrollable: boolean | Scroller | object | Partial<ScrollerConfig>;
+    tooltip: object | string;
+    width: number | string;
+    x: number;
+    y: number;
+    anchorSize: number[];
+    onBeforeDestroy: EventEmitter<object>;
+    onBeforeHide: EventEmitter<object>;
+    onBeforeShow: EventEmitter<object>;
+    onCatchAll: EventEmitter<object>;
+    onDestroy: EventEmitter<object>;
+    onFocusIn: EventEmitter<object>;
+    onFocusOut: EventEmitter<object>;
+    onHide: EventEmitter<object>;
+    onItem: EventEmitter<object>;
+    onPaint: EventEmitter<object>;
+    onReadOnly: EventEmitter<object>;
+    onResize: EventEmitter<object>;
+    onShow: EventEmitter<object>;
+    /**
+     * Create and append the underlying widget
+     */
+    ngOnInit(): void;
+    /**
+     * Watch for changes
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Destroy the component
+     */
+    ngOnDestroy(): void;
+}

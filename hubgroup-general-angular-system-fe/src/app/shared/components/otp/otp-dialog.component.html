@@ -1,0 +1,135 @@
+<nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" nzTip="Loading...">
+    @if (message) {
+        <nz-form-item>
+            <nz-alert nzType="error" [nzMessage]="message" nzDescription="" nzShowIcon></nz-alert>
+        </nz-form-item>
+    }
+
+    <form nz-form #otpForm="ngForm" [nzLayout]="'horizontal'" autocomplete="off" novalidate="novalidate">
+        @if (companies.length > 0) {
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" class="fw-bold" nzRequired
+                               nzFor="otp.companyId">{{ 'Company'|translate }}
+                </nz-form-label>
+                <nz-form-control [nzSpan]="15" [nzErrorTip]="companyIdTpl">
+                    <nz-select [(ngModel)]="companyId" name="companyId" nzShowSearch
+                               required id="otp.companyId"
+                               (ngModelChange)="onCompanyModelChange($event)"
+                    >
+                        @for (item of companies; track $index) {
+                            <nz-option [nzValue]="item.id"
+                                       [nzLabel]="item.text!"></nz-option>
+                        }
+                    </nz-select>
+                    <ng-template #companyIdTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            {{ 'otp.value.required'|lowercase|translate }}
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" class="fw-bold" nzRequired
+                               nzFor="otp.websiteId">{{ 'user.website.selected'|translate }}
+                </nz-form-label>
+                <nz-form-control [nzSpan]="15" [nzErrorTip]="websiteIdTpl">
+                    <nz-select [(ngModel)]="websiteId" (ngModelChange)="onWebsiteModelChange()" name="websiteId" nzShowSearch
+                               required id="otp.websiteId"
+                    >
+                        @for (website of websites; track $index) {
+                            <nz-option [nzValue]="website.id"
+                                       [nzLabel]="website.text!"></nz-option>
+                        }
+                    </nz-select>
+                    <ng-template #websiteIdTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            {{ 'otp.value.required'|lowercase|translate }}
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        }
+        <nz-form-item>
+            <nz-form-control [nzSm]="{offset:6}">
+                <nz-radio-group [name]="'otpType'" [(ngModel)]="requestVerify.type" (ngModelChange)="setLabelOtp()">
+                    <label nz-radio-button [nzValue]="OtpTypeEnum.SmartOTP">{{ 'otp.type.smart'|translate }}</label>
+                    <label nz-radio-button [nzValue]="OtpTypeEnum.OTPByEmail">{{ 'otp.type.email'|translate }}</label>
+                    <label nz-radio-button [nzValue]="OtpTypeEnum.QR">{{ 'otp.type.qr'|translate }}</label>
+                </nz-radio-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control [nzSm]="{offset:6}">
+                <app-news-button-icon
+                    [disabled]="disabledResendOtp"
+                    [isLoading]="isLoadingResendOtp"
+                    buttonClass="btn btn-sm btn-light-info px-3 min-w-100px"
+                    (clickFunc)="onResendOtp()"
+                    [keenIcon]="'arrows-circle'"
+                    text="{{labelResendOtp}}"
+                    type="button">
+                </app-news-button-icon>
+
+                <app-news-button-icon
+                    buttonClass="btn btn-sm btn-secondary ms-3 px-3"
+                    (clickFunc)="onLogout()"
+                    [keenIcon]="'arrow-circle-left'"
+                    text="{{'otp.relogin'|lowercase|translate}}"
+                    type="button">
+                </app-news-button-icon>
+
+            </nz-form-control>
+        </nz-form-item>
+
+        @if (qrImageReady && requestVerify.type === OtpTypeEnum.QR) {
+            <nz-form-item>
+                <nz-form-control [nzSm]="{offset:6}" [nzSpan]="15">
+                    <div class="d-block text-center">
+                        Dùng ứng dụng để quét mã
+                    </div>
+                    <div class="qr-image">
+                        <img class='w-100' src="data:image/bmp;base64,{{qrImage}}">
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+        } @else {
+            <nz-form-item>
+                <nz-form-label class="fw-bold" [nzSpan]="6" nzRequired nzFor="otp.value">{{ 'otp.value'|translate }}
+                </nz-form-label>
+                <nz-form-control [nzSpan]="15"
+                                 [nzErrorTip]="otpValueTpl"
+                >
+                    <nz-input-group nzSearch [nzAddOnAfter]="suffixButton">
+                        <input type="text" [name]="'otp'" [(ngModel)]="requestVerify.otp" nz-input
+                               required [minlength]="4" [maxlength]="8"
+                               id="otp.value"
+                        />
+                    </nz-input-group>
+                    <ng-template #suffixButton>
+                        <button nz-button nzType="primary" (click)="onOtpVerify(otpForm)"
+                                [nzLoading]="isLoadingVerifyOtp"
+                                nzSearch>
+                            <i nz-icon nzType="safety" nzTheme="outline"></i>
+                            {{ 'otp.button.submit'|translate }}
+                        </button>
+                    </ng-template>
+                    <ng-template #otpValueTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            {{ 'otp.value.required'|lowercase|translate }}
+                        </ng-container>
+                        <ng-container *ngIf="control.hasError('minlength')">
+                            {{ 'otp.value.minLength'|lowercase|translate }}
+                   k     </ng-container>
+                        <ng-container *ngIf="control.hasError('maxlength')">
+                            {{ 'otp.value.maxlength'|lowercase|translate }}
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        }
+
+
+    </form>
+
+</nz-spin>

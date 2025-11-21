@@ -1,0 +1,644 @@
+<form nz-form [nzLayout]="'horizontal'" #formElement #addOrChangeForm='ngForm'
+      autocomplete='off' novalidate='novalidate'>
+    <div class='card'>
+        <div class='card-header' [ngClass]="{'px-3': !responsive.isDesktop}">
+            <div class='card-title m-0'>
+                <div [ngClass]="{'me-5': responsive.isDesktop, 'me-2': !responsive.isDesktop}">
+                    @if (isFAQ) {
+                        @if (newsModel.isAdd) {
+                            {{ 'question.title.create'| translate }}
+                        } @else {
+                            {{ 'question.title.edit'| translate }}
+                        }
+                    } @else {
+                        @if (newsModel.isAdd) {
+                            {{ 'article.add.or.change.title.create' | translate }} {{
+                                ui.displayTypeText | translate
+                            }}
+                        } @else {
+                            {{ 'article.add.or.change.title.edit' | translate }} {{
+                                ui.displayTypeText | translate
+                            }}
+                        }
+                    }
+                </div>
+            </div>
+            <div class="card-toolbar">
+                <div nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'small'"
+                     [nzWrap]="'wrap'">
+                    <nz-select nzShowSearch [nzDisabled]="!newsModel.isAdd"
+                               class="w-125px"
+                               [(ngModel)]="newsModel.languageCulture"
+                               (ngModelChange)="detectDataModelChange()"
+                               [nzPlaceHolder]="'news.online.language.culture'| translate"
+                               [name]="'newsModel.languageCulture'">
+                        @for (item of languageSources; track item.id) {
+                            <nz-option [nzLabel]="item.text || ''"
+                                       [nzValue]="item.value"></nz-option>
+                        }
+                    </nz-select>
+                    <app-news-button-icon [text]="'go.back'| translate"
+                                          (clickFunc)="onBack(addOrChangeForm, formElement)" [checkPermission]="false"
+                                          [buttonClassType]="'btn-light-primary'"
+                                          [keenIcon]="'black-left'">
+                    </app-news-button-icon>
+                    <nz-button-group>
+                        <app-news-button-save nz-button [buttonClass]="'rounded-end-0'" [checkPermission]="false"
+                                              (clickFunc)="onSave(addOrChangeForm, formElement)"></app-news-button-save>
+                        <app-news-button-icon [keenIcon]="'down'" [buttonIcon]="true" [checkPermission]="false"
+                                              [buttonClass]="'bg-opacity-75 bg-primary rounded-start-0 h-100'"
+                                              nz-button
+                                              nz-dropdown nzTrigger="click"
+                                              [nzDropdownMenu]="menu1"
+                                              nzPlacement="bottomRight"></app-news-button-icon>
+                    </nz-button-group>
+                    <nz-dropdown-menu #menu1="nzDropdownMenu">
+                        <div nz-menu
+                             class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px show">
+                            <div class="menu-item">
+                                <a href="javascript:void(0)" (click)="onSaveAndBack(addOrChangeForm, formElement)"
+                                   class="menu-link px-5">
+                                    {{ 'save.and.back'| translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </nz-dropdown-menu>
+                </div>
+            </div>
+        </div>
+        <div class='card-body'>
+            @if (message) {
+                <nz-alert class="mb-3" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+            }
+
+            <div nz-row [nzGutter]="30">
+                <div nz-col [nzSpan]="24" [nzMd]="24-7">
+                    @if (newsModel.parent; as parentNews) {
+                        <div>
+                            <p>
+                                {{ 'news.copy.source'| translate }}: {{ parentNews.id }} -
+                                <a href="javascript:void(0)"
+                                   (click)="onOpenParentNews(parentNews)">{{ parentNews.title }}</a>
+                            </p>
+                            <p>Website: {{ parentNews.websiteId }} - {{ parentNews.websiteUrl }}</p>
+                        </div>
+                        <div class="separator separator-dashed mt-4 mb-10"></div>
+                    }
+                    @if (newsModel.podcastParent; as podcastParent) {
+                        <div>
+                            <p>
+                                {{ 'news.copy.source'| translate }}: {{ podcastParent.id }} -
+                                <a href="javascript:void(0)"
+                                   (click)="onOpenParentNews(podcastParent)">{{ podcastParent.title }}</a>
+                            </p>
+                        </div>
+                        <div class="separator separator-dashed mt-4 mb-10"></div>
+                    }
+
+                    <!--#region top-->
+                    <div nz-row [nzGutter]="30" [nzAlign]="'middle'">
+                        <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                            <nz-form-item [nzGutter]="20">
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzXXl]="8"
+                                               class="text-gray-700 fw-bold text-break">{{ 'news.online.provinces'| translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                               [(ngModel)]="newsModel.provinceId"
+                                               (ngModelChange)="detectDataModelChange()"
+                                               [nzPlaceHolder]="'news.online.provinces'| translate"
+                                               (nzOnSearch)="requestProvinceAutocomplete$.next({keyword: $event})"
+                                               [name]="'newsModel.provinceId'">
+                                        @for (province of sources.provinceSources; track province.id) {
+                                            <nz-option [nzLabel]="province.text || ''"
+                                                       [nzValue]="province.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                            <nz-form-item [nzGutter]="20">
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzXXl]="8"
+                                               class="text-gray-700 fw-bold text-break">{{ 'news.online.icons'| translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [(ngModel)]="newsModel.iconId"
+                                               (ngModelChange)="detectDataModelChange()"
+                                               [nzPlaceHolder]="'news.online.icons'| translate"
+                                               [name]="'newsModel.iconId'">
+                                        @for (icon of sources.newsIconSources; track icon.id) {
+                                            <nz-option [nzLabel]="icon.text!" [nzValue]="icon.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                            <nz-form-item [nzGutter]="20">
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzXXl]="8"
+                                               class="text-gray-700 fw-bold text-break">{{ 'news.online.source'| translate }}
+                                    <span class="text-danger ms-2">*</span>
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [(ngModel)]="newsModel.sourceId"
+                                               (ngModelChange)="onSourceModelChange(); detectDataModelChange();"
+                                               [nzPlaceHolder]="'news.online.source'| translate"
+                                               [name]="'newsModel.sourceId'">
+                                        @for (source of newsSources; track source.id) {
+                                            <nz-option [nzLabel]="source.text || ''"
+                                                       [nzValue]="source.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                            <nz-form-item [nzGutter]="20">
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzXXl]="8"
+                                               class="text-gray-700 fw-bold text-break">{{ 'news.online.type'| translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                               [(ngModel)]="newsModel.typeId"
+                                               (ngModelChange)="detectDataModelChange()"
+                                               [nzPlaceHolder]="'news.online.type'| translate"
+                                               (nzOnSearch)="onSearchAutocompleteNewsType($event)"
+                                               [name]="'newsModel.typeId'">
+                                        @for (newsType of sources.newsTypeSources; track $index) {
+                                            @if (newsType.children && newsType.children.length > 0) {
+                                                <nz-option-group [nzLabel]="newsType.text || ''">
+                                                    @if (newsType.children) {
+                                                        @for (
+                                                            newsTypeChild of newsType.children; track newsTypeChild.id) {
+                                                            <nz-option [nzLabel]="newsTypeChild.text || ''"
+                                                                       [nzValue]="newsTypeChild.value"></nz-option>
+                                                        }
+                                                    }
+                                                </nz-option-group>
+                                            }
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!--#endregion-->
+                    <nz-form-item>
+                        <nz-form-label nzNoColon nzSpan="24" nzLabelWrap
+                                       class="fw-bold text-gray-900"
+                                       nzLabelAlign="left" nzFor='news.online.add.or.change.title'>
+                            {{ (isFAQ ? 'article.question' : 'news.online.add.or.change.title') | translate }}
+                            <span class="text-danger ms-2">*</span></nz-form-label>
+                        <nz-form-control [nzErrorTip]='titleTpl'>
+                            <input required nz-input type='text' [(ngModel)]='newsModel.title'
+                                   (ngModelChange)="detectDataModelChange();"
+                                   [customMaxLength]="isFAQ ? 0 :NEWS_DETAIL_VALIDATE.titleLength"
+                                   [placeholder]="(isFAQ ? 'article.question' : 'news.online.add.or.change.title') | translate"
+                                   name='newsModel.title' id='news.add.or.change.name' />
+                            <ng-template #titleTpl let-control>
+                                @if (control.hasError('required')) {
+                                    {{ (isFAQ ? 'article.question.warning.required' : 'news.online.add.or.change.title.warning.required') | translate }}
+                                } @else if (control.hasError('customMaxLength')) {
+                                    {{ (isFAQ ? 'article.question.warning.custom.length' : 'news.online.add.or.change.title.warning.customMaxLength') | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <ng-template #countTpl let-value let-maxLength="maxLength">
+                        <div [ngClass]="value && value.length > maxLength ? 'text-danger': 'text-primary'">
+                            {{ 'count.character'| translate }}: {{ value ? value.length : 0 }} / {{ maxLength }}
+                        </div>
+                    </ng-template>
+
+                    @if (!isFAQ) {
+
+
+                        <nz-form-item>
+                            <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzSpan="24"
+                                           nzLabelAlign="left"
+                                           nzFor='news.online.add.or.change.subtitle'>
+                                {{ 'news.online.add.or.change.subtitle' | translate }}
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]='title2Tpl'>
+                                <input nz-input type='text' [(ngModel)]='newsModel.title2'
+                                       (ngModelChange)="detectDataModelChange()"
+                                       [customMaxLength]="NEWS_DETAIL_VALIDATE.subTitleLength"
+                                       [placeholder]="'news.online.add.or.change.subtitle' | translate"
+                                       name='newsModel.title2' id='news.add.or.change.subtitle' />
+                                <ng-container
+                                    [ngTemplateOutlet]="countTpl"
+                                    [ngTemplateOutletContext]="{ $implicit: newsModel.title2, maxLength: NEWS_DETAIL_VALIDATE.subTitleLength }">
+                                </ng-container>
+                                <ng-template #title2Tpl let-control>
+                                    @if (control.hasError('customMaxLength')) {
+                                        {{ 'news.online.add.or.change.subtitle.warning.customMaxLength' | translate }}
+                                    }
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    }
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzSpan="24"
+                                       nzLabelAlign="left">
+                            {{ (isFAQ ? 'article.question.description' : 'news.online.add.or.change.description') | translate }}
+                            <span class="text-danger ms-2">*</span>
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]='descriptionTpl'>
+                            <textarea nz-input [(ngModel)]="newsModel.description"
+                                      required [customMaxLength]="NEWS_DETAIL_VALIDATE.descriptionLength"
+                                      (ngModelChange)="detectDataModelChange()"
+                                      [name]="'newsModel.description'"
+                                      [placeholder]="(isFAQ ? 'article.question.description' :'news.online.add.or.change.description')| translate"
+                                      [nzAutosize]="{ minRows: 3 }"
+                            ></textarea>
+                            <ng-container
+                                [ngTemplateOutlet]="countTpl"
+                                [ngTemplateOutletContext]="{ $implicit: newsModel.description, maxLength: NEWS_DETAIL_VALIDATE.descriptionLength }">
+                            </ng-container>
+                            <ng-template #descriptionTpl let-control>
+                                @if (control.hasError('required')) {
+                                    {{ (isFAQ ? 'article.question.description.warning.required' : 'news.online.add.or.change.description.warning.required')| translate }}
+                                } @else if (control.hasError('customMaxLength')) {
+                                    {{ (isFAQ ? 'article.question.description.warning.custom.max.length' : 'news.online.add.or.change.description.warning.customMaxLength') | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <app-news-add-or-change-normal [newsModel]="newsModel"
+                                                   [isTypeQuestionAndAnswer]="isFAQ"
+                                                   (detectDataChangeFunc)="detectDataModelChange()"></app-news-add-or-change-normal>
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900 " nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                                       nzLabelAlign="left">
+                            {{ 'article.add.or.change.origin.url' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input [(ngModel)]="newsModel.originUrl"
+                                   (ngModelChange)="detectDataModelChange()"
+                                   [name]="'newsModel.originUrl'"
+                                   [placeholder]="'article.add.or.change.origin.url'| translate"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900 " nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                                       nzLabelAlign="left">
+                            {{ 'news.online.add.or.change.tag' | translate }}
+                            <span class="text-danger ms-2">*</span>
+                        </nz-form-label>
+                        <nz-form-control>
+                            <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                       [(ngModel)]="newsModel.tagIds" [nzMode]="'tags'"
+                                       (ngModelChange)="detectDataModelChange()"
+                                       [nzPlaceHolder]="'news.online.add.or.change.tag'| translate"
+                                       (nzOnSearch)="requestTagAutocomplete$.next({keyword:$event})"
+                                       [name]="'newsModel.tagIds'">
+                                @for (item of sources.tagSources; track item.id) {
+                                    <nz-option [nzLabel]="item.text!" [nzValue]="item.value"></nz-option>
+                                }
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900 " nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                                       nzLabelAlign="left">
+                            {{ 'news.online.add.or.change.event' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                       [(ngModel)]="newsModel.eventId"
+                                       (ngModelChange)="detectDataModelChange(); onEventModelChange($event)"
+                                       [nzPlaceHolder]="'news.online.add.or.change.event'| translate"
+                                       (nzOnSearch)="requestEventAutocomplete$.next({keyword:$event})"
+                                       [name]="'newsModel.eventId'">
+                                @for (item of sources.eventSources; track item.id) {
+                                    <nz-option [nzLabel]="item.text!" [nzValue]="item.value"></nz-option>
+                                }
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    @if (subEvents && subEvents.length > 0) {
+                        <div class="bg-light-primary px-5 py-3 rounded my-3">
+                            @for (subEvent of subEvents; track $index) {
+                                <div>
+                                    <label nz-checkbox class="mb-3 ms-0 fs-4 fw-bold"
+                                           [name]="'subEvent-'+$index"
+                                           [nzValue]="subEvent.id"
+                                           [(ngModel)]="subEvent.checked"
+                                           (ngModelChange)="detectDataModelChange();"
+                                    >
+                                        {{ (subEvent.name || '') | translate }}
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900 " nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                                       nzLabelAlign="left">
+                            {{ 'news.online.add.or.change.series' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                       [(ngModel)]="newsModel.seriesId"
+                                       (ngModelChange)="detectDataModelChange()"
+                                       [nzPlaceHolder]="'news.online.add.or.change.series'| translate"
+                                       (nzOnSearch)="requestSeriesAutocomplete$.next({keyword:$event})"
+                                       [name]="'newsModel.seriesId'">
+                                @for (item of sources.seriesSources; track item.id) {
+                                    <nz-option [nzLabel]="item.text!" [nzValue]="item.value"></nz-option>
+                                }
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <!--#region related-->
+                    @if (relatedArticles && newsModel.displayType !== NewsDisplayTypeEnum.OutSystem) {
+                        <app-news-article-related [(relatedArticles)]="relatedArticles"
+                                                  (detectDataChangeFunc)="detectDataModelChange($event)"></app-news-article-related>
+                    }
+                    <!--#endregion-->
+
+                    <hr class="border-dark-subtle">
+                    <nz-form-item [nzGutter]="20">
+                        <nz-form-label class="fw-bold text-gray-900 text-break" nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                                       nzLabelAlign="left"
+                                       nzFor='news.online.add.or.change.publish.date'>
+                            {{ 'news.online.add.or.change.publish.date' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <app-news-date-picker [placeHolder]="'news.online.add.or.change.publish.date' | translate"
+                                                  [showTime]="true"
+                                                  [(date)]="newsModel.publishDate"
+                                                  (dateChange)="detectDataModelChange()"></app-news-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <!--#region zone-->
+                    @if (newsModel.categoryMain && newsModel.categorySubs) {
+                        <app-news-main-category [categoryMain]="newsModel.categoryMain"
+                                                [categorySubs]="newsModel.categorySubs"
+                                                [newsDisplayType]="newsModel.displayType"
+                                                (detectDataChangeFunc)="detectDataModelChange($event)"></app-news-main-category>
+                        <app-news-sub-category [categoryMain]="newsModel.categoryMain"
+                                               [categorySubs]="newsModel.categorySubs"
+                                               [newsDisplayType]="newsModel.displayType"
+                                               (detectDataChangeFunc)="detectDataModelChange($event)"></app-news-sub-category>
+                    }
+                    <!--#endregion-->
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="7">
+                    <app-news-add-or-change-thumb-image [avatarIconsSources]="avatarIconSources" [newsModel]="newsModel"
+                                                        [isTypeQuestionAndAnswer]="isFAQ"
+                                                        (detectDataChangeFunc)="detectDataModelChange($event)"></app-news-add-or-change-thumb-image>
+                    <!--#region SEO-->
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left" nzSpan="24"
+                                       nzFor='news.online.add.or.change.facebook.title'>
+                            {{ 'news.online.add.or.change.facebook.title' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <textarea nz-input [(ngModel)]="newsModel.facebookTitle"
+                                      (ngModelChange)="detectDataModelChange()"
+                                      [name]="'news.online.add.or.change.facebook.title'"
+                                      [placeholder]="'news.online.add.or.change.facebook.title'| translate"
+                                      [nzAutosize]="{ minRows: 3 }"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <div class='card mb-5'>
+                        <div class='card-header' [ngClass]="{'px-3': !responsive.isDesktop}">
+                            <div class='card-title m-0'>
+                                {{ 'news.online.add.or.change.seo.info'| translate }}
+                            </div>
+                        </div>
+                        <div class='card-body'>
+                            <nz-form-item>
+                                <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left"
+                                               nzSpan="24"
+                                               nzFor='news.online.add.or.change.seo.title'>
+                                    {{ 'news.online.add.or.change.seo.title' | translate }}
+                                    <span class="text-danger ms-2">*</span>
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]='seoTitleTpl'>
+                                    <textarea nz-input [(ngModel)]="newsModel.seoTitle"
+                                              (ngModelChange)="detectDataModelChange(); "
+                                              (change)="onSeoTitleChange();"
+                                              [name]="'news.online.add.or.change.seo.title'"
+                                              [placeholder]="'news.online.add.or.change.seo.title'| translate"
+                                              [nzAutosize]="{ minRows: 2 }"
+                                              required
+                                              [customMaxLength]="NEWS_DETAIL_VALIDATE.seoTitleLength"
+                                    ></textarea>
+                                    <ng-container
+                                        [ngTemplateOutlet]="countTpl"
+                                        [ngTemplateOutletContext]="{ $implicit: newsModel.seoTitle, maxLength: NEWS_DETAIL_VALIDATE.seoTitleLength }">
+                                    </ng-container>
+                                    <ng-template #seoTitleTpl let-control>
+                                        @if (control.hasError('required')) {
+                                            {{ 'news.online.add.or.change.seo.title.warning.required' | translate }}
+                                        } @else if (control.hasError('customMaxLength')) {
+                                            {{ 'news.online.add.or.change.seo.title.warning.customMaxLength' | translate }}
+                                        }
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left"
+                                               nzSpan="24"
+                                               nzFor='news.online.add.or.change.seo.description'>
+                                    {{ 'news.online.add.or.change.seo.description' | translate }}
+                                    <span class="text-danger ms-2">*</span>
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]='seoDescriptionTpl'>
+                                    <textarea nz-input [(ngModel)]="newsModel.seoDescription"
+                                              (ngModelChange)="detectDataModelChange()"
+                                              [name]="'news.online.add.or.change.seo.description'"
+                                              [placeholder]="'news.online.add.or.change.seo.description'| translate"
+                                              [nzAutosize]="{ minRows: 4 }"
+                                              required
+                                              [customMaxLength]="NEWS_DETAIL_VALIDATE.seoDescriptionLength"
+                                    ></textarea>
+                                    <ng-container
+                                        [ngTemplateOutlet]="countTpl"
+                                        [ngTemplateOutletContext]="{ $implicit: newsModel.seoTitle, maxLength: NEWS_DETAIL_VALIDATE.seoDescriptionLength }">
+                                    </ng-container>
+                                    <ng-template #seoDescriptionTpl let-control>
+                                        @if (control.hasError('required')) {
+                                            {{ 'news.online.add.or.change.seo.description.warning.required' | translate }}
+                                        } @else if (control.hasError('customMaxLength')) {
+                                            {{ 'news.online.add.or.change.seo.description.warning.customMaxLength' | translate }}
+                                        }
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left"
+                                               nzSpan="24"
+                                               nzFor='news.online.add.or.change.seo.keyword'>
+                                    {{ 'news.online.add.or.change.seo.keyword' | translate }}
+                                    <span class="text-danger ms-2">*</span>
+                                </nz-form-label>
+                                <nz-form-control [nzWarningTip]='seoKeywordTpl'>
+                                    <textarea nz-input [(ngModel)]="newsModel.seoKeywords"
+                                              (ngModelChange)="detectDataModelChange()"
+                                              [name]="'news.online.add.or.change.seo.keyword'"
+                                              [placeholder]="'news.online.add.or.change.seo.keyword'| translate"
+                                              [nzAutosize]="{ minRows: 2 }"
+                                              required
+                                    ></textarea>
+                                    <ng-template #seoKeywordTpl let-control>
+                                        @if (control.hasError('required')) {
+                                            {{ 'news.online.add.or.change.seo.keyword.warning.required' | translate }}
+                                        }
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left"
+                                               nzSpan="24"
+                                               nzFor='news.online.add.or.change.seo.url'>
+                                    {{ 'news.online.add.or.change.seo.url' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input [(ngModel)]="newsModel.seoUrl"
+                                           (ngModelChange)="detectDataModelChange()"
+                                           [name]="'news.online.add.or.change.seo.url'"
+                                           [placeholder]="'news.online.add.or.change.seo.url'| translate" />
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left"
+                                               nzSpan="24">
+                                    {{ 'news.online.add.or.change.seo.setting' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    @for (seo of seoSettings; track seo.id) {
+                                        <div>
+                                            <label nz-checkbox class="fw-bolder"
+                                                   [(ngModel)]="seo.checked"
+                                                   (ngModelChange)="detectDataModelChange()"
+                                                   [name]="'news.seo.setting-'+ $index">
+                                                {{ seo.text| translate }}
+                                            </label>
+                                        </div>
+                                    }
+                                </nz-form-control>
+                            </nz-form-item>
+
+                        </div>
+                    </div>
+                    <!--#endregion-->
+
+                    <nz-form-item>
+                        <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzLabelAlign="left" nzSpan="24"
+                                       nzFor='news.online.add.or.change.note'>
+                            {{ 'news.online.add.or.change.note' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <textarea nz-input [(ngModel)]="newsModel.quickNote"
+                                      (ngModelChange)="detectDataModelChange()"
+                                      [name]="'news.online.add.or.change.note'"
+                                      [placeholder]="'news.online.add.or.change.note'| translate"
+                                      [nzAutosize]="{ minRows: 3 }"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <!--#region option-->
+                    <h4 class="fw-bold mb-2 mt-5 fs-4">
+                        {{ 'news.online.add.or.change.setting.option'| translate }}
+                    </h4>
+                    <div class="bg-light-primary p-5 rounded mb-3">
+                        @for (option of sources.newsOptionSources; track $index) {
+                            <div [ngClass]="{'mb-3': !$last}">
+                                <label nz-checkbox class="ms-0 fs-4 fw-bold"
+                                       [name]="'news.optionObjects-'+$index"
+                                       [nzValue]="option.value"
+                                       [(ngModel)]="option.checked"
+                                       [nzDisabled]="option.value === NewsOptionEnum.FAQ"
+                                       (ngModelChange)="detectDataModelChange();">
+                                    {{ (option.text || '') | translate }}
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <!--#endregion-->
+                </div>
+            </div>
+        </div>
+
+        @if (responsive.isMobile) {
+            <app-news-keenicon [name]="'menu'" [class]="'position-fixed z-index-3 fs-4tx bottom-25 end-0 me-4'"
+                               (click)="ui.isHiddenToolbar = !ui.isHiddenToolbar"></app-news-keenicon>
+        }
+
+        <nz-affix [nzOffsetBottom]="0" style="z-index: 100" class="transition-toolbar"
+                  [ngClass]="{'opacity-0 invisible': ui.isHiddenToolbar}">
+            <div class='card-footer bg-white p-5' nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'small'"
+                 [nzWrap]="'wrap'">
+
+                @if (newsModel.status) {
+                    <span class="badge badge-warning badge-outline fw-bold px-4 py-3">
+                            {{ ('news.status.' + (NewsStatusEnum[newsModel.status] || newsModel.status)) | lowercase | translate }}
+                    </span>
+                }
+
+                @if (newsModel.isReturn) {
+                    <span class="badge badge-light-danger fw-bold px-4 py-3">
+                    {{ 'return.news'| translate }}
+                  </span>
+                }
+                <app-news-button-icon [text]="'go.back'| translate"
+                                      (clickFunc)="onBack(addOrChangeForm, formElement)" [checkPermission]="false"
+                                      [buttonClassType]="'btn-light-primary'"
+                                      [keenIcon]="'black-left'">
+                </app-news-button-icon>
+
+                <app-news-button-save (clickFunc)="onSave(addOrChangeForm, formElement)"
+                                      [permissionKey]="!newsModel.isAdd ? 'NewsOnlineNormal/Change' : 'NewsOnlineNormal/Add'">
+                </app-news-button-save>
+
+                @if (!newsModel.isAdd) {
+                    @for (actionTypePermission of actionTypesHasPermission; track $index) {
+                        @if (checkAttributeFromActionType(actionTypePermission, ActionTypePermissionAttributeEnum.SendEmail)) {
+                        } @else {
+                            <app-news-button-icon [buttonType]="'button'"
+                                                  [keenIcon]="checkAttributeFromActionType(actionTypePermission) ? 'cross' :'send'"
+                                                  [bootstrapIcon]="classNames({
+                                                        'bi-arrow-up-circle': actionTypePermission.id  === NewsActionTypeEnum.Publish,
+                                                        'bi-reply': actionTypePermission.checked
+                                                    })"
+                                                  [buttonClassType]="classNames({
+                                                        'btn-success': actionTypePermission.ext,
+                                                        'btn-danger': actionTypePermission.checked || checkAttributeFromActionType(actionTypePermission)
+                                                    }) || 'btn-primary'"
+                                                  [buttonIcon]="false"
+                                                  [checkPermission]="false"
+                                                  (clickFunc)="onChangeStatus(actionTypePermission, formElement)"
+                                                  [text]="('news.online.change.status.' + actionTypePermission.text) | lowercase | translate"
+                            >
+                            </app-news-button-icon>
+                        }
+                    }
+                }
+            </div>
+        </nz-affix>
+    </div>
+</form>

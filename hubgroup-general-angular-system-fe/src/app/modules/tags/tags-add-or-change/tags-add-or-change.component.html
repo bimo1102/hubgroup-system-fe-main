@@ -1,0 +1,106 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm'
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (tagModel.id) {
+                            {{ 'tag edit' | translate }}
+                        } @else {
+                            {{ 'tag create' | translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save' | translate"
+                                                  [permissionKey]="isChange ? 'Tags/Change' : 'Tags/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close' | translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="4" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'tag.title' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='titleTpl'>
+                        <input nz-input required type='text' [placeholder]="'tag.title' | translate"
+                               [(ngModel)]='tagModel.title' name='tags.title'>
+                        <ng-template #titleTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'tags.title.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="4" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'tag.description' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='descriptionTpl'>
+                        <textarea nz-input required rows="3" type='text' [placeholder]="'tag.description' | translate"
+                                  [(ngModel)]='tagModel.description' name='tags.description'></textarea>
+                        <ng-template #descriptionTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'tags.description.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="4" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'tag.mappings' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <input nz-input type='text' [placeholder]="'tag.mappings' | translate"
+                               [(ngModel)]='tagModel.tagMappings' name='tagModel.tagMappings'>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="4" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Tag.options' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        @for (item of tagModel.configOptionObjects; track $index) {
+                            <div>
+                                <label nz-checkbox name="options_{{$index}}"
+                                       [(ngModel)]="item.checked">{{ item.text | translate }}</label>
+                            </div>
+                        }
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="4" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Status' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <app-news-switch [checkPermission]="false"
+                                         [value]="tagModel.status === StatusEnum.Active"
+                                         (clickFunc)="tagModel.status = (tagModel.status === StatusEnum.Active ? StatusEnum.InActive : StatusEnum.Active)"></app-news-switch>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+

@@ -1,0 +1,56 @@
+@import '../../variables.scss';
+
+.b-popup {
+    color : $popup-color;
+
+    // If the Popup is not widthed, and is displaying purely text content (has no child components)
+    // then constrain the width so that the text wraps inside a visually pleasing width.
+    &.b-text-popup {
+        max-width : 25em;
+    }
+
+    &.b-positioned {
+        box-shadow : $float-box-shadow;
+    }
+}
+
+.b-popup-content {
+    background : $popup-background-color;
+
+    a {
+        color : darken($popup-color, 20);
+    }
+}
+
+.b-popup-header {
+    background-color : $popup-header-background-color;
+    color            : $popup-header-color;
+}
+
+.b-popup-close:before {
+    @extend .b-icon-close;
+}
+
+.b-popup-expand:before {
+    @extend .b-icon-expand;
+}
+
+.b-modal-mask {
+    background-color : $popup-modal-mask-color;
+    position         : fixed;
+    top              : 0;
+    left             : 0;
+    bottom           : 0;
+    right            : 0;
+    pointer-events   : all;
+    // Matching popups z-index, to not end up behind (normal stack order will determine)
+    z-index          : $float-root-z-index + 1;
+}
+
+
+// Constrain popups to screen width for small screens
+@media (max-width : 480px) {
+    .b-popup {
+        max-width : 100% !important;
+    }
+}

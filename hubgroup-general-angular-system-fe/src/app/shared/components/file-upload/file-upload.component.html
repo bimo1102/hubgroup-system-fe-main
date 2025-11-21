@@ -1,0 +1,20 @@
+<nz-upload
+    [nzName]="name"
+    [nzShowUploadList]="showUploadList"
+    (nzChange)="handleChange($event)"
+    [nzBeforeUpload]="beforeUpload"
+    [nzCustomRequest]="onCustomRequest"
+    [nzFileList]="fileList"
+    [nzRemove]="handleRemoveFile"
+    [nzMultiple]='isMultiple'
+    [nzLimit]="limitUpload"
+    [nzAccept]='allowedFileTypes'
+>
+    <app-news-button-upload [permissionKey]="permissionKey"
+                          [buttonClass]="buttonClass"
+                          [buttonIcon]="buttonIcon"
+                          [checkPermission]="checkPermission" [isLoading]="loading"
+                          [text]="buttonText | translate">
+    </app-news-button-upload>
+</nz-upload>
+

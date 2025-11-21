@@ -1,0 +1,73 @@
+@import '../../variables.scss';
+
+// IE11 can't reset to "initial".
+// TODO: reset using "initial" when we drop IE11
+$display-reset-value : inline-flex;
+
+.b-messagedialog.b-popup {
+    min-width : 18em;
+
+    .b-button {
+        min-width : 9em;
+    }
+
+    .b-messagedialog-header,
+    .b-messagedialog-content {
+        padding : 1em;
+    }
+
+    .b-messagedialog-content.b-panel-content {
+        border-radius : 0;
+        min-height    : 4em;
+    }
+
+    // All items are opt-in. Hidden by default
+    .b-messagedialog-input,
+    .b-messagedialog-okbutton,
+    .b-messagedialog-cancelbutton {
+        display : none;
+    }
+
+    // Confirm - Show OK/Cancel
+    &.b-messagedialog-prompt,
+    &.b-messagedialog-confirm {
+        .b-messagedialog-okbutton,
+        .b-messagedialog-cancelbutton {
+            display : $display-reset-value;
+        }
+    }
+
+    // Prompt - Show input element with OK / Cancel buttons
+    &.b-messagedialog-prompt {
+        .b-messagedialog-input {
+            display : $display-reset-value;
+            margin  : 1em 0 0 0;
+        }
+    }
+
+    // Alert - Show message with OK button
+    &.b-messagedialog-alert {
+        .b-messagedialog-okbutton {
+            display : $display-reset-value;
+        }
+    }
+
+    .b-panel-body-wrap {
+        background : $popup-background-color;
+    }
+
+    .b-popup-content,
+    .b-toolbar {
+        background : transparent;
+    }
+
+    .b-toolbar {
+        .b-toolbar-content {
+            justify-content : flex-end;
+
+            .b-button:not(:first-child) {
+                margin-left : 1em;
+            }
+        }
+    }
+}

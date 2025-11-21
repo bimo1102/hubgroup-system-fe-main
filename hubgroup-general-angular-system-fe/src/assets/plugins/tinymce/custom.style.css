@@ -1,0 +1,26 @@
+body{
+    line-height:1.8 !important;;
+}
+p{
+    margin-top:1em !important;
+}
+img{max-width:100%;}
+figure > figcaption{
+    margin-top: 0 !important;
+    display: table-caption !important;
+    caption-side: bottom !important;
+    word-break: break-word !important;
+    padding: 0.6em !important;
+    outline-offset: -1px !important;
+    color: #222 !important;
+}
+
+figure{
+    figcaption:hover{
+        outline: 3px solid #b4d7ff;
+    }
+}
+
+.tpl-text-single figure> figcaption {
+    display: block !important;
+}

@@ -1,0 +1,48 @@
+.b-sticky-headers {
+    .b-grid-header, .b-timeaxis, .b-sticky-header, .b-sch-header-timeaxis-cell {
+        overflow : visible;
+    }
+
+    .b-sch-header-text.b-sticky-header {
+        position : sticky;
+    }
+    .b-horizontaltimeaxis {
+        .b-sch-header-text.b-sticky-header {
+            left    : 0;
+            padding : 0 right($event-bar-content-margin) .0 left($event-bar-content-margin);
+        }
+    }
+    .b-verticaltimeaxis {
+        .b-sch-header-text {
+            &.b-sticky-header {
+                top : 0;
+            }
+        }
+
+        .b-sch-header-row-0 {
+            // When being moved by stickiness, don't allow the text to touch the bottom.
+            // top=right because the element is rotated by 180 degrees.
+            .b-sch-header-text.b-sticky-header {
+                padding-top : right($event-bar-content-margin);
+            }
+        }
+
+        .b-sch-header-row.b-lowest {
+            // When being moved by stickiness, don't allow the text to touch the top or bottom.
+            .b-sch-header-text.b-sticky-header {
+                padding-top    : left($event-bar-content-margin);
+                padding-bottom : right($event-bar-content-margin);
+            }
+        }
+    }
+}
+
+.b-sch-vertical {
+    // It's the scheduler content element that carries this class in vertical mode.
+    // All containing elements have to be overflow: visible
+    .b-sticky-headers {
+        .b-content-element, .b-grid-subgrid, .b-verticaltimeaxis-row, .b-verticaltimeaxiscolumn, .b-verticaltimeaxis, .b-sch-header-row, .b-sch-header-timeaxis-cell {
+            overflow : visible;
+        }
+    }
+}

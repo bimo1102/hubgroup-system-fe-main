@@ -1,0 +1,55 @@
+@import '../../variables.scss';
+
+.b-datetimefield {
+    &.b-ie {
+        width : 24em;
+    }
+
+    align-items : center;
+    // For materials label to be positioned within field
+    position    : relative;
+
+    input {
+        text-align : center;
+    }
+
+    .b-field-inner {
+        height : 100%;
+    }
+
+    .b-datefield {
+        flex                       : 1 1 55%;
+        border-top-right-radius    : 0;
+        border-bottom-right-radius : 0;
+
+        .b-field-inner {
+            border                     : none;
+            border-right               : 1px solid scale_color($widget-border-color, $lightness : 30%);
+            border-top-right-radius    : 0;
+            border-bottom-right-radius : 0;
+        }
+    }
+
+    .b-timefield {
+        flex                      : 1 1 45%;
+        border-top-left-radius    : 0;
+        border-bottom-left-radius : 0;
+
+        .b-field-inner {
+            border                    : none;
+            border-top-left-radius    : 0;
+            border-bottom-left-radius : 0;
+        }
+    }
+
+    &:not(.b-disabled):hover,
+    &:focus-within {
+        .b-field-inner {
+            border-color : $field-highlight-color;
+        }
+
+        .b-datefield .b-field-inner {
+            border-right : 1px solid scale_color($widget-border-color, $lightness : 30%);
+        }
+    }
+}

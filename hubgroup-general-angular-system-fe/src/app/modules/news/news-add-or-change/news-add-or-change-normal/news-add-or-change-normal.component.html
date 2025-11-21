@@ -1,0 +1,23 @@
+<nz-form-item>
+    <nz-form-label class="fw-bold text-gray-900" nzLabelWrap nzSpan="24"
+                   nzLabelAlign="left"
+                   nzFor='news.online.add.or.change.content'>
+        {{(isTypeQuestionAndAnswer ? 'article.answer' : 'news.online.add.or.change.content') | translate }}
+        <span class="text-danger ms-2">*</span>
+    </nz-form-label>
+    <nz-form-control>
+        <app-news-tyt-editor [(value)]='newsModel.content'
+                        [newsModel]="newsModel"
+                        [isTemplatePodcastNotificationDisplayedChange]="isTemplatePodcastNotificationDisplayedChange"
+                        (valueChange)="detectDataItemChange()"></app-news-tyt-editor>
+        @if (!newsModel.content) {
+            <div class="text-warning mt-3">
+                {{ (isTypeQuestionAndAnswer ? 'article.answer.required' : NEWS_VALIDATE_MESSAGE.content) | translate }}
+            </div>
+        } @else if (!isTypeQuestionAndAnswer && newsModel.content && newsModel.content <= NEWS_DETAIL_VALIDATE.contentMinLength) {
+            <div class="text-warning mt-3">
+                {{ NEWS_VALIDATE_MESSAGE.contentMinLength | translate }}
+            </div>
+        }
+    </nz-form-control>
+</nz-form-item>

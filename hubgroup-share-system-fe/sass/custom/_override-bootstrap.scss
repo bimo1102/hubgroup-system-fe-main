@@ -1,0 +1,18 @@
+.anticon svg {
+    vertical-align: initial;
+}
+
+.btn {
+    span, i {
+        &.ki-duotone, &.ki-solid, &.ki-outline {
+            //display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}
+.flex {
+    display: flex;
+}
+.items-center {
+    align-items: center;
+}

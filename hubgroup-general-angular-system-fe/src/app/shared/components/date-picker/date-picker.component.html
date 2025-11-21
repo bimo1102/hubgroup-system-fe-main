@@ -1,0 +1,7 @@
+<nz-date-picker [nzFormat]="format" class="w-100"
+                [nzShowTime]="showTime ? { nzFormat: timeFormat } : false"
+                [name]="'news.online.add.or.change.publish.date'"
+                [(ngModel)]="date"
+                (ngModelChange)="onChangeDatePicker($event)"
+                [nzPlaceHolder]="placeHolder | translate"
+></nz-date-picker>

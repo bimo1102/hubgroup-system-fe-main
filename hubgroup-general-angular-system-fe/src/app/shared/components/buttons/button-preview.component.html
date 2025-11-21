@@ -1,0 +1,13 @@
+<ng-container *ngIf="isShow">
+  <button [disabled]="disabled" [type]="buttonType" [title]="title || text"
+          [class]="buttonClassBase + ' ' + buttonClassType + ' btn btn-shadow btn-sm ' + buttonClass"
+          [ngClass]="{'btn-icon' : buttonIcon}"
+          (click)="onClick()">
+      <app-news-keenicon *ngIf="keenIcon && !isLoading" class="active" [name]="keenIcon"
+                    [class]="keenIconClass + (!buttonIcon ? ' me-1' : '')"
+                    [type]="keenIconType"></app-news-keenicon>
+      @if (!buttonIcon) {
+          {{ text }}
+      }
+  </button>
+</ng-container>

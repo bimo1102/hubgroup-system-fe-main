@@ -1,0 +1,24 @@
+<nz-form-item [nzGutter]="20">
+    <nz-form-label class="fw-bold text-gray-900 text-break" nzLabelWrap [nzSpan]="24"
+                   [nzMd]="layout === 'vertical' ? 24 : 4"
+                   nzLabelAlign="left"
+                   nzFor='news.online.add.or.change.main.category'>
+        {{ 'news.online.add.or.change.main.category' | translate }}
+        <span class="text-danger ms-2">*</span>
+    </nz-form-label>
+    <nz-form-control>
+        @if (categoryMain) {
+            <nz-select nzShowSearch nzServerSearch class="w-100 mb-3" [nzAllowClear]="true"
+                       [ngModel]="categoryMain.categoryId" [disabled]="!editable"
+                       (ngModelChange)="onSelectMainCategory($event, categoryMain); checkViewKpiDefaultConfigFunc.emit(); detectDataItemChange()"
+                       [nzPlaceHolder]="'news.online.add.or.change.main.category'|translate"
+                       (nzOnSearch)="onSearchNewsCategoryAutocomplete($event)"
+                       [name]="'news.online.add.or.change.main.category'">
+                @for (item of sources.categoryMainSources; track item.id) {
+                    <nz-option [nzLabel]="(item.text || '') | translate"
+                               [nzValue]="item.value"></nz-option>
+                }
+            </nz-select>
+        }
+    </nz-form-control>
+</nz-form-item>

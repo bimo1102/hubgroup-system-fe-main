@@ -1,0 +1,111 @@
+// Additional Grid icons
+
+//region Column
+
+.b-icon-column-move-left:before {
+    content: "#{ $fa-var-arrow-circle-left }";
+}
+
+.b-icon-column-move-right:before {
+    content: "#{ $fa-var-arrow-circle-right }";
+}
+
+.b-icon-hide-column:before {
+    content: "#{ $fa-var-times-circle }";
+}
+
+//endregion
+
+// region Sort
+
+.b-icon-sort:before {
+    content: "#{ $fa-var-sort }";
+}
+
+.b-icon-sort-asc:before {
+    content: "#{ $fa-var-sort-alpha-up }";
+}
+
+.b-icon-sort-desc:before {
+    content: "#{ $fa-var-sort-alpha-down }";
+}
+
+.b-icon-sorted-asc:before {
+    content: "#{ $fa-var-arrow-up }";
+}
+
+//.b-icon-sorted-desc:before {
+//    content: "#{ $fa-var-arrow-down }";
+//}
+
+//endregion
+
+//region Group
+
+.b-icon-group-asc:before {
+    content: "#{ $fa-var-sort-amount-up-alt }";
+}
+
+.b-icon-group-desc:before {
+    content: "#{ $fa-var-sort-amount-down }";
+}
+
+.b-icon-group-collapse:before {
+    content: "#{ $fa-var-minus-circle }";
+}
+
+.b-icon-group-expand:before {
+    content: "#{ $fa-var-plus-circle }";
+}
+
+.b-icon-grouped-asc:before {
+    content: "#{ $fa-var-signal }";
+}
+
+//.b-icon-grouped-desc:before {
+//    content: "#{ $fa-var-signal }";
+//}
+
+//endregion
+
+//region Tree
+
+.b-icon-tree-expand:before {
+    content: "#{ $fa-var-angle-right }";
+}
+
+.b-icon-tree-collapse:before {
+    content: "#{ $fa-var-angle-down }";
+}
+
+.b-icon-tree-folder:before {
+    content: "#{ $fa-var-folder }";
+}
+
+.b-icon-tree-folder-open:before {
+    content: "#{ $fa-var-folder-open }";
+}
+
+.b-icon-tree-leaf:before {
+    content: "#{ $fa-var-circle }";
+}
+
+//endregion
+
+//region Splitter
+
+.b-icon-expand-gridregion:before {
+    content: "#{ $fa-var-caret-right }";
+}
+
+.b-icon-collapse-gridregion:before {
+    content: "#{ $fa-var-caret-left }";
+}
+
+// Fix for IE11 styling
+.b-ie .b-icon-expand-gridregion,
+.b-ie .b-icon-collapse-gridregion {
+   margin-left: -0.2em;
+}
+
+//endregion

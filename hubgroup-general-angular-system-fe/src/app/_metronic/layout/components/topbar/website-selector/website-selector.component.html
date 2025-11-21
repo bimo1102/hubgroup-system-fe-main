@@ -1,0 +1,51 @@
+<div class="cursor-pointer" [ngClass]="userAvatarClass">
+    <div class="me-1 fw-bold fs-4"
+         [nzPlacement]="'bottomLeft'"
+         nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+
+        <i class="fas fa-globe mx-1 text-primary"></i>
+        @if (currentUser$ | async; as currentUser) {
+            @if (currentUser && currentUser.website) {
+                {{ currentUser.website.text | titlecase }}
+            }
+        }
+    </div>
+
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+        @if (currentUser$ | async; as currentUser) {
+            @if (currentUser && currentUser.companies && currentUser.companies.length > 0) {
+                <!--            <app-website-selector-list-->
+                    <!--                data-kt-menu='true'-->
+                    <!--                [companies]="currentUser.companies"-->
+                    <!--                (clickChange)="onSelect($event)">-->
+                    <!--            </app-website-selector-list>-->
+                <ul nz-menu [nzMode]="responsive.isMobile ? 'inline' : 'vertical'">
+                    @for (item of currentUser.companies; track item.id) {
+                        @if (!item.websites || item.websites.length === 0) {
+                            <li nz-menu-item class="min-w-200px py-2">
+                                {{ item.text | titlecase }}
+                            </li>
+                        } @else {
+                            <li nz-submenu [nzTitle]="titleTpl" class="min-w-200px">
+                                <ng-template #titleTpl>
+                                    <span class="py-1 d-inline-block">
+                                        {{ item.text | titlecase }}
+                                    </span>
+                                </ng-template>
+                                <ul>
+                                    @for (website of item.websites; track $index) {
+                                        <li nz-menu-item class="min-w-200px py-2"
+                                            [ngClass]="{'text-primary fw-bold border-bottom': currentUser.website && website.id === currentUser.website.id}"
+                                            (click)="(currentUser.website && website.id !== currentUser.website.id) && onSelect(website)"> {{ website.text | titlecase }}
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+            }
+        }
+    </nz-dropdown-menu>
+</div>
+

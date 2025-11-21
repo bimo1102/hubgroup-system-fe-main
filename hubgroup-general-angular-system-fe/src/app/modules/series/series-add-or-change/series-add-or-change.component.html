@@ -1,0 +1,199 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (seriesModel.id) {
+                                {{ 'series.create' | translate }}
+                        } @else {
+                            {{ 'series.edit' | translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save' | translate"
+                                                  [permissionKey]="isChange ? 'Series/Change' : 'Series/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close' | translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'series.title' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='titleTpl'>
+                        <input nz-input required type='text' [placeholder]="'series.title' | translate"
+                               [(ngModel)]='seriesModel.title' name='series.title'>
+                        <ng-template #titleTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'series.title.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'series.description' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='descriptionTpl'>
+                                <textarea nz-input required rows="2" type='text'
+                                          [placeholder]="'series.description' | translate"
+                                          [(ngModel)]='seriesModel.description' name='series.description'></textarea>
+                        <ng-template #descriptionTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'series.description.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Category' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                   [nzMode]="'multiple'"
+                                   [(ngModel)]="seriesModel.categoryIds"
+                                   [nzPlaceHolder]="'Category' | translate"
+                                   (nzOnSearch)="requestCategoryMainAutocomplete$.next({keyword: $event})"
+                                   [name]="'Category'">
+                            @for (item of categoryMainSources; track item.id) {
+                                <nz-option [nzLabel]="(item.text || '') | translate"
+                                           [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'series.options' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        @for (item of seriesModel.optionObjects; track $index) {
+                            <div>
+                                <label nz-checkbox name="options_{{$index}}"
+                                       [(ngModel)]="item.checked">{{ item.text | translate }}</label>
+                            </div>
+                        }
+                    </nz-form-control>
+                </nz-form-item>
+
+                <ng-template #countTpl let-value let-maxLength="maxLength">
+                    <div [ngClass]="value && value.length > maxLength ? 'text-danger': 'text-primary'">
+                        {{ 'count.character'| translate }}: {{ value ? value.length : 0 }} / {{ maxLength }}
+                    </div>
+                </ng-template>
+
+                @if (seriesModel.facebookOption) {
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.title' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type='text' [placeholder]="'facebook.title' | translate"
+                                   [(ngModel)]='seriesModel.facebookOption.title'
+                                   name='series.facebookOption.title'
+                            >
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.description' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <textarea nz-input rows="2" type='text'
+                                      [placeholder]="'facebook.description' | translate"
+                                      [(ngModel)]='seriesModel.facebookOption.description'
+                                      name='series.facebookOption.description'></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.seo.keyword' | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type='text' [placeholder]="'facebook.seo.keyword' | translate"
+                                   [(ngModel)]='seriesModel.facebookOption.keywords'
+                                   name='series.facebookOption.keywords'
+                            >
+                        </nz-form-control>
+                    </nz-form-item>
+                }
+                <div class="separator my-2">
+                </div>
+                <div nz-row [nzGutter]="20">
+                    @for (media of mediaObjects; track $index) {
+                        <div nz-col [nzSpan]="24/5">
+                            <div class="mb-2">
+                                {{ ('series.media' + MediaTypeEnum[media.type]) | lowercase | translate }}
+                            </div>
+                            <div class="card card-bordered overlay mw-150px">
+                                <div class="card-body p-0">
+                                    <div class="overlay-wrapper">
+                                        <img class="w-100 min-h-150px card-rounded object-fit-cover"
+                                             alt=""
+                                             [src]="media.url || noImageMobile" />
+                                    </div>
+                                    <div class="overlay-layer bg-dark bg-opacity-25"
+                                         [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                                        <div class="d-flex gap-3">
+                                            <app-news-button-icon [keenIcon]="'picture'"
+                                                                  [buttonIcon]="true"
+                                                                  [checkPermission]="false"
+                                                                  (clickFunc)="onOpenFileManagerModal(media)"
+                                                                  [buttonClassType]="'btn-info'"
+                                                                  [text]="'series.choose.image' | translate"
+                                            >
+                                            </app-news-button-icon>
+                                            @if (media.url) {
+                                                <app-news-button-delete [checkPermission]="false"
+                                                                        [buttonIcon]="true"
+                                                                        (clickFunc)="media.url=''"
+                                                                        [title]="'series.remove.image' | translate">
+                                                    <i class="fas fa-times icon-xl"></i>
+                                                </app-news-button-delete>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="card-footer">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                    <app-news-button-save [text]="'Save' | translate"
+                                          [permissionKey]="isChange ? 'Series/Change' : 'Series/Add'"
+                                          (clickFunc)="onSave(addOrChangeForm)">
+                    </app-news-button-save>
+                    <app-news-button-close [text]="'Close' | translate"
+                                           (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+

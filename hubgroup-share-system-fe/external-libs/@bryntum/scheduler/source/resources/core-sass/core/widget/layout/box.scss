@@ -1,0 +1,20 @@
+.b-hbox,
+.b-vbox {
+    display         : flex;
+    align-items     : stretch;
+    justify-content : flex-start;
+    overflow        : hidden;
+    position        : relative;
+
+    > .b-box-center {
+        flex : 1 1 auto;
+    }
+}
+
+.b-hbox {
+    flex-flow : row nowrap;
+}
+
+.b-vbox {
+    flex-flow : column nowrap;
+}

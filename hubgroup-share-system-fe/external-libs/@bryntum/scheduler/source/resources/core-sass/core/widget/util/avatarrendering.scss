@@ -1,0 +1,22 @@
+@import '../../../variables.scss';
+
+.b-resource-avatar {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : $avatar-size;
+    height          : $avatar-size;
+    border-radius   : 50%;
+    flex-shrink     : 0;
+
+    &.b-resource-icon:before {
+        font-size : 1.5em;
+        color     : $avatar-icon-color;
+    }
+}
+
+.b-resource-initials {
+    background     : $avatar-initials-background;
+    color          : $avatar-initials-color;
+    text-transform : $avatar-initials-text-transform;
+}

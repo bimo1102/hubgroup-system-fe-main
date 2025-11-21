@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./../../../../sass/style.scss";
+// Replace above style with this css file to enable RTL styles
+// @import "../../hubgroup-share-system-fe/css/style.rtl";
+@import "./../../../../sass/plugins.scss";
+// @import "./../../../../css/style.rtl.css";
+@import "./../../../../sass/style.angular.scss";
+
+// Keenicons - High quality and pixel perfect font icons available in 3 styles, duotone, outline and solid for Metronic elements
+@import "./../../../../plugins/keenicons/duotone/style.css";
+@import "./../../../../plugins/keenicons/outline/style.css";
+@import "./../../../../plugins/keenicons/solid/style.css";
+
+// aggrid config
+.ag-header-cell.text-center {
+  .ag-header-cell-label {
+    justify-content: center;
+  }
+}

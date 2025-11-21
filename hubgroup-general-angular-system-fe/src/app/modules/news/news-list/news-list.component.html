@@ -1,0 +1,837 @@
+<div class='card'>
+    <div class='card-header'>
+        <div class='card-title m-0'>
+            @if (isFAQ) {
+                {{ 'cms.menu.list-faq' | translate }}
+            } @else {
+                {{ 'cms.menu.list-news' | translate }}
+            }
+        </div>
+        <div class="card-toolbar">
+            <div nz-flex [nzGap]="'middle'" [nzAlign]="'center'">
+                <nz-button-group nzSize="small">
+                    <app-news-button-add nz-button [buttonClass]="'rounded-end-0'"
+                                         [permissionKey]="'NewsOnlineNormal/InitAddOrChange'"
+                                         [keenIconClass]="responsive.isDesktop ? 'fs-4' : 'fs-5'"
+                                         (clickFunc)='redirectToAddOrChangePage()'>
+                    </app-news-button-add>
+                    <app-news-button-icon [keenIcon]="'down'" [buttonIcon]="true"
+                                          [permissionKey]="'NewsOnlineNormal/InitAddOrChange'"
+                                          [buttonClass]="'bg-opacity-75 bg-primary rounded-start-0 h-100'" nz-button
+                                          nz-dropdown nzTrigger="click"
+                                          [nzDropdownMenu]="menu1" nzPlacement="bottomRight"></app-news-button-icon>
+                </nz-button-group>
+                <nz-dropdown-menu #menu1="nzDropdownMenu">
+                    <div nz-menu
+                         class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold  show">
+                        @for (display of listNewsDisplayTypeEditable; track display) {
+                            <div class="menu-item">
+                                <a [routerLink]="['/news/add', display]"
+                                   class="menu-link px-5">
+                                    {{ ('news.display.type.' + NewsDisplayTypeEnum[display]) | lowercase | translate }}
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </nz-dropdown-menu>
+
+                <app-news-button-reload (clickFunc)="onSyncToEs()" [permissionKey]="'News/SyncToES'"
+                                        [confirmTitle]="'Are you sure sync news to ES?'"
+                                        [okText]="'Process'"
+                                        [text]="'Sync'"></app-news-button-reload>
+            </div>
+        </div>
+    </div>
+    <div class='card-body'>
+        @if (message) {
+            <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+        }
+        <form nz-form [nzLayout]="'vertical'" class="position-relative" (ngSubmit)="onSearch(true)">
+            <nz-spin nzSimple class="position-absolute top-0 end-0" [nzSpinning]="isFormLoading"></nz-spin>
+            <div nz-row [nzGutter]="30">
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Keyword'|translate"
+                                            [nzAddOnAfter]="addOnAfterTemplateKeyWord">
+                                <input nz-input [name]="'search.keyword'" [autofocus]="responsive.isDesktop"
+                                       [placeholder]="'search.keyword'|translate"
+                                       type="search"
+                                       [(ngModel)]="requestSearch.keyword" (ngModelChange)="onRequestModelChange()" />
+                            </nz-input-group>
+                            <ng-template #addOnAfterTemplateKeyWord>
+                                <div nz-flex [nzAlign]="'center'">
+                                    <label nz-checkbox
+                                           [name]="'requestSearch.searchInContent'"
+                                           [(ngModel)]="requestSearch.searchInContent"
+                                           (ngModelChange)="onRequestModelChange()"></label>
+                                    <app-news-keenicon [name]="'question'" [title]="'search.in.content'|translate"
+                                                       [class]="'text-primary ms-3 fs-2'"></app-news-keenicon>
+                                </div>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 2">
+                    <nz-form-item>
+                        <nz-input-group [nzAddOnBefore]="labelDateByRequest|translate">
+                            <nz-form-control>
+                                <app-news-date-range-picker [format]="dateFormat" class="w-100"
+                                                            [(date)]="date" (dateChange)="onRequestModelChange()"
+                                                            (keydown.enter)="onEnterDate($event)"></app-news-date-range-picker>
+                            </nz-form-control>
+                        </nz-input-group>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 2">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'search.main.category'|translate"
+                                            [nzAddOnAfter]="addOnAfterTemplate">
+                                <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                           [(ngModel)]="requestSearch.categoryMainIds"
+                                           (ngModelChange)="onRequestModelChange()"
+                                           [nzPlaceHolder]="'search.main.category'|translate"
+                                           (nzOnSearch)="requestCategoryMainAutocomplete$.next({keyword: $event})"
+                                           [name]="'search.main.category'">
+                                    @for (item of sources.categoryMainSources; track item.id) {
+                                        <nz-option [nzLabel]="(item.text || '') | translate"
+                                                   [nzValue]="item.value"></nz-option>
+                                    }
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #addOnAfterTemplate>
+                                <div nz-flex [nzAlign]="'center'">
+                                    <label nz-checkbox
+                                           [name]="'requestSearch.mainCategoriesOnlyParent'"
+                                           [(ngModel)]="isNotSearchInCategoryMainTree"
+                                           (ngModelChange)="requestSearch.isSearchInCategoryMainTree = !$event; onRequestModelChange()"></label>
+                                    <app-news-keenicon [name]="'question'"
+                                                       [title]="'isNotSearchInCategoryMainTree'|translate"
+                                                       [class]="'text-primary ms-3 fs-2'"></app-news-keenicon>
+                                </div>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/2" [nzXXl]="5">
+                    <div nz-flex [nzWrap]="'wrap'" [nzGap]="'small'" [nzAlign]="'center'">
+                        <app-news-button-search [buttonType]="'submit'"
+                                                [permissionKey]="'NewsOnlineNormal/Gets'"></app-news-button-search>
+                        <app-news-button-search [text]="'search.advance'| translate"
+                                                [keenIcon]="'filter'" [permissionKey]="'NewsOnlineNormal/Gets'"
+                                                (clickFunc)="isCollapsed = !isCollapsed"
+                        ></app-news-button-search>
+                        <app-news-button-delete [text]="'search.clear'| translate"
+                                                [permissionKey]="'NewsOnlineNormal/Gets'"
+                                                [buttonIcon]="true" [btnConfirm]="false"
+                                                (clickFunc)="onClearFilter()"
+                        ></app-news-button-delete>
+                    </div>
+                </div>
+            </div>
+            <div [(ngbCollapse)]="isCollapsed">
+                <div nz-row [nzGutter]="30" class="flex-column-fluid pt-2">
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeDisplayTypeTpl">
+                                    <ng-template #addOnBeforeDisplayTypeTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.display.type'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.displayTypes"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.display.type'|translate"
+                                               [name]="'search.news.display.type'">
+                                        @for (displayType of sources.newsDisplayTypeSources; track displayType.id) {
+                                            <nz-option [nzLabel]="displayType.text || ''"
+                                                       [nzValue]="displayType.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeSourceTpl">
+                                    <ng-template #addOnBeforeSourceTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.source'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.sourceIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.source'|translate"
+                                               [name]="'search.news.source'">
+                                        @for (source of sources.sourceNewsSources; track source.id) {
+                                            <nz-option [nzLabel]="source.text || ''"
+                                                       [nzValue]="source.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeDisplayTypeTpl"
+                                                [nzAddOnAfter]="addOnAfterSubCateTemplate">
+                                    <ng-template #addOnBeforeDisplayTypeTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.sub.category'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.categorySubIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.sub.category'|translate"
+                                               (nzOnSearch)="requestSubCateAutocomplete$.next({keyword: $event})"
+                                               [name]="'search.news.sub.category'">
+                                        @for (subCate of sources.subCateSources; track subCate.id) {
+                                            <nz-option [nzLabel]="subCate.text!" [nzValue]="subCate.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                    <ng-template #addOnAfterSubCateTemplate>
+                                        <div nz-flex [nzAlign]="'center'">
+                                            <label nz-checkbox
+                                                   [name]="'requestSearch.subCategoriesOnlyParent'"
+                                                   [(ngModel)]="isNotSearchInCategorySubTree"
+                                                   (ngModelChange)="requestSearch.isSearchInCategorySubTree = !$event; onRequestModelChange()"></label>
+                                            <app-news-keenicon [name]="'question'"
+                                                               [title]="'isNotSearchInCategorySubTree'|translate"
+                                                               [class]="'text-primary ms-3 fs-2'"></app-news-keenicon>
+                                        </div>
+                                    </ng-template>
+                                </nz-input-group>
+                            </nz-form-control>
+
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeTagTpl">
+                                    <ng-template #addOnBeforeTagTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.tag'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.tagIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.tag'|translate"
+                                               (nzOnSearch)="requestTagAutocomplete$.next({keyword: $event})"
+                                               [name]="'search.news.tag'">
+                                        @for (tag of sources.tagSources; track tag.id) {
+                                            <nz-option [nzLabel]="tag.text || ''" [nzValue]="tag.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeEventTpl">
+                                    <ng-template #addOnBeforeEventTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.event'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.eventIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.event'|translate"
+                                               (nzOnSearch)="requestEventAutocomplete$.next({keyword:$event})"
+                                               [name]="'search.news.event'">
+                                        @for (event of sources.eventSources; track event.id) {
+                                            <nz-option [nzLabel]="event.text || ''" [nzValue]="event.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeSeriesTpl">
+                                    <ng-template #addOnBeforeSeriesTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.series'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.seriesIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.series'|translate"
+                                               (nzOnSearch)="requestSeriesAutocomplete$.next({keyword:$event})"
+                                               [name]="'search.news.series'">
+                                        @for (author of sources.seriesSources; track author.id) {
+                                            <nz-option [nzLabel]="author.text || ''"
+                                                       [nzValue]="author.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeCreateUserTpl">
+                                    <ng-template #addOnBeforeCreateUserTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.create.user'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.createdUserIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.create.user'|translate"
+                                               (nzOnSearch)="requestCreateUserAutocomplete$.next({keyword:$event})"
+                                               [name]="'search.news.create.user'">
+                                        @for (createUser of sources.createUserSources; track createUser.id) {
+                                            <nz-option [nzLabel]="createUser.text!"
+                                                       [nzValue]="createUser.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeOptionTpl">
+                                    <ng-template #addOnBeforeOptionTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.options'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.options"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.options'|translate"
+                                               [name]="'search.news.options'">
+                                        @for (option of sources.newsOptionSources; track option.id) {
+                                            @if (option.id !== NewsOptionEnum.FAQ) {
+                                                <nz-option [nzLabel]="option.text!"
+                                                           [nzValue]="option.value"></nz-option>
+                                            }
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeIconTpl">
+                                    <ng-template #addOnBeforeIconTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.icons'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <nz-select nzShowSearch nzAllowClear [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.iconIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.news.icons'|translate"
+                                               [name]="'search.news.icons'">
+                                        @for (icon of sources.newsIconSources; track icon.id) {
+                                            <nz-option [nzLabel]="icon.text!" [nzValue]="icon.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforePageViewTpl">
+                                    <ng-template #addOnBeforePageViewTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.page.view'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <div nz-row [nzGutter]="15">
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.page.view.from'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.page.view.from'|translate"
+                                                             [(ngModel)]="requestSearch.systemViewFrom"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.page.view.to'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.page.view.to'|translate"
+                                                             [(ngModel)]="requestSearch.systemViewTo"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                    </div>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeViewGaTypeTpl">
+                                    <ng-template #addOnBeforeViewGaTypeTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.page.view.ga'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <div nz-row [nzGutter]="15">
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.page.view.ga.from'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.page.view.ga.from'|translate"
+                                                             [(ngModel)]="requestSearch.gaViewFrom"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.page.view.ga.to'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.page.view.ga.to'|translate"
+                                                             [(ngModel)]="requestSearch.gaViewTo"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                    </div>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeWordCountTpl">
+                                    <ng-template #addOnBeforeWordCountTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.word.count'|translate }}
+                                        </div>
+                                    </ng-template>
+                                    <div nz-row [nzGutter]="15">
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.word.count.from'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.word.count.from'|translate"
+                                                             [(ngModel)]="requestSearch.wordCountFrom"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.word.count.to'"
+                                                             class="w-100" [nzMin]="0"
+                                                             [nzPlaceHolder]="'search.news.word.count.to'|translate"
+                                                             [(ngModel)]="requestSearch.wordCountTo"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                    </div>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="addOnBeforeSeoPointTpl">
+                                    <ng-template #addOnBeforeSeoPointTpl>
+                                        <div class="min-w-70px">
+                                            {{ 'search.news.seo.point' |translate }}
+                                        </div>
+                                    </ng-template>
+                                    <div nz-row [nzGutter]="15">
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.seo.point.from'"
+                                                             class="w-100"
+                                                             [nzPlaceHolder]="'search.news.seo.point.from'|translate"
+                                                             [(ngModel)]="requestSearch.seoPointMin"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="24/2">
+                                            <nz-input-number [name]="'search.news.seo.point.to'"
+                                                             class="w-100"
+                                                             [nzPlaceHolder]="'search.news.seo.point.to'|translate"
+                                                             [(ngModel)]="requestSearch.seoPointMax"
+                                                             (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                                        </div>
+                                    </div>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <div nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'middle'" class="mb-2">
+                    <app-news-button-search [text]="'Search'| translate" (clickFunc)="onSearch()"
+                                            [permissionKey]="'NewsOnlineNormal/Gets'">
+                    </app-news-button-search>
+                    <app-news-button-delete [btnConfirm]="false"
+                                            (clickFunc)="onClearFilter()"
+                                            [text]="'search.reset'| translate"
+                                            [permissionKey]="'NewsOnlineNormal/Gets'"
+                    ></app-news-button-delete>
+                    <app-news-button-icon [keenIcon]="'cross'"
+                                          [text]="'search.close'| translate"
+                                          (clickFunc)="isCollapsed = !isCollapsed"
+                                          [permissionKey]="'NewsOnlineNormal/Gets'"
+                                          [buttonClassType]="'btn-warning'"
+                    ></app-news-button-icon>
+                </div>
+            </div>
+        </form>
+
+        <div class="hover-scroll-x pb-2" #tabElement>
+            <div class="d-grid">
+                <ul class="nav nav-stretch nav-line-tabs fs-6 fw-semibold flex-nowrap text-nowrap drop-list">
+                    @for (tab of tabSources; track tab.tabName) {
+                        <li class="nav-item mt-2 drag-item">
+                            <a class="nav-link text-active-primary ms-0 me-8 py-3"
+                               href="javascript:void(0);"
+                               (click)="tab.selected || onSelectNavStatus(tab)"
+                               [ngClass]="{'active cursor-default': tab.selected}">
+                                {{ ('news.online.tab.' + tab.tabName) | lowercase | translate }}
+                                ({{ tab.total }})
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div nz-flex [nzJustify]="'space-between'" [nzAlign]="'center'" [nzWrap]="'wrap'"
+             [nzGap]="responsive.isDesktop ? 'large': 'middle'">
+            <nz-pagination [nzPageIndex]="requestSearch.pageIndex! + 1" [nzPageSize]="requestSearch.pageSize!"
+                           [nzTotal]="totalRow"
+                           (nzPageIndexChange)="onPageIndexChange($event)"
+                           [nzSize]="'small'"
+                           [nzShowSizeChanger]="responsive.isDesktop"
+                           [nzPageSizeOptions]="listPageSize"
+                           (nzPageSizeChange)="onRequestModelChange();onPageSizeChange($event)"></nz-pagination>
+            <div nz-flex [nzGap]="responsive.isDesktop ? 'large': 'small'" [nzAlign]="'center'" [nzWrap]="'wrap'">
+                @for (field of fieldSums; track field.group) {
+                    <div>
+                        {{ ('news.field.sum.' + field.group) | lowercase | translate }} :
+                        <span class="fw-bold fs-2">{{ field.total | number }}</span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class='table-responsive mt-3'>
+            <nz-table nzBordered #newsTable
+                      [nzData]='newsArticleModels' [nzPageIndex]='requestSearch.pageIndex! + 1'
+                      [nzPageSize]='requestSearch.pageSize!'
+                      [nzSize]="'small'"
+                      [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                      (nzPageIndexChange)='onPageIndexChange($event)'
+                      [nzTotal]='totalRow'
+                      [nzFrontPagination]='false'
+                      [nzShowSizeChanger]="responsive.isDesktop"
+                      [nzPageSizeOptions]="listPageSize"
+                      (nzPageSizeChange)="onRequestModelChange(); onPageSizeChange($event)">
+                <thead>
+                <tr>
+                    @if (responsive.isDesktop) {
+                        <th nzWidth="50px"
+                            [nzChecked]="checkedAll"
+                            [nzIndeterminate]="indeterminate"
+                            nzLabel="Select all"
+                            (nzCheckedChange)="onAllChecked($event)">
+                        </th>
+                        <th nzAlign="center" nzWidth="50px">{{ 'STT' | translate }}
+                        </th>
+                    }
+                    <th [ngClass]="{'min-w-500px': responsive.isDesktop}">{{ 'table.article' | translate }}</th>
+
+                    @if (responsive.isDesktop) {
+                        @if (onColumnShow(NewsDisplayColumnEnum.NoteColumn)) {
+                            <th class="min-w-200px">{{ 'table.note' | translate }}</th>
+                        }
+                        @if (onColumnShow(NewsDisplayColumnEnum.StatusColumn)) {
+                            <th nzAlign="center">{{ 'table.status' | translate }}</th>
+                        }
+                        @if (onColumnShow(NewsDisplayColumnEnum.SystemViewColumn)) {
+                            <th nzAlign="center">{{ 'table.page.view.system' | translate }}</th>
+                        }
+                        @if (onColumnShow(NewsDisplayColumnEnum.GAViewColumn)) {
+                            <th nzAlign="center">{{ 'table.page.view.ga' | translate }}</th>
+                        }
+                        <th nzAlign="center" class="min-w-200px">{{ 'table.action' | translate }}</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                    @for (item of newsTable.data; track item.id) {
+                        <tr>
+                            @if (responsive.isDesktop) {
+                                <td
+                                    [nzChecked]="setOfCheckedId.has(item.id)"
+                                    [nzLabel]="item.title"
+                                    (nzCheckedChange)="onItemChecked(item.id, $event)"
+                                ></td>
+                                <td nzAlign="center">
+                                    {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}
+                                </td>
+                            }
+                            <td>
+                                @if (!responsive.isDesktop) {
+                                    <div class="fw-bold mb-3 fs-4 lh-sm">
+                                        {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}.
+
+                                        [{{ item.id }}]
+                                        <span class="cursor-pointer"
+                                              (click)="onArticleOpenNewTab({id: item.id,type: item.displayType })"> {{ item.title }}</span>
+                                    </div>
+                                }
+
+                                <div nz-flex [nzGap]="responsive.isDesktop ? 'middle': 'small'">
+                                    <div class="symbol symbol-75px symbol-2by3">
+                                        @if (onPropertyShow(NewsDisplayPropertyEnum.AvatarProperty)) {
+                                            <div class="symbol-label"
+                                                 [style]="'background-image:url('+ (item.avatarUrl || noImage) +')'"></div>
+                                        }
+                                        @if (!responsive.isDesktop && item.status) {
+                                            <span
+                                                class="badge mt-3"
+                                                [ngClass]="{ 'badge-success': item.status === NewsStatusEnum.Publish,
+                                                            'badge-danger': item.status === NewsStatusEnum.Removed || item.status === NewsStatusEnum.UnPublish,
+                                                            'badge-dark': item.status !== NewsStatusEnum.Publish && item.status !== NewsStatusEnum.Removed && item.status !== NewsStatusEnum.UnPublish,
+                                                }">
+                                                    {{ ('news.status.' + (NewsStatusEnum[item.status] || item.status)) | lowercase |translate }}
+                                            </span>
+                                        }
+                                    </div>
+                                    <div>
+                                        @if (responsive.isDesktop) {
+                                            <div class="fw-bold fs-4 lh-sm">
+                                                @if (item.title) {
+                                                    <span nz-typography nzCopyable [nzCopyText]="item.title">
+                                                    <span class="cursor-pointer"
+                                                          (click)="onArticleOpenNewTab({id: item.id,type: item.displayType })">
+                                                        {{ item.title }}
+                                                    </span>
+                                                </span>
+                                                }
+                                            </div>
+                                        }
+                                        <div>
+                                            @if (onPropertyShow(NewsDisplayPropertyEnum.IdProperty)) {
+                                                [{{ item.id }}]
+                                            }
+                                            @if (onPropertyShow(NewsDisplayPropertyEnum.NewsDisplayTypeProperty) && item.displayType) {
+                                                - {{ ('news.type.' + NewsDisplayTypeEnum[item.displayType] || '') | lowercase | translate }}
+                                            }
+                                        </div>
+                                        @if (onPropertyShow(NewsDisplayPropertyEnum.CreatedDateProperty)) {
+                                            <div>
+                                                {{ 'table.created.date' | translate }} :
+                                                {{ item.createdDate | date: dateTimeFormat }}
+                                            </div>
+                                        }
+                                        @if (onPropertyShow(NewsDisplayPropertyEnum.UpdatedDateProperty)) {
+                                            <div>
+                                                {{ 'table.updated.date' | translate }} :
+                                                {{ item.updatedDate | date: dateTimeFormat }}
+                                            </div>
+                                        }
+                                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzWrap]="'wrap'">
+                                            @if (onPropertyShow(NewsDisplayPropertyEnum.MainCategoryProperty)) {
+                                                <div>
+                                                    {{ 'table.news.main.category' | translate }} :
+                                                    {{ item.categoryMainName }}
+                                                </div>
+                                            }
+                                            @if (responsive.isDesktop) {
+                                                <app-news-button-icon
+                                                    [text]="'news.list.table.tooltip.open.view.public.new.tab'| translate"
+                                                    [buttonClassType]="'btn-light-primary'"
+                                                    [buttonClass]="'w-25px h-25px'"
+                                                    [bootstrapIcon]="'fa-external-link-alt'"
+                                                    [bootstrapIconType]="'fas'"
+                                                    [bootstrapIconClass]="''"
+                                                    [buttonIcon]="true"
+                                                    [checkPermission]="false"
+                                                    (clickFunc)="onOpenPublicUrl(item)">
+                                                </app-news-button-icon>
+                                                <app-news-button-icon
+                                                    [text]="'news.list.table.tooltip.copy.link'| translate"
+                                                    [buttonClassType]="'btn-light-primary'"
+                                                    [buttonClass]="'w-25px h-25px'"
+                                                    [bootstrapIcon]="'fa-link'"
+                                                    [bootstrapIconType]="'fas'"
+                                                    [bootstrapIconClass]="''"
+                                                    [buttonIcon]="true"
+                                                    [checkPermission]="false"
+                                                    (clickFunc)="onCopyLink(item)">
+                                                </app-news-button-icon>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (!responsive.isDesktop) {
+                                    <div nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'small'"
+                                         [nzWrap]="'wrap'" class="mt-2">
+
+                                        <app-news-button-icon
+                                            [text]="'news.list.table.tooltip.open.view.public.new.tab'| translate"
+                                            [buttonClassType]="'btn-light-primary'"
+                                            [bootstrapIcon]="'fa-external-link-alt'"
+                                            [bootstrapIconType]="'fas'"
+                                            [bootstrapIconClass]="''"
+                                            [buttonIcon]="true"
+                                            [checkPermission]="false"
+                                            (clickFunc)="onOpenPublicUrl(item)">
+                                        </app-news-button-icon>
+                                        <app-news-button-icon [text]="'news.list.table.tooltip.copy.link'| translate"
+                                                              [buttonClassType]="'btn-light-primary'"
+                                                              [bootstrapIcon]="'fa-link'"
+                                                              [bootstrapIconType]="'fas'"
+                                                              [bootstrapIconClass]="''"
+                                                              [buttonIcon]="true"
+                                                              [checkPermission]="false"
+                                                              (clickFunc)="onCopyLink(item)">
+                                        </app-news-button-icon>
+
+                                        <app-news-button-change [permissionKey]="'NewsOnlineNormal/InitAddOrChange'"
+                                                                [text]=" 'button.change.news' | translate "
+                                                                (clickFunc)='redirectToAddOrChangePage(item)'>
+                                        </app-news-button-change>
+                                        @if (item.actionTypes && item.actionTypes.length > 0) {
+                                            @for (
+                                                actionTypePermission of item.actionTypes; track actionTypePermission.id) {
+                                                <app-news-button-icon-confirm [buttonType]="'button'"
+                                                                              [keenIcon]="checkAttributeFromActionType(actionTypePermission) ? 'cross' :'send'"
+                                                                              [bootstrapIcon]="classNames({
+                                                                                    'bi-arrow-up-circle': actionTypePermission.id  === NewsActionTypeEnum.Publish,
+                                                                                    'bi-reply': actionTypePermission.checked
+                                                                                })"
+                                                                              [buttonClassType]="classNames({
+                                                                                    'btn-success': actionTypePermission.ext,
+                                                                                    'btn-danger': actionTypePermission.checked || checkAttributeFromActionType(actionTypePermission)
+                                                                                }) || 'btn-primary'"
+                                                                              [buttonIcon]="true"
+                                                                              [checkPermission]="false"
+                                                                              (confirmFunc)="onChangeStatus(item,actionTypePermission)"
+                                                                              [text]="('news.online.change.status.' + actionTypePermission.text) | translate"
+                                                                              [okText]="'Continue'| translate"
+                                                                              [confirmTitle]="('are.you.sure.change.news.online.status.' + actionTypePermission.text) | lowercase | translate"
+                                                >
+                                                </app-news-button-icon-confirm>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </td>
+
+                            @if (responsive.isDesktop) {
+                                @if (onColumnShow(NewsDisplayColumnEnum.NoteColumn)) {
+                                    <td>
+                                        <div class="text-break">{{ item.quickNote }}</div>
+                                    </td>
+                                }
+                                @if (onColumnShow(NewsDisplayColumnEnum.StatusColumn)) {
+                                    <td nzAlign="center" [ngClass]="{'text-dander': item.isReturn}">
+                                        @if (item.status) {
+                                            @if (item.isReturn) {
+                                                <div
+                                                    class="text-danger">{{ 'news.status.return.article'|translate }}
+                                                </div>
+                                            } @else {
+                                                @if (item.status !== NewsStatusEnum.Publish) {
+                                                    <div
+                                                        [ngClass]="item.status === NewsStatusEnum.UnPublish ? 'text-danger' : 'text-dark' ">
+                                                        {{ ('news.status.' + (NewsStatusEnum[item.status] || item.status)) | lowercase |translate }}
+                                                    </div>
+                                                } @else {
+                                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                                        @if (item.publishDate) {
+                                                            <div>
+                                                                <div>
+                                                                    {{ 'news.list.table.publishedDate'|translate }}:
+                                                                </div>
+                                                                {{ item.publishDate | date : dateTimeFormat }}
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                }
+                                @if (onColumnShow(NewsDisplayColumnEnum.SystemViewColumn)) {
+                                    <td nzAlign="center">
+                                        {{ item.systemView | number: '2.0' || '00' }}
+                                    </td>
+                                }
+                                @if (onColumnShow(NewsDisplayColumnEnum.GAViewColumn)) {
+                                    <td nzAlign="center">
+                                        <div>{{ item.gaView | number: '2.0' || '00' }}</div>
+                                    </td>
+                                }
+                                <td nzAlign="center">
+                                    <div nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'small'"
+                                         [nzWrap]="'wrap'">
+                                        <app-news-button-change [permissionKey]="'NewsOnline/InitAddOrChange'"
+                                                                [text]="'button.change.news' | translate "
+                                                                (clickFunc)='redirectToAddOrChangePage(item)'>
+                                        </app-news-button-change>
+                                        @if (item.actionTypes && item.actionTypes.length > 0) {
+                                            @for (
+                                                actionTypePermission of item.actionTypes; track actionTypePermission.id) {
+                                                @if (checkAttributeFromActionType(actionTypePermission, ActionTypePermissionAttributeEnum.SendEmail)) {
+                                                } @else {
+                                                    <app-news-button-icon-confirm [buttonType]="'button'"
+                                                                                  [keenIcon]="checkAttributeFromActionType(actionTypePermission) ? 'cross' :'send'"
+                                                                                  [bootstrapIcon]="classNames({
+                                                                                    'bi-arrow-up-circle': actionTypePermission.id  === NewsActionTypeEnum.Publish,
+                                                                                    'bi-reply': actionTypePermission.checked
+                                                                                })"
+                                                                                  [buttonClassType]="classNames({
+                                                                                    'btn-success': actionTypePermission.ext,
+                                                                                    'btn-danger': actionTypePermission.checked || checkAttributeFromActionType(actionTypePermission)
+                                                                                }) || 'btn-primary'"
+                                                                                  [buttonIcon]="true"
+                                                                                  [checkPermission]="false"
+                                                                                  (confirmFunc)="onChangeStatus(item,actionTypePermission)"
+                                                                                  [text]="('news.online.change.status.' + actionTypePermission.text) | lowercase | translate"
+                                                                                  [okText]="'Continue'| translate"
+                                                                                  [confirmTitle]="('are.you.sure.change.news.online.status.' + actionTypePermission.text) | lowercase | translate"
+                                                    >
+                                                    </app-news-button-icon-confirm>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+
+                </tbody>
+            </nz-table>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                <div class="me-5">
+                    {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items'|translate }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

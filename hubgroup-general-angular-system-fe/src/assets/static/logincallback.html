@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phiên đăng nhập hết hạn</title>
+    <style type="text/css">
+        .login.login-2 .login-signin,
+        .login.login-2 .login-signup,
+        .login.login-2 .login-forgot {
+            display: none;
+        }
+        .login.login-2.login-signin-on .login-signup {
+            display: none;
+        }
+        .login.login-2.login-signin-on .login-signin {
+            display: block;
+        }
+        .login.login-2.login-signin-on .login-forgot {
+            display: none;
+        }
+        .login.login-2.login-signup-on .login-signup {
+            display: block;
+        }
+        .login.login-2.login-signup-on .login-signin {
+            display: none;
+        }
+        .login.login-2.login-signup-on .login-forgot {
+            display: none;
+        }
+        .login.login-2.login-forgot-on .login-signup {
+            display: none;
+        }
+        .login.login-2.login-forgot-on .login-signin {
+            display: none;
+        }
+        .login.login-2.login-forgot-on .login-forgot {
+            display: block;
+        }
+        .login.login-2 .content .content-img {
+            min-height: 450px;
+        }
+        @media (min-width: 992px) {
+            .login.login-2 .login-aside {
+                width: 100%;
+                max-width: 600px;
+            }
+            .login.login-2 .content .content-img {
+                min-height: 600px !important;
+            }
+            .login.login-2 .login-form {
+                width: 100%;
+                max-width: 450px;
+            }
+        }
+        @media (min-width: 992px) and (max-width: 1399.98px) {
+            .login.login-2 .login-aside {
+                width: 100%;
+                max-width: 600px;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .login.login-2 .content .content-img {
+                min-height: 470px !important;
+                background-size: 700px;
+            }
+            .login.login-2 .login-form {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .login.login-2 .content .content-img {
+                min-height: 280px !important;
+                background-size: 400px;
+            }
+            .login.login-2 .login-form {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+    <link href="/assets/static/style.bundle.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div class="d-flex flex-column flex-root">
+        <div class="login login-2 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white"
+            id="kt_login">
+            <div class="content order-1 order-lg-2 d-flex flex-column w-100 pb-0" style="background-color: #B1DCED;">
+                <div
+                    class="d-flex flex-column justify-content-center text-center pt-lg-40 pt-md-5 pt-sm-5 px-lg-0 pt-5 px-7">
+                    <h3 class="display4 font-weight-bolder my-7 text-dark" style="color: #986923;">Phiên làm việc của bạn đã hết hạn!
+                    </h3>
+                    <p class="font-weight-bolder font-size-h2-md font-size-lg text-dark opacity-70">
+                        Vui lòng kết nối lại.
+                    </p>
+                    <div class="text-center pt-2">
+                        <button onclick="reconnectLogin()" id="re_login_signin_submit" class="btn btn-light font-weight-bolder font-size-h6 px-8 py-4 my-3">Đăng nhập lại</button>
+                    </div>
+                </div>
+                <div class="content-img d-flex flex-row-fluid bgi-no-repeat bgi-position-y-bottom bgi-position-x-center"
+                    style="background-image: url(/assets/media/svg/illustrations/login-visual-2.svg);">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+      const response = { IsCallBack: true };
+      window.top.postMessage([response], '*');
+      if(window.parent !== window.top){
+        window.parent.postMessage([response], '*');
+      }
+      if(window.parent.parent &&  window.parent.parent !== window.top && window.parent.parent !== window.parent){
+        window.parent.postMessage([response], '*');
+      }
+      function reconnectLogin(){
+        window.top.postMessage([{ IsCallBack: true }], '*');
+        if(window.parent !== window.top){
+          window.parent.postMessage([{ IsCallBack: true }], '*');
+        }
+        if(window.parent.parent &&  window.parent.parent !== window.top && window.parent.parent !== window.parent){
+          window.parent.postMessage([{ IsCallBack: true }], '*');
+        }
+        window.parent.location.reload();
+      }
+    </script>
+</body>
+
+</html>

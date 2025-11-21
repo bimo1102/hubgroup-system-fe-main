@@ -1,0 +1,34 @@
+{
+  "name": "@bryntum/scheduler",
+  "description": "Bryntum Scheduler JavaScript component",
+  "version": "4.2.3",
+  "author": {
+    "name": "Bryntum",
+    "url": "https://bryntum.com",
+    "email": "info@bryntum.com"
+  },
+  "license": "Commercial",
+  "homepage": "https://bryntum.com/products/scheduler/",
+  "main": "scheduler.module.js",
+  "scripts": {
+    "postinstall": "node ../scheduler-lib/build.js"
+  },
+  "dependencies": {
+    "@bryntum/scheduler-lib": "1.0.0"
+  },
+  "devDependencies": {},
+  "browserslist": [
+    "ie >= 11",
+    "last 2 versions"
+  ],
+  "keywords": [
+    "bryntum",
+    "scheduler",
+    "component"
+  ],
+  "bugs": "https://github.com/bryntum/support/issues",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "types": "./scheduler.d.ts"
+}

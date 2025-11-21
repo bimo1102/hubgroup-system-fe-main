@@ -1,0 +1,20 @@
+.b-textareafield {
+    textarea {
+        padding    : $textareafield-input-padding;
+        align-self : stretch;
+    }
+}
+
+.b-textareafield-picker {
+    display : flex;
+
+    textarea {
+        flex       : 1;
+        min-height : 10em;
+
+        &:focus {
+            outline      : none;
+            border-color : $widget-highlight-color;
+        }
+    }
+}

@@ -1,0 +1,142 @@
+<!--begin::Menu wrapper-->
+<div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" data-kt-scroll="true"
+     data-kt-scroll-activate="true" data-kt-scroll-height="auto"
+     data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
+     data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+    <!--begin::Menu-->
+    <ul class="topNav mb-3">
+        <li class="topNav-item flex-fill">
+            <a (click)="selectMenu(cmsNewsMenuPositionEnv)" [ngClass]="getActiveCSSClasses(cmsNewsMenuPositionEnv)">
+                <span [inlineSVG]="'./assets/media/svg/bootstrap-icons/newspaper.svg'"
+                      class="svg-icon menu-icon"></span>
+                <span class="top-nav-tab-text"> {{ 'Tin tức'|translate }}</span>
+            </a>
+        </li>
+        <li class="topNav-item flex-fill">
+            <a (click)="selectMenu(cmsDataMenuPositionEnv)"
+               [ngClass]="getActiveCSSClasses(cmsDataMenuPositionEnv)">
+                <span [inlineSVG]="'./assets/media/svg/bootstrap-icons/database-fill-gear.svg'"
+                      class="svg-icon menu-icon"></span>
+                <span class="top-nav-tab-text"> {{ 'Dữ liệu'|translate }}</span>
+            </a>
+        </li>
+    </ul>
+    <div class="menu-loading" [ngStyle]="{display: isMenuLoading ? 'block' : 'none'}">
+        <nz-spin nzSimple [nzSpinning]="isMenuLoading"></nz-spin>
+    </div>
+    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu"
+         data-kt-menu="true"
+         data-kt-menu-expand="false">
+        @for (menuItem of menus; track menuItem.id) {
+            @if (!menuItem.children || (menuItem.children && menuItem.children.length === 0)) {
+                @if (menuItem.type === MenuTypeEnum.Link) {
+                    <div class="menu-item">
+                        @if (menuItem.systemOption === systemOptionEnv) {
+                            <a class="menu-link menu-link-custom without-sub" [routerLink]="menuItem.url"
+                               routerLinkActive="active">
+                                    <span class="menu-icon">
+                                      <span
+                                          [inlineSVG]=" menuItem.cssClassIcon || './assets/media/icons/duotune/general/gen008.svg'"
+                                          class="svg-icon svg-icon-2">
+                                      </span>
+                                    </span>
+                                <span class="menu-title">{{ (menuItem.text || '')|lowercase|translate }}</span>
+                            </a>
+                        } @else {
+                            <a class="menu-link menu-link-custom without-sub" [href]="menuItem.fullUrl"
+                               routerLinkActive="active">
+                                    <span class="menu-icon">
+                                      <span
+                                          [inlineSVG]=" menuItem.cssClassIcon || './assets/media/icons/duotune/general/gen008.svg'"
+                                          class="svg-icon svg-icon-2">
+                                      </span>
+                                    </span>
+                                <span class="menu-title">{{ (menuItem.text || '')|lowercase|translate }}</span>
+                            </a>
+                        }
+                    </div>
+                } @else {
+                    <div class="menu-item">
+                        <div class="menu-content pt-8 pb-2">
+                                    <span
+                                        class="menu-section text-muted text-uppercase fs-8 ls-1">{{ (menuItem.text || '')|lowercase|translate }}</span>
+                        </div>
+                    </div>
+                }
+            } @else if (menuItem.children && menuItem.children.length > 0) {
+                <ng-container
+                    [ngTemplateOutlet]="treeNode"
+                    [ngTemplateOutletContext]="{ $implicit: menuItem }">
+                </ng-container>
+            }
+        }
+
+        <ng-template #treeNode let-menuItem>
+            <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+                <span class="menu-link menu-link-custom">
+                    <span class="menu-icon">
+                      <span class="svg-icon svg-icon-2"
+                            [inlineSVG]="menuItem.cssClassIcon || './assets/media/icons/duotune/general/gen008.svg'"></span>
+                    </span>
+                    <span class="menu-title"
+                          [attr.data-link]="[menuItem.url]">{{ (menuItem.text || '')|lowercase|translate }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                @if (menuItem.children && menuItem.children.length > 0) {
+                    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+                        @for (menuItemChild of $any(menuItem.children); track menuItemChild.id) {
+                            @if (menuItemChild.children && menuItemChild.children.length > 0) {
+                                <ng-container
+                                    [ngTemplateOutlet]="treeNode"
+                                    [ngTemplateOutletContext]="{ $implicit: menuItemChild }">
+                                </ng-container>
+                            } @else {
+                                @if (menuItemChild.type === MenuTypeEnum.Link) {
+                                    <div class="menu-item">
+                                        @if (menuItemChild.systemOption === systemOptionEnv) {
+                                            <a class="menu-link menu-link-custom without-sub" routerLinkActive="active"
+                                               routerLink="{{menuItemChild.url}}">
+                                              <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                              </span>
+                                                <span class="menu-title">
+                                                {{ (menuItemChild.text || '')|lowercase|translate }}
+                                            </span>
+                                            </a>
+                                        } @else {
+                                            <a class="menu-link menu-link-custom without-sub"
+                                               routerLinkActive="active"
+                                               [href]="menuItemChild.fullUrl">
+                                                  <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                  </span>
+                                                <span class="menu-title">
+                                                    {{ (menuItemChild.text || '')|lowercase|translate }}
+                                                </span>
+                                            </a>
+                                        }
+                                    </div>
+                                }
+<!--                                @else {-->
+<!--                                    <div class="menu-item">-->
+<!--                                        <div class="menu-content pt-8 pb-2">-->
+<!--                                        <span-->
+<!--                                            class="menu-section text-muted text-uppercase fs-8 ls-1">{{ (menuItem.text || '') }}</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                }-->
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </ng-template>
+
+        <div class="menu-item">
+            <div class="menu-content">
+                <div class="separator mx-1 my-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Menu wrapper-->

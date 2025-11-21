@@ -1,0 +1,11 @@
+<ng-container *ngIf="appContentContiner">
+  <!--begin::Content container-->
+  <div id="kt_app_content_container" class="app-container app-container-fit-mobile container-fluid"
+    [ngClass]="appContentContainerClass + ' ' + contentContainerCSSClass">
+    <router-outlet></router-outlet>
+  </div>
+  <!--end::Content container-->
+</ng-container>
+<ng-container *ngIf="!appContentContiner">
+  <router-outlet></router-outlet>
+</ng-container>

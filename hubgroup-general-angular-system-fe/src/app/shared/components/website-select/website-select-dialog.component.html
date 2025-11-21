@@ -1,0 +1,45 @@
+<nz-spin [nzSpinning]="false" [nzSize]="'large'" nzTip="Loading...">
+    <!--    <nz-form-item *ngIf="message">-->
+    <!--        <nz-alert nzType="error" [nzMessage]="message" nzDescription="" nzShowIcon></nz-alert>-->
+    <!--    </nz-form-item>-->
+    <form nz-form [nzLayout]="'horizontal'" autocomplete="off" novalidate="novalidate">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="8">{{ 'website.selected.server'|translate }}</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+                <input type="text" [value]="serverWebsite?.text || ''" nz-input disabled />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="8">{{ 'website.selected.client'|translate }}</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+                <input type="text" [value]="clientWebsiteName || ''" nz-input disabled />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="8">{{ 'Company'|translate }}</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+                <nz-select [(ngModel)]="companyId" name="companyId"
+                           (ngModelChange)="onCompanyModelChange($event)">
+                    <nz-option *ngFor="let website of companies" [nzValue]="website.id"
+                               [nzLabel]="website.text!"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="websites.length>0">
+            <nz-form-label [nzSpan]="8">{{ 'user.website.selected'|translate }}</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+                <nz-select [(ngModel)]="websiteId" name="websiteId">
+                    <nz-option *ngFor="let website of websites" [nzValue]="website.id"
+                               [nzLabel]="website.text"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <div class="mt-5 text-center">
+            <app-news-button-icon [checkPermission]="false" [keenIcon]="' '"
+                                [text]="'choose.website'| translate"
+                                (clickFunc)="onWebsiteChange()"></app-news-button-icon>
+        </div>
+    </form>
+</nz-spin>

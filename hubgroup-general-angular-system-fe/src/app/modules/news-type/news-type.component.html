@@ -1,0 +1,98 @@
+<div class='card card-bordered'>
+    <div class='card-header'>
+        <div class='card-title m-0'>
+            {{ 'news.type.list.title' | translate }}
+        </div>
+
+        <div class="card-toolbar">
+            <app-news-button-add [permissionKey]="'NewsType/Insert'"
+                                 [keenIconClass]="responsive.isDesktop ? 'fs-4' : 'fs-5'"
+                                 (clickFunc)='onOpenInsertOrUpdateModal()'
+                                 [text]="'Add' | translate">
+            </app-news-button-add>
+        </div>
+    </div>
+    <div class='card-body'>
+        @if (message) {
+            <nz-alert class="mb-1" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+        }
+        <form nz-form [nzLayout]="'horizontal'" class="position-relative" (ngSubmit)="onSearch(true)">
+            <div nz-row [nzGutter]="30">
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Keyword' | translate">
+                                <input nz-input [name]="'keyword'" [autofocus]="responsive.isDesktop"
+                                       [placeholder]="'Keyword' | translate"
+                                       type="search"
+                                       [(ngModel)]="requestSearch.key" (ngModelChange)="onRequestModelChange()" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="3">
+                    <div nz-flex [nzWrap]="'wrap'" [nzGap]="'middle'" [nzAlign]="'center'">
+                        <app-news-button-search [text]="'Search' | translate"
+                                                [buttonType]="'submit'"
+                                                [permissionKey]="'NewsType/Gets'"></app-news-button-search>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class='table-responsive'>
+            <nz-table nzBordered #dataTable
+                      [nzData]='newsTypeModels' [nzPageIndex]='requestSearch.pageIndex! + 1'
+                      [nzPageSize]='requestSearch.pageSize!'
+                      [nzSize]="'small'"
+                      [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                      (nzPageIndexChange)='onPageIndexChange($event)'
+                      [nzTotal]='totalRow'
+                      [nzFrontPagination]='false'
+                      [nzShowSizeChanger]="responsive.isDesktop"
+                      [nzPageSizeOptions]="listPageSize"
+                      (nzPageSizeChange)="onPageSizeChange($event)">
+                <thead>
+                <tr>
+                    <th nzAlign="center" nzWidth="50px">{{ 'STT' | translate }}
+                    </th>
+                    <th>{{ 'news.type.name' | translate }}</th>
+                    <th>{{ 'news.type.parent' | translate }}</th>
+                    <th>{{ 'Status' | translate }}</th>
+                    <th>{{ 'news.type.priority' | translate }}</th>
+                    <th nzAlign="center">{{ 'Action' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for (type of dataTable.data; track $index) {
+                        <tr>
+                            <td [nzAlign]="'center'"> {{ pageIndex * pageSize + ($index + 1) }}</td>
+                            <td>{{ type.name }}</td>
+                            <td>{{ type.parentName }}</td>
+                            <td>{{ StatusEnum[type.status] | translate }}</td>
+                            <td>
+                                {{ type.priority }}
+                            </td>
+                            <td [nzAlign]="'center'">
+                                <div class="d-flex flex-center gap-3 flex-wrap">
+                                    <app-news-button-change [buttonIcon]="true"
+                                                            [permissionKey]="'NewsType/GetById'"
+                                                            (clickFunc)="onOpenInsertOrUpdateModal(type)">
+                                    </app-news-button-change>
+
+                                    <app-news-button-delete [buttonIcon]="true"
+                                                            (clickFunc)="onDelete(type)"
+                                                            [permissionKey]="'NewsType/StatusChange'"></app-news-button-delete>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </nz-table>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                <div class="me-5">
+                    {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items' | translate }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+/**
+ * Angular wrapper for Bryntum Fullscreen button
+ */
+import { ElementRef, OnDestroy, OnInit } from '@angular/core';
+export declare class BryntumFullscreenButtonComponent implements OnInit, OnDestroy {
+    private elementRef;
+    private button;
+    constructor(element: ElementRef);
+    /**
+     * Initializes component
+     */
+    ngOnInit(): void;
+    /**
+     * Destroys component
+     */
+    ngOnDestroy(): void;
+}

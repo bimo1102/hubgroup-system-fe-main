@@ -1,0 +1,6 @@
+@if (isEditorInModal && !isModalAfterOpen) {
+    <nz-skeleton [nzParagraph]="{rows: 10}"></nz-skeleton>
+}@else {
+    <editor [init]="editorSettings" [inline]="inline" [(ngModel)]="value"
+            (ngModelChange)="onChangeHandler($event)" [disabled]="disabled" class="w-100"></editor>
+}

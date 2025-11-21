@@ -1,0 +1,162 @@
+/**
+ * Angular wrapper for Bryntum ResourceCombo
+ */
+import { ElementRef, EventEmitter, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Base, Mask, MaskConfig, Rectangle, Scroller, ScrollerConfig, Store, StoreConfig, Widget } from '@bryntum/scheduler/scheduler.lite.umd.js';
+import { ResourceCombo } from '@bryntum/scheduler/scheduler.lite.umd.js';
+export declare class BryntumResourceComboComponent implements OnInit, OnDestroy {
+    static instanceClass: typeof ResourceCombo;
+    private static bryntumFeatureNames;
+    private static bryntumConfigs;
+    private static bryntumConfigsOnly;
+    private static bryntumProps;
+    private elementRef;
+    instance: ResourceCombo;
+    private bryntumConfig;
+    constructor(element: ElementRef);
+    adopt: HTMLElement | string;
+    align: object | string;
+    anchor: boolean;
+    appendTo: HTMLElement | string;
+    autoClose: boolean;
+    autoComplete: string;
+    autoExpand: boolean;
+    autoSelect: boolean;
+    bubbleEvents: object;
+    caseSensitive: boolean;
+    centered: boolean;
+    chipView: object;
+    clearable: boolean | object;
+    clearTextOnPickerHide: boolean;
+    cls: string | object;
+    config: object;
+    constrainTo: HTMLElement | Widget | Rectangle;
+    contentElementCls: string | object;
+    defaultBindProperty: string;
+    displayField: string;
+    displayValueRenderer: Function;
+    dock: string;
+    draggable: boolean | object;
+    editable: boolean;
+    emptyText: string;
+    encodeFilterParams: Function;
+    filterOnEnter: boolean;
+    filterParamName: string;
+    filterSelected: boolean;
+    floating: boolean;
+    hideAnimation: boolean | object;
+    hidePickerOnSelect: boolean;
+    hideTrigger: boolean;
+    highlightExternalChange: boolean;
+    hint: string | Function;
+    hintHtml: string | Function;
+    htmlCls: string | object;
+    inputAlign: string;
+    inputAttributes: object;
+    inputWidth: string | number;
+    insertBefore: HTMLElement | string;
+    insertFirst: HTMLElement | string;
+    items: object[] | string[] | object;
+    keyStrokeChangeDelay: number;
+    keyStrokeFilterDelay: number;
+    labelCls: string | object;
+    labelPosition: string;
+    labels: object;
+    labelWidth: string | number;
+    listCls: string;
+    listeners: object;
+    listItemTpl: Function;
+    localeClass: Base;
+    localizableProperties: string[];
+    maskDefaults: object | Mask | Partial<MaskConfig>;
+    masked: boolean | string | object | Mask | Partial<MaskConfig>;
+    maxLength: number;
+    minChars: number;
+    minLength: number;
+    monitorResize: boolean;
+    multiSelect: boolean;
+    name: string;
+    overlayAnchor: boolean;
+    owner: Widget;
+    picker: object;
+    pickerAlignElement: string;
+    pickerWidth: number;
+    placeholder: string;
+    positioned: boolean;
+    preventTooltipOnTouch: boolean;
+    primaryFilter: object;
+    required: boolean;
+    revertOnEscape: boolean;
+    ripple: boolean | object;
+    rootElement: ShadowRoot;
+    scrollAction: string;
+    showAnimation: boolean | object;
+    tab: boolean | object;
+    tabIndex: number;
+    tag: string;
+    textAlign: string;
+    title: string;
+    triggerAction: string;
+    validateFilter: boolean;
+    valueField: string;
+    weight: number;
+    alignSelf: string;
+    badge: string;
+    content: string;
+    dataset: object;
+    disabled: boolean;
+    extraData: boolean | number | object | string;
+    filterOperator: string;
+    flex: number | string;
+    height: number | string;
+    hidden: boolean;
+    html: string;
+    id: string;
+    label: string;
+    margin: number | string;
+    maxHeight: number | string;
+    maxWidth: number | string;
+    minHeight: number | string;
+    minWidth: number | string;
+    readOnly: boolean;
+    scrollable: boolean | Scroller | object | Partial<ScrollerConfig>;
+    store: Store | object | Partial<StoreConfig>;
+    tooltip: object | string;
+    triggers: object;
+    value: number[] | object | string | string[];
+    width: number | string;
+    x: number;
+    y: number;
+    anchorSize: number[];
+    onAction: EventEmitter<object>;
+    onBeforeDestroy: EventEmitter<object>;
+    onBeforeHide: EventEmitter<object>;
+    onBeforeShow: EventEmitter<object>;
+    onCatchAll: EventEmitter<object>;
+    onChange: EventEmitter<object>;
+    onClear: EventEmitter<object>;
+    onDestroy: EventEmitter<object>;
+    onFocusIn: EventEmitter<object>;
+    onFocusOut: EventEmitter<object>;
+    onHide: EventEmitter<object>;
+    onInput: EventEmitter<object>;
+    onPaint: EventEmitter<object>;
+    onReadOnly: EventEmitter<object>;
+    onResize: EventEmitter<object>;
+    onSelect: EventEmitter<object>;
+    onShow: EventEmitter<object>;
+    onTrigger: EventEmitter<object>;
+    /**
+     * Create and append the underlying widget
+     */
+    ngOnInit(): void;
+    /**
+     * Watch for changes
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Destroy the component
+     */
+    ngOnDestroy(): void;
+}

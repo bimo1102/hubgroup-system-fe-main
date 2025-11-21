@@ -1,0 +1,122 @@
+/*
+    The Gripper
+    ===========
+    The Hoverable mixin applies various b-hover classes to a hoverTarget element. Based on these classes, a resize
+    gripper element inside the target is styled. This element may be always present, or (as with CalendarDrag), moved
+    in to the active hoverTarget on hoverEnter.
+
+    Hoverable may set the following classes simultaneously. Within each are the classes that are mutually exclusive:
+
+     - b-hover-(top|bottom)
+     - b-hover-(right|left)
+     - b-hover-edge   (set when hovering near any edge)
+
+   It may be that none of the above are present if hoverEdges is used. When hoverEdges is not used, these classes will
+   be present on the hoverTarget no matter where the cursor is inside it.
+
+   To facilitate animations, the b-hover-anim class is added in a way such that transitions for styles activated by it
+   will be animated.
+*/
+
+.b-gripper {
+    position : absolute;
+
+    &:after {
+        content  : " ";
+        position : absolute;
+        opacity  : 0;
+    }
+
+    /*
+     Horizontal gripper (top and bottom):
+            +---------------------------+
+            |           =====           |
+            |                           |
+            |                           |
+            |           =====           |
+            +---------------------------+
+     */
+    &.b-gripper-horz {
+        .b-hover-top &,
+        .b-hover-bottom & {
+            cursor : $gripper-horz-cursor;
+            height : $gripper-horz-edge-height;
+            left   : 0;
+            right  : 0;
+        }
+
+        .b-hover-bottom & {
+            bottom : 0;
+        }
+
+        &:after {
+            border-top    : $gripper-border;
+            border-bottom : $gripper-border;
+            width         : 0;
+            height        : $gripper-horz-height;
+            left          : 50%;
+            margin-left   : 0;
+
+            .b-hover-top & {
+                top : $gripper-horz-offset;
+            }
+
+            .b-hover-bottom & {
+                bottom : $gripper-horz-offset;
+            }
+
+            .b-hover-anim.b-hover-edge & {
+                transition  : $gripper-horz-transition;
+                opacity     : 1;
+                margin-left : $gripper-horz-width / -2;
+                width       : $gripper-horz-width;
+            }
+        }
+    }
+
+    /*
+     Vertical gripper (left and right):
+            +---------------------------+
+            |                           |
+            | ||                     || |
+            | ||                     || |
+            |                           |
+            +---------------------------+
+     */
+    &.b-gripper-vert {
+        .b-hover-left &,
+        .b-hover-right & {
+            cursor : $gripper-vert-cursor;
+            width  : $gripper-vert-edge-width;
+            top    : 0;
+            bottom : 0;
+        }
+
+        .b-hover-right & {
+            right : 0;
+        }
+
+        &:after {
+            background : $gripper-vert-gradient;
+            height     : 0;
+            width      : $gripper-vert-width;
+            top        : 50%;
+            margin-top : 0;
+
+            .b-hover-left & {
+                left : $gripper-vert-offset;
+            }
+
+            .b-hover-right & {
+                right : $gripper-vert-offset;
+            }
+
+            .b-hover-anim.b-hover-edge & {
+                transition : $gripper-vert-transition;
+                opacity    : 1;
+                margin-top : $gripper-vert-height / -2;
+                height     : $gripper-vert-height;
+            }
+        }
+    }
+}

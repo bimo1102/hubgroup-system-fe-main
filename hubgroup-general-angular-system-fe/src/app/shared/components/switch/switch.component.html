@@ -1,0 +1,6 @@
+<ng-container *ngIf="isShow">
+    <nz-switch [nzControl]="true" [nzLoading]="isLoading"
+               [(ngModel)]="value"
+               name="selectedItem.status"
+               (click)="onClick()"></nz-switch>
+</ng-container>

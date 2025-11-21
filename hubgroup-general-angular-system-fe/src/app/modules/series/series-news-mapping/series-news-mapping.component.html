@@ -1,0 +1,135 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <div class='card'>
+        <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+            <div class="card-header bg-white">
+                <h3 class="card-title">
+                   <span class="card-label">{{ 'Article in series' | translate }}
+                       @if (seriesModel) {
+                           : {{ seriesModel.id + ' - ' + seriesModel.title }}
+                       }
+                   </span>
+                </h3>
+
+                <div class="card-toolbar">
+                    <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                        <app-news-button-add [permissionKey]="'Series/SeriesAddToNews'"
+                                             (clickFunc)="onOpenNewsModal()"
+                                             [text]="'Add Article' | translate"
+                        ></app-news-button-add>
+                        <app-news-button-close [text]="'Close' | translate"
+                                               (clickFunc)="onClose()"></app-news-button-close>
+
+                    </div>
+                </div>
+            </div>
+        </nz-affix>
+        <div class="card-body">
+            @if (message) {
+                <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+            }
+            <form nz-form autocomplete='off' novalidate='novalidate' (ngSubmit)="onPostGets(true)">
+                <div nz-row [nzGutter]="20">
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/2 - 3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="'Keyword' | translate">
+                                    <input nz-input [name]="'keyword'" [autofocus]="responsive.isDesktop"
+                                           [placeholder]="'Keyword' | translate"
+                                           type="search"
+                                           [(ngModel)]="requestSearch.keyword" (ngModelChange)="onRequestModelChange()" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/2 - 3">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnBefore]="'search.main.category' | translate">
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.categoryIds"
+                                               (ngModelChange)="onRequestModelChange()"
+                                               [nzPlaceHolder]="'search.main.category' | translate"
+                                               (nzOnSearch)="requestCategoryAutocomplete$.next({keyword: $event})"
+                                               [name]="'search.main.category'">
+                                        @for (item of categorySources; track item.id) {
+                                            <nz-option [nzLabel]="(item.text || '') | translate"
+                                                       [nzValue]="item.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="6">
+                        <div nz-flex [nzWrap]="'wrap'" [nzGap]="'middle'" [nzAlign]="'center'">
+                            <app-news-button-search [buttonType]="'submit'"
+                                                    [permissionKey]="'Series/ArticleGets'"
+                                                    [text]="'Search' | translate">
+                            </app-news-button-search>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @if (setOfCheckedId.size > 0) {
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'">
+                    <app-news-button-delete [text]="'Remove.article.from.this.series' | translate"
+                                            (clickFunc)="onRemoveSeriesFromNewsConfirm()"
+                                            [permissionKey]="'Series/SeriesRemoveFromNews'"
+                    >
+                    </app-news-button-delete>
+                    <app-news-button-close (clickFunc)="onClearAllChecked()"
+                                           [text]="'Cancel'| translate">
+                    </app-news-button-close>
+                </div>
+            }
+
+            <div class='table-responsive'>
+                <nz-table nzBordered #newspaperArticleTable
+                          [nzData]='newsSimpleModels'
+                          [nzPageIndex]='requestSearch.pageIndex! + 1'
+                          [nzPageSize]='pageSizeServer'
+                          [nzSize]="'small'"
+                          [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                          (nzPageIndexChange)='onPageIndexChange($event)'
+                          [nzTotal]='totalRow'
+                          [nzFrontPagination]='false'>
+                    <thead>
+                    <tr>
+                        <th nzWidth="50px"
+                            [nzChecked]="checkedAll"
+                            [nzIndeterminate]="indeterminate"
+                            nzLabel="Select all"
+                            (nzCheckedChange)="onAllChecked($event)"
+                        ></th>
+                        <th>{{ 'Article title' | translate }}</th>
+                        <th>{{ 'NewsStatus' | translate }}</th>
+                        <th>{{ 'Created date' | translate }}</th>
+                        <th>{{ 'Category' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of newspaperArticleTable.data; track item.id) {
+                            <tr>
+                                <td [nzChecked]="setOfCheckedId.has(item.id)"
+                                    [nzLabel]="item.title || ''"
+                                    (nzCheckedChange)="onItemChecked(item.id, $event)"
+                                ></td>
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.statusName | translate }}</td>
+                                <td>{{ item.createdDateDisplay }}</td>
+                                <td>{{ item.categoryName }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </nz-table>
+                <ng-template #rangeTemplate let-range="range" let-total>
+                    <div class="me-5">
+                        {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items' | translate }}
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</nz-spin>
+

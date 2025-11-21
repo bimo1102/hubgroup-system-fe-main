@@ -1,0 +1,208 @@
+@import '../../variables.scss';
+
+@mixin bryntum-toolbar-ui(
+    $toolbar-background-color,
+    $toolbar-color,
+    $toolbar-padding,
+    $toolbar-dock-header-padding : null,
+    $toolbar-dock-header-background-color : null,
+    $toolbar-dock-header-margin : null
+) {
+    $separator-start-color : null !default;
+    $separator-end-color   : null !default;
+
+    @if lightness($toolbar-background-color) > lightness($toolbar-color) {
+        // Light background theme
+        $separator-start-color : darken($toolbar-background-color, 10%);
+        $separator-end-color   : darken($toolbar-background-color, 5%)
+    } @else {
+        // dark background theme
+        $separator-start-color : lighten($toolbar-background-color, 20%);
+        $separator-end-color   : lighten($toolbar-background-color, 10%);
+    }
+
+    .b-toolbar {
+        background-color : $toolbar-background-color;
+        color            : $toolbar-color;
+
+        &.b-dock-header, &.b-dock-pre-header {
+            background-color : $toolbar-dock-header-background-color;
+
+            .b-toolbar-content {
+                padding : $toolbar-dock-header-padding;
+            }
+
+            // Buttons added as tools (like the overflow menu button)
+            > .b-button {
+                margin : $toolbar-dock-header-padding;
+            }
+
+            .b-button {
+                min-height : auto;
+            }
+        }
+
+        &.b-dock-header {
+            margin-left : $toolbar-dock-header-margin;
+        }
+
+        &.b-dock-pre-header {
+            margin-right : $toolbar-dock-header-margin;
+        }
+
+        // Must not shrink when Panel loses height
+        flex-shrink      : 0;
+
+        // Scroll tools at start and end
+        > .b-tool {
+            align-self       : center;
+            background-color : transparent;
+            //background-color : rgba(100, 100, 100, 0.1);
+
+            &.b-pressed {
+                background-color : rgba(50, 50, 50, 0.2);
+            }
+        }
+
+        // Icon-only buttons must not yield width
+        .b-button:not(.b-text) {
+            flex-shrink : 0;
+        }
+
+        .b-row-start-scroller {
+            margin : 0 left($toolbar-padding) 0 0;
+        }
+
+        &.b-dock-left {
+            .b-row-start-scroller {
+                margin : 0 0 0 left($toolbar-padding);
+            }
+        }
+
+        &.b-dock-right {
+            .b-row-start-scroller {
+                margin : 0 0 0 left($toolbar-padding);
+            }
+        }
+
+        .b-row-end-scroller, .b-row-menu {
+            margin : 0 0 0 right($toolbar-padding);
+        }
+
+        .b-column-start-scroller {
+            margin : 0 0 top($toolbar-padding) 0;
+        }
+
+        .b-column-end-scroller, .b-column-menu {
+            margin : bottom($toolbar-padding) 0 0 0;
+        }
+
+        // Buttons added as tools (like the overflow menu button)
+        > .b-overflow-button {
+            margin : $toolbar-padding;
+        }
+
+        .b-toolbar-content {
+            padding : $toolbar-padding;
+
+            .b-field {
+                margin-bottom : 0;
+            }
+
+            // A filler element to push elements along.
+            > .b-toolbar-fill {
+                flex : 1 1 0%;
+            }
+
+            // text display elements such as titles/descriptions should be centered.
+            .b-html {
+                align-items : center;
+
+                code {
+                    margin : 0 .5em;
+                }
+            }
+
+            // Toolbar dictates height (for the most part, high widgets can stretch it)
+            > .b-widget {
+                &:not(.b-button) {
+                    min-height : 0;
+                }
+
+                &:not(.b-last-visible-child) {
+                    margin-right : .5em;
+                }
+            }
+
+            &.b-overflow {
+                // Fields and buttons must not flex down into obscurity when there's an overflow handler
+                .b-field, .b-button {
+                    flex-shrink : 0;
+                }
+            }
+        }
+
+        &.b-dock-top,
+        &.b-dock-bottom {
+            min-height : 4.2em;
+
+            .b-toolbar-content {
+                > .b-toolbar-separator {
+                    margin             : 0.2em 0.5em 0.2em 0;
+                    border-style       : solid;
+                    border-width       : 0 1px 0 1px;
+                    border-left-color  : $separator-start-color;
+                    border-right-color : $separator-end-color;
+                }
+            }
+        }
+
+        &.b-dock-top {
+            border-bottom : $panel-toolbar-top-border-bottom;
+        }
+
+        &.b-dock-left,
+        &.b-dock-right {
+            min-width : 4.2em;
+
+            .b-toolbar-content {
+                > .b-toolbar-separator {
+                    margin              : 0 0.5em 0.2em 0.2em;
+                    border-style        : solid;
+                    border-width        : 1px 0 1px 0;
+                    border-top-color    : $separator-start-color;
+                    border-bottom-color : $separator-end-color;
+                }
+            }
+        }
+    }
+
+    // When displayed in a tabpanel, match its color
+    .b-tabpanel .b-panel .b-toolbar {
+        background-color : $tabpanel-background-color;
+    }
+
+    // When used standalone, use panel background color
+    .b-toolbar.b-outer {
+        background-color : $popup-background-color;
+    }
+}
+
+.b-toolbar-overflow-menu > .b-panel-body-wrap > .b-menu-content {
+    .b-widget {
+        // Don't allow horizontal flex styles to apply in the vertical layout of a Menu
+        flex  : 0 0 auto !important;
+
+        // Width must obey the Menu's align-items:stretch
+        width : auto;
+    }
+}
+
+@include bryntum-toolbar-ui(
+        $panel-toolbar-background-color,
+        $panel-toolbar-color,
+        $panel-toolbar-padding,
+        $panel-toolbar-dock-header-padding,
+        $panel-toolbar-dock-header-background-color,
+        $panel-toolbar-dock-header-margin
+);

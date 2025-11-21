@@ -1,0 +1,49 @@
+@import '../../variables.scss';
+
+// Try to occupy all available space in a flexbox if outermost widget
+// or if we only contain one child and have not been given a layout
+.b-container {
+    &.b-outer,
+    .b-auto-container:not(.b-toolbar-content).b-single-child > & {
+        align-self : stretch;
+        flex       : 1 1 auto;
+    }
+}
+
+// If we adopt body as a container, behave as a viewport:
+// No margins, no scrolling, full size.
+body.b-container.b-outer {
+    margin   : 0;
+    height   : 100%;
+    width    : 100%;
+    overflow : hidden;
+}
+
+.b-container:focus {
+    outline : none;
+}
+
+.b-content-element {
+    position  : relative;
+    display   : flex;
+    flex-flow : row wrap;
+
+    &.b-flex-row {
+        // This causes wrapped items to align vertically below the previous line. Per MDN:
+        //  > The CSS align-content property sets the distribution of space between and around content items along a
+        //  > flexbox's cross-axis or a grid's block axis.
+        align-content : start;
+    }
+
+    // If implementer is using our widgets to contain just custom markup/text,
+    // we apply a display rule to make the contentElement flow as expected
+    &.b-text-content {
+        display  : block;
+        overflow : auto;
+    }
+}
+
+.b-ie .b-content-element.b-flex-row,
+.b-ie.b-content-element.b-flex-row {
+    align-content : flex-start;
+}

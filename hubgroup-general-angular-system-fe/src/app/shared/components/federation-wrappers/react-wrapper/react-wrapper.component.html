@@ -1,0 +1,11 @@
+<div [ngClass]="{
+        'loading-module': isLoadingModule && !isModalMode
+    }"
+     #react_app [class]="(moduleName ? moduleName.split('/')[0] : '') + ' react-app-wrapper'">
+    @if (isModalMode) {
+        <nz-skeleton [nzParagraph]="{rows: 5}"></nz-skeleton>
+    } @else {
+        <nz-spin nzTip="Loading..." nzSimple></nz-spin>
+    }
+</div>
+

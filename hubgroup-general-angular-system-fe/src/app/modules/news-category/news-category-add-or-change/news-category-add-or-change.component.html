@@ -1,0 +1,274 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' #formElement nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card card-bordered'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (isAdd) {
+                            {{ 'Add news category' | translate }}
+                        } @else {
+                            {{ 'Edit news category' | translate }}
+                        }
+                    </div>
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'middle'">
+                            <app-news-button-save
+                                [permissionKey]="categoryModel.id ? 'NewsCategory/Add' : 'NewsCategory/Change'"
+                                (clickFunc)="onSave(addOrChangeForm)"
+                                [text]="'Save' | translate"></app-news-button-save>
+                            <app-news-button-close (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class='card-body'>
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <div nz-row [nzGutter]="30">
+                    <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'News category name' | translate }}
+                                <span class="text-danger ms-2">*</span>
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]='nameTpl'>
+                                <input required nz-input type='text' [(ngModel)]='categoryModel.name'
+                                       [placeholder]="'News category name' | translate"
+                                       (change)="onChangeTitle()"
+                                       name='categoryModel.name' />
+                                <ng-template #nameTpl let-control>
+                                    @if (control.hasError('required')) {
+                                        {{ 'News category name is required' | translate }}
+                                    }
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'News category parent' | translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-tree
+                                    #nzTreeParentComponent
+                                    [nzData]="nodes"
+                                    [nzSearchValue]="searchNodeValue"
+                                    [nzSelectedKeys]="parentCheckedKeys"
+                                    [nzCheckedKeys]="parentCheckedKeys"
+                                    (nzClick)="onCategoryToggleSelect($event)"
+                                    (nzCheckBoxChange)="onParentCheck($event)"
+                                    nzCheckable
+                                    [nzCheckStrictly]="true"
+                                ></nz-tree>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div class="separator my-1"></div>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'news.category.group' | translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-select nzShowSearch nzAllowClear nzServerSearch [nzMode]="'multiple'"
+                                           [(ngModel)]="groupIds"
+                                           [nzPlaceHolder]="'news.category.group' | translate"
+                                           (nzOnSearch)="requestGroupCategoryAutocomplete$.next({keyword: $event})"
+                                           [name]="'groupIds'">
+                                    @for (item of groupsSources; track item.id) {
+                                        <nz-option [nzLabel]="(item.text || '') | translate"
+                                                   [nzValue]="item.value"></nz-option>
+                                    }
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzSpan]="8" [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'order.title' | translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-input-number class="min-w-200px" [(ngModel)]="categoryModel.order"
+                                                 name="model.order"></nz-input-number>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'category.related' | translate }}
+                                <app-news-button-add [buttonClass]="'ms-3'" [checkPermission]="false"
+                                                     (clickFunc)="onAddCateRelates()"></app-news-button-add>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <div cdkDropList class="drop-list"
+                                     (cdkDropListDropped)="dropRelates($event)">
+                                    @for (item of categoryRelates; track $index) {
+                                        <div
+                                            class="custom-drag-item px-3 py-2 mb-1 d-flex flex-stack gap-2 rounded bg-gray-200"
+                                            cdkDrag>
+                                            <div
+                                                class="border-2 my-2 border-dashed border-secondary-active min-h-50px custom-placeholder"
+                                                *cdkDragPlaceholder></div>
+                                            <app-news-keenicon [name]="'menu'" [class]="'fs-2'" cdkDragHandle>
+                                            </app-news-keenicon>
+                                            <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                                       [(ngModel)]="item.id"
+                                                       [nzPlaceHolder]="'category.related' | translate"
+                                                       (nzOnSearch)="requestCategoryRelatedAutocomplete$.next({keyword: $event})"
+                                                       [name]="'cateRelateIds' + $index">
+                                                @for (item of categoryRelatedSources; track $index) {
+                                                    <nz-option [nzLabel]="(item.text || '') | translate"
+                                                               [nzValue]="item.value"></nz-option>
+                                                }
+                                            </nz-select>
+                                            <app-news-button-delete [buttonIcon]="true" [btnConfirm]="false"
+                                                                    (clickFunc)="onRemoveCategoryRelated($index)"
+                                                                    [checkPermission]="false"></app-news-button-delete>
+                                        </div>
+                                    }
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'News.category.all.child' | translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <label nz-checkbox name="isRelAllChild"
+                                       [(ngModel)]="isRelAllChild"></label>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label nzLabelWrap [nzLabelAlign]="'left'"
+                                           class="text-gray-700 fw-bold text-break">
+                                {{ 'Status' | translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <label nz-checkbox name="model.isActive"
+                                       [(ngModel)]="categoryModel.isActive">{{ 'Active'| translate }}</label>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzXl]="24/2">
+                        @if (categoryModel.seoOption; as seoOption) {
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'seo.title' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type='text' [(ngModel)]='seoOption.title'
+                                           (change)="onChangeSeoTitle()"
+                                           [placeholder]="'seo.title' | translate"
+                                           maxlength="80"
+                                           name='seoOption.title' />
+                                    <ng-container [ngTemplateOutlet]="countTpl"
+                                                  [ngTemplateOutletContext]="{ $implicit: seoOption.title, maxLength: 80 }">
+                                    </ng-container>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <ng-template #countTpl let-value let-maxLength="maxLength">
+                                <div [ngClass]="value && value.length > maxLength ? 'text-danger': 'text-primary'">
+                                    {{ 'count.character' | translate }}: {{ value ? value.length : 0 }}
+                                    / {{ maxLength }}
+                                </div>
+                            </ng-template>
+
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'seo.description' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type='text' [(ngModel)]='seoOption.description'
+                                           (change)="onChangeSeoTitle()"
+                                           [placeholder]="'seo.description' | translate"
+                                           maxlength="180"
+                                           name='seoOption.description' />
+                                    <ng-container [ngTemplateOutlet]="countTpl"
+                                                  [ngTemplateOutletContext]="{ $implicit: seoOption.description, maxLength: 180 }">
+                                    </ng-container>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'seo.keyword' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type='text' [(ngModel)]='seoOption.keywords'
+                                           (change)="onChangeSeoTitle()"
+                                           [placeholder]="'seo.keyword' | translate"
+                                           name='seoOption.keyword' />
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'seo.url' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type='text' [(ngModel)]='seoOption.url'
+                                           (change)="onChangeSeoUrl()"
+                                           [placeholder]="'seo.url' | translate"
+                                           name='seoOption.url' />
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'seo.canonicalUrl' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type='text' [(ngModel)]='seoOption.canonicalUrl'
+                                           (change)="onChangeSeoCanonicalUrl()"
+                                           [placeholder]="'seo.canonicalUrl' | translate"
+                                           name='seoOption.canonicalUrl' />
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <nz-form-item>
+                                <nz-form-label nzLabelWrap [nzSpan]="24" [nzLabelAlign]="'left'"
+                                               class="text-gray-700 fw-bold text-break">
+                                    {{ 'news.category.options' | translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    @if (categoryModel.optionsDisplay && categoryModel.optionsDisplay.length > 0) {
+                                        @for (item of categoryModel.optionsDisplay; track $index) {
+                                            <div>
+                                                <label nz-checkbox name="options_{{$index}}"
+                                                       [(ngModel)]="item.checked">{{ item.text | translate }}</label>
+                                            </div>
+                                        }
+                                    }
+                                </nz-form-control>
+                            </nz-form-item>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="flex flex-center gap-3">
+                    <app-news-button-save
+                        [permissionKey]="categoryModel.id ? 'NewsCategory/Add' : 'NewsCategory/Change'"
+                        (clickFunc)="onSave(addOrChangeForm)"
+                        [text]="'Save' | translate"></app-news-button-save>
+                    <app-news-button-close (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>

@@ -1,0 +1,55 @@
+@import 'colors.scss';
+
+@import 'core/core.scss';
+
+@import 'core/mixin/hoverable.scss';
+
+@import 'core/helper/draghelper.scss';
+@import 'core/helper/util/demobot.scss';
+
+// widget.scss should be imported first of the widgets, to allow easier overriding
+@import 'core/widget/widget.scss';
+@import 'core/widget/badge.scss';
+@import 'core/widget/button.scss';
+@import 'core/widget/buttongroup.scss';
+@import 'core/widget/calendarpanel.scss';
+@import 'core/widget/checkbox.scss';
+@import 'core/widget/combo.scss';
+@import 'core/widget/container.scss';
+@import 'core/widget/datepicker.scss';
+@import 'core/widget/editor.scss';
+@import 'core/widget/field.scss';
+@import 'core/widget/filepicker.scss';
+@import 'core/widget/displayfield.scss';
+@import 'core/widget/pickerfield.scss';
+@import 'core/widget/datefield.scss';
+@import 'core/widget/datetimefield.scss';
+@import 'core/widget/label.scss';
+@import 'core/widget/list.scss';
+@import 'core/widget/chipview.scss';
+@import 'core/widget/mask.scss';
+@import 'core/widget/messagedialog.scss';
+@import 'core/widget/pagingtoolbar.scss';
+@import 'core/widget/panel.scss';
+@import 'core/widget/popup.scss';
+@import 'core/widget/menu.scss';
+@import 'core/widget/ripple.scss';
+@import 'core/widget/slider.scss';
+@import 'core/widget/slidetoggle.scss';
+@import 'core/widget/splitter.scss';
+@import 'core/widget/timefield.scss';
+@import 'core/widget/timepicker.scss';
+@import 'core/widget/toast.scss';
+@import 'core/widget/tooltip.scss';
+@import 'core/widget/textareafield.scss';
+@import 'core/widget/toolbar.scss';
+@import 'core/widget/tabpanel.scss';
+
+@import 'core/widget/graph/histogram.scss';
+@import 'core/widget/graph/scale.scss';
+
+@import 'core/widget/layout/box.scss';
+@import 'core/widget/layout/card.scss';
+@import 'core/widget/layout/fit.scss';
+
+@import 'core/widget/util/avatarrendering.scss';

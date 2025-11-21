@@ -1,0 +1,68 @@
+<div class="card card-bordered">
+    <div class="card-header ">
+        <h3 class="card-title">
+            {{ 'news.image.setting.title'|translate }}
+        </h3>
+        <div class="card-toolbar">
+            <div class="d-flex gap-3">
+                <app-news-button-save (clickFunc)="onSave()" class="button-group-clear me-1"
+                                      [permissionKey]="'File/DownloadFromOutside'"
+                ></app-news-button-save>
+                <app-news-button-close (clickFunc)="onClose()"
+                ></app-news-button-close>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive w-100px h-100px">
+            <table class="table table-bordered table-choice-position bg-gray-400">
+                <tbody>
+                <tr>
+                    <td [class.selected-col]="position===1" (click)="onSelectedPosOnImage(1)">
+                    </td>
+                    <td [class.selected-col]="position===2" (click)="onSelectedPosOnImage(2)">
+                    </td>
+                    <td [class.selected-col]="position===3" (click)="onSelectedPosOnImage(3)">
+                    </td>
+                </tr>
+                <tr>
+                    <td [class.selected-col]="position===4" (click)="onSelectedPosOnImage(4)">
+                    </td>
+                    <td [class.selected-col]="position===5" (click)="onSelectedPosOnImage(5)">
+                    </td>
+                    <td [class.selected-col]="position===6" (click)="onSelectedPosOnImage(6)">
+                    </td>
+                </tr>
+                <tr>
+                    <td [class.selected-col]="position===7" (click)="onSelectedPosOnImage(7)">
+                    </td>
+                    <td [class.selected-col]="position===8" (click)="onSelectedPosOnImage(8)">
+                    </td>
+                    <td [class.selected-col]="position===9" (click)="onSelectedPosOnImage(9)">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <image-cropper
+                id="img_cropper"
+                format="png"
+                [imageURL]="imageUrl"
+                [style.display]="showCropper ? null : 'none'"
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="ratio!==1"
+                [aspectRatio]="ratio"
+                [cropper]="cropper"
+                [alignImage]="'left'"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (loadImageFailed)="loadImageFailed()"
+            ></image-cropper>
+        </div>
+    </div>
+</div>
+
+
+
+

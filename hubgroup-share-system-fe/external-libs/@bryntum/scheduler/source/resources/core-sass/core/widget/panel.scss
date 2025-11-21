@@ -1,0 +1,318 @@
+@import '../../variables.scss';
+
+// Only floating panels have radius. If they are contained, that would leave visible gaps.
+.b-panel.b-floating {
+    border-radius : $widget-border-radius;
+
+    // By default the body gets a border radius
+    > .b-panel-body-wrap > .b-panel-content {
+        border-radius : $widget-border-radius;
+    }
+
+    // If we have a header, it needs top border-radius instead of body (removed further down).
+    // The same applies for no header but a top toolbar
+    > .b-panel-header.b-dock-top,
+    &:not(.b-has-header) > .b-panel-body-wrap > .b-toolbar.b-dock-top {
+        border-top-left-radius  : $widget-border-radius;
+        border-top-right-radius : $widget-border-radius;
+    }
+
+    // If we have a bottom toolbar, it needs bottom border-radius (removed from body further down)
+    > .b-panel-body-wrap > .b-toolbar.b-dock-bottom {
+        border-bottom-left-radius  : $widget-border-radius;
+        border-bottom-right-radius : $widget-border-radius;
+    }
+
+    // Has header or top toolbar, remove top radius from body
+    &.b-panel-has-header,
+    &.b-panel-has-top-toolbar {
+        > .b-panel-body-wrap > .b-panel-content {
+            border-top-left-radius  : 0;
+            border-top-right-radius : 0;
+        }
+    }
+
+    // Has bottom toolbar, remove bottom radius from body
+    &.b-panel-has-bottom-toolbar > .b-panel-body-wrap > .b-panel-content {
+        border-bottom-left-radius  : 0;
+        border-bottom-right-radius : 0;
+    }
+}
+
+.b-panel {
+    padding : 0;
+    color   : $panel-color;
+
+    // Where the body joins the header, border radius has to be disabled
+    &.b-header-dock-top {
+        .b-panel-content {
+            border-top-right-radius : 0;
+            border-top-left-radius  : 0;
+        }
+    }
+
+    &.b-header-dock-right {
+        .b-panel-content {
+            border-top-right-radius    : 0;
+            border-bottom-right-radius : 0;
+        }
+    }
+
+    &.b-header-dock-bottom {
+        .b-panel-content {
+            border-bottom-left-radius  : 0;
+            border-bottom-right-radius : 0;
+        }
+    }
+
+    &.b-header-dock-left {
+        .b-panel-content {
+            border-top-left-radius    : 0;
+            border-bottom-left-radius : 0;
+        }
+    }
+
+    &.b-panel-has-bottom-toolbar {
+        .b-panel-content {
+            border-bottom-left-radius  : 0;
+            border-bottom-right-radius : 0;
+        }
+    }
+
+    // Only radius the outer edges of docked items in floating Panels.
+    &.b-floating {
+        > .b-dock-top {
+            border-top-right-radius : $widget-border-radius;
+            border-top-left-radius  : $widget-border-radius;
+        }
+
+        > .b-dock-right {
+            border-top-right-radius    : $widget-border-radius;
+            border-bottom-right-radius : $widget-border-radius;
+        }
+
+        > .b-dock-bottom {
+            position                   : static; // Inherits relative, which gives a subpixel spacing between docked and content
+            border-bottom-left-radius  : $widget-border-radius;
+            border-bottom-right-radius : $widget-border-radius;
+        }
+
+        > .b-dock-left {
+            border-top-left-radius    : $widget-border-radius;
+            border-bottom-left-radius : $widget-border-radius;
+        }
+    }
+}
+
+.b-panel-content {
+    background-color : $panel-background-color;
+    justify-content  : space-between;
+    overflow         : hidden;
+    padding          : $panel-content-padding;
+
+    + .b-toolbar.b-bottom-toolbar {
+        min-height : 3.9em;
+    }
+
+    // Try to help users out.
+    // If they don't specify a layout, and only put one child in the Panel,
+    // flex it to occupy the main axis.
+    &.b-auto-container.b-single-child {
+        > .b-container {
+            flex : 1 1 auto;
+        }
+    }
+
+    // No padding on body when using fit layout, let widget fill it fully
+    &.b-fit-container {
+        padding : 0;
+    }
+}
+
+
+// When displayed in a tabpanel, match its color
+.b-tabpanel .b-panel-content {
+    background-color : $tabpanel-background-color;
+}
+
+
+.b-panel-header {
+    display          : flex;
+    background-color : $panel-header-background-color;
+    color            : $panel-header-color;
+    padding          : $panel-header-padding;
+    flex             : 0 0 auto; // Must participate in flex using flex-basis: auto
+    align-items      : center;
+
+    // Where the header joins the boundary, border radius has to match
+    &.b-dock-top {
+        border-bottom : $panel-header-border-bottom;
+    }
+
+    &.b-dock-right {
+        flex-flow : column nowrap;
+    }
+
+    &.b-dock-left {
+        flex-flow : column-reverse nowrap;
+
+        .b-header-title {
+            transform : rotate(180deg);
+        }
+    }
+
+    .b-header-title {
+        // If there are tools inside the header, add some air
+        &:not(:last-child) {
+            padding-right : 1em;
+        }
+
+        flex            : 1 1 auto;
+        text-align      : center;
+        justify-content : center;
+        font-size       : $panel-header-font-size;
+        font-weight     : $panel-header-font-weight;
+        white-space     : nowrap;
+        overflow        : hidden;
+        text-overflow   : ellipsis;
+
+        &.b-align-start {
+            text-align      : start;
+            justify-content : flex-start;
+        }
+
+        &.b-align-center {
+            text-align      : center;
+            justify-content : center;
+            // No additional air for tools if centering
+            padding-right   : 0;
+        }
+
+        &.b-align-end {
+            text-align      : end;
+            justify-content : flex-end;
+
+            // Some air before tool icons if aligned end
+            &:not(:last-child) {
+                margin-right : 1em;
+            }
+        }
+    }
+
+    &.b-dock-right, &.b-dock-left {
+        .b-header-title {
+            -webkit-writing-mode : vertical-lr;
+            writing-mode         : vertical-lr;
+            -ms-writing-mode     : tb-lr;
+        }
+    }
+
+    &.b-dock-right, &.b-dock-bottom {
+        order : 100;
+    }
+}
+
+.b-button.b-tool,
+.b-tool {
+    cursor           : pointer;
+    color            : $panel-tool-color;
+    height           : 2em;
+    width            : 2em;
+    font-size        : 0.9em;
+    display          : flex;
+    align-items      : center;
+    justify-content  : center;
+    border-radius    : 50%;
+
+    // Override user agent button styling
+    border           : 0 none;
+    background-color : transparent;
+
+    // Remove inner focus outline in FF
+    &::-moz-focus-inner {
+        border : 0;
+    }
+
+    &:focus {
+        outline : none;
+
+        .b-using-keyboard & {
+            background-color : rgba(220, 220, 220, 0.5);
+        }
+    }
+
+    // Tools may not be compressed
+    flex-shrink      : 0;
+
+    // Constrain what gets repainted.
+    contain          : paint;
+
+    &.b-icon:before {
+        width      : 1em;
+        height     : 1em;
+        text-align : center;
+    }
+
+    &:hover {
+        opacity : 0.8;
+    }
+
+    &.b-disabled {
+        opacity : 0.4;
+    }
+
+    &.b-rotate-left {
+        transform : rotate(270deg);
+    }
+
+    &.b-rotate-right {
+        transform : rotate(90deg);
+    }
+
+    i {
+        // Aligns i to the center of the button by adjusting i size to the content
+        display : flex;
+    }
+
+    a {
+        color : $panel-tool-color;
+    }
+}
+
+.b-button.b-tool {
+    // Button defines a larger min-height & min-width, need to counteract
+    min-height : 2em;
+    min-width  : 2em;
+}
+
+.b-dock-top, .b-dock-bottom {
+    .b-header-title:not(:last-child) {
+        padding-right : 0.2em;
+    }
+
+    .b-tool {
+        &.b-align-start {
+            margin : 0 0.4em 0 0;
+        }
+
+        &.b-align-end {
+            margin : 0 0 0 0.4em;
+        }
+    }
+}
+
+.b-dock-right, .b-dock-left {
+    .b-header-title:not(:last-child) {
+        padding : 0.2em 0;
+    }
+
+    .b-tool {
+        &.b-align-start {
+            margin : 0.4em 0 0 0;
+        }
+
+        &.b-align-end {
+            margin : 0 0 0.4em 0;
+        }
+    }
+}

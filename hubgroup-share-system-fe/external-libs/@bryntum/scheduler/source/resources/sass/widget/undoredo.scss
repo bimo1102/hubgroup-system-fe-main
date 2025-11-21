@@ -1,0 +1,33 @@
+.b-toolbar.b-undoredo {
+    padding : 0;
+
+    > * {
+        border-radius : 0;
+    }
+
+    .b-buttongroup & {
+        // When in a ButtonGroup, adjoining button borders are overlayed.
+        // Overlay our undo button over the preceding button's border
+        &:not(:first-child) {
+            > button:first-child {
+                margin-left : $buttongroup-button-left-margin;
+            }
+        }
+
+        > .b-widget {
+            margin-right : 0;
+        }
+    }
+
+    .b-widget.b-combo {
+        flex   : 1 0 250px;
+        margin : 0 0.5em;
+
+        .b-theme-material & {
+            .b-field-inner {
+                padding-left  : 0.7em;
+                padding-right : 0.7em;
+            }
+        }
+    }
+}

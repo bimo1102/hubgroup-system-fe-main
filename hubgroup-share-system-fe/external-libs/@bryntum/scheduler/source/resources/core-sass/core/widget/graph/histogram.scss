@@ -1,0 +1,47 @@
+@import '../../../variables.scss';
+
+.b-histogram {
+    background-color : #fff;
+    padding          : 1px;
+    contain          : strict;
+
+    svg {
+        * {
+            vector-effect : non-scaling-stroke;
+        }
+    }
+
+    rect {
+        fill         : $histogram-bar-color;
+        stroke-width : $histogram-bar-border-width;
+        stroke       : $histogram-bar-border-color;
+        @if ($histogram-transition-duration != null) {
+            transition-property : x, y, width, height, fill;
+            transition-duration : $histogram-transition-duration;
+        }
+
+        &.b-exceeds-top {
+            fill : $histogram-exceeds-top-bar-color;
+        }
+    }
+
+    text.b-bar-legend {
+        writing-mode : tb;
+        text-anchor  : end;
+        font-size    : $histogram-bar-legend-font-size;
+    }
+
+    svg {
+        // Because of the stroke coordinate system, 0.5 of a pixel at the edges overflows/
+        overflow : visible;
+    }
+
+    path {
+        fill           : transparent;
+        stroke         : $histogram-outline-color;
+        @if ($histogram-transition-duration != null) {
+            transition : d $histogram-transition-duration;
+        }
+        pointer-events : none;
+    }
+}

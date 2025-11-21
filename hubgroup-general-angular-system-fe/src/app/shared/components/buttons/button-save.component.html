@@ -1,0 +1,21 @@
+<ng-container *ngIf="isShow">
+    <button
+        [disabled]="isLoading || disabled" [type]="buttonType" [title]="title || text" (click)="onClick($event)"
+        [ngClass]="{'btn-icon' : buttonIcon}"
+        [class]="buttonClassBase + ' btn-shadow btn-sm ' + buttonClassType + ' ' + buttonClass">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        @if (placementIcon === 'left') {
+            <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon"
+                          [class]="keenIconClass + (!buttonIcon ? ' me-1' : '')"
+                          [type]="keenIconType"></app-news-keenicon>
+        }
+        @if (!buttonIcon) {
+            {{ text | translate }}
+        }
+        @if (placementIcon === 'right') {
+            <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon"
+                          [class]="keenIconClass + (text ? ' me-1' : '')"
+                          [type]="keenIconType"></app-news-keenicon>
+        }
+    </button>
+</ng-container>

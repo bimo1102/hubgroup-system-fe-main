@@ -1,0 +1,56 @@
+<div class='card'>
+    <div class='card-header'>
+        <div class='card-title m-0'>
+            {{ data.title|translate }}
+        </div>
+        <div class="card-toolbar">
+        </div>
+    </div>
+    <div class='card-body'>
+        <div class="fs-4">
+            @if (data.isShowAcceptConfirm) {
+                <label nz-checkbox [(ngModel)]="isAccept">
+                    {{ data.description | translate }}
+                </label>
+            } @else {
+                {{ data.description | translate }}
+            }
+        </div>
+        @if (data.linkOpenPreview) {
+            <a [href]="data.linkOpenPreview" target="_blank" class="text-primary my-3"> Mở nội dung liên quan ở <span
+                class="font-weight-bold">cửa sổ mới</span>
+            </a>
+        }
+
+        @if (data.isShowPodcastOption) {
+            <div class="my-2 text-info font-italic">
+                - {{ 'podcast.update.warning'|translate }}
+            </div>
+        }
+    </div>
+    <div class='card-footer bg-white' nz-flex [nzAlign]="'center'" [nzJustify]="'center'" [nzGap]="'small'"
+         [nzWrap]="'wrap'">
+        <app-news-button-close
+            (clickFunc)="clickConfirmFunc(false,false)"
+            text="{{data.textNoButton|translate}}">
+        </app-news-button-close>
+
+        @if (data.isShowBtnYes1) {
+            <app-news-button-icon
+                [checkPermission]="false" [keenIcon]="''"
+                [buttonClassType]="cssClassBtn1"
+                (clickFunc)="clickConfirmFunc(true,false)"
+                [text]="data.textYesButton|translate">
+            </app-news-button-icon>
+        }
+
+        @if (data.isShowBtnYes2) {
+            <app-news-button-icon
+                [checkPermission]="false" [keenIcon]="''"
+                [buttonClassType]="cssClassBtn2"
+                (clickFunc)="clickConfirmFunc(false,true)"
+                [text]="data.textYesButton2|translate">
+            </app-news-button-icon>
+        }
+    </div>
+</div>

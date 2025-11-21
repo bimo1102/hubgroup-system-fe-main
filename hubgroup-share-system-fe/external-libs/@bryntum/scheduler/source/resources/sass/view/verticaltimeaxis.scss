@@ -1,0 +1,68 @@
+@import '../variables.scss';
+
+$background-color : lighten($grid-header-background-color, 3%);
+
+.b-verticaltimeaxiscolumn {
+    flex-flow        : column nowrap;
+    align-items      : stretch;
+    padding          : 0;
+    border-right     : none;
+    // Using !important to override rules for hover, selected, focused cell etc. in a single line
+    background-color : $background-color !important;
+
+    &.b-grid-cell.b-focused:after {
+        display : none;
+    }
+}
+
+.b-verticaltimeaxis {
+    flex    : 1 0 100%;
+    contain : strict;
+
+    .b-sch-header-row {
+        flex-direction : column;
+        flex           : 1;
+    }
+
+    .b-sch-header-timeaxis-cell {
+        width          : 100%;
+        text-transform : $grid-header-text-transform;
+        padding        : 0;
+        border-left    : 0 none;
+    }
+
+    .b-sch-header-row.b-lowest {
+        .b-sch-header-timeaxis-cell {
+            border-right    : none;
+            border-bottom   : none;
+            justify-content : flex-end;
+
+            .b-sch-header-text {
+                padding-right : 0.5em;
+            }
+
+            // Hover effects only on lowest TimeAxis cells.
+            &:hover {
+                background-color : $grid-header-background-color;
+            }
+        }        
+    }
+    
+    // Rotate text in all but the lowest level header
+    .b-sch-header-row:not(.b-lowest) {
+        flex : 0 0 2em;
+
+        .b-sch-header-timeaxis-cell {
+            align-items  : flex-start;
+            border-right : 1px solid $grid-header-border-color;
+        }
+
+        .b-sch-header-text {
+            // It's rotated by 180 degrees, so start padding is padding-bottom.
+            padding-bottom   : left($event-bar-content-margin);
+            writing-mode     : vertical-lr;
+            -ms-writing-mode : tb-lr;
+            transform        : rotate(180deg);
+        }
+    }
+}

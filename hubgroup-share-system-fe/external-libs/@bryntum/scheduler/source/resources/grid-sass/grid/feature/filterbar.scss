@@ -1,0 +1,86 @@
+@import '../../variables.scss';
+
+.b-filter-bar-field {
+    margin : 0 0 .5em 0;
+    width  : 100%;
+}
+
+.b-filter-bar-compact {
+    // More compact header when using filterbar, to not waste space
+    .b-grid-header.b-filter-bar-enabled {
+        flex-direction : row;
+
+        .b-grid-header-text {
+            padding      : .25em 0;
+            width        : 2em;
+            order        : 1;
+            margin-right : -.5em;
+
+            // Using placeholders instead of header text, to not get overlapping issues
+            .b-grid-header-text-content {
+                display : none;
+            }
+        }
+    }
+
+    .b-filter-bar-field {
+        margin : 0;
+
+        .b-field-inner {
+            background-color : transparent;
+            border           : none;
+
+            // Hide materials focus effect, looks poor in header
+            &::before {
+                display : none;
+            }
+
+            input {
+                padding : 0.8em 0;
+
+                &::placeholder {
+                    color          : $grid-header-text-color;
+                    text-transform : $grid-header-text-transform;
+                    font-size      : $grid-header-font-size;
+                    font-weight    : $grid-header-font-weight;
+                }
+            }
+        }
+
+        // Hide all field triggers by default
+        .b-fieldtrigger {
+            display : none;
+        }
+
+        // Show them on focus
+        &:focus-within:not(.b-empty) .b-icon-remove,
+        &:focus-within .b-fieldtrigger:not(.b-step-trigger):not(.b-icon-remove):not(.b-spintrigger) {
+            display : inline-flex;
+        }
+
+        // Tighten up to note waste space
+        .b-fieldtrigger.b-align-end {
+            padding : 0;
+        }
+
+        // Hide placeholder for combo with chipview if it is displaying chips
+        &.b-uses-chipview:not(.b-empty) {
+            input {
+                margin-left : .5em;
+                margin-top  : -.25em;
+
+                &::placeholder {
+                    color : transparent;
+                }
+            }
+
+            .b-chip {
+                font-size : .9em;
+            }
+
+            .b-chip[data-index="0"] {
+                margin-left : 0;
+            }
+        }
+    }
+}

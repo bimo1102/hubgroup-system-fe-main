@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.b-resourcecollapse-cell {
+    cursor : pointer;
+
+    .b-icon {
+        transition : transform 0.2s !important;
+
+        &.b-flip {
+            transform : rotate(180deg);
+        }
+    }
+}

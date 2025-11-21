@@ -1,0 +1,86 @@
+<div nz-flex [nzAlign]="'center'" [nzGap]="'middle'" [nzWrap]="'wrap'">
+    <h4 class="fw-bold fs-4 mb-0 text-break">
+        {{ (isTypeQuestionAndAnswer ? 'article.question.avatar' : 'news.online.add.or.change.avatar') | translate }}
+    </h4>
+    <nz-select nzShowSearch class="w-100" [disabled]="!editable"
+               [(ngModel)]="newsModel.avatarIconId"
+               (ngModelChange)="onIconAvatarChange(); detectDataChangeFunc.emit()"
+               [nzPlaceHolder]="'news.online.add.or.change.avatar.icon' | translate"
+               [name]="'news.online.add.or.change.avatar.icon'">
+        <nz-option [nzLabel]="'article.avatar.icon.position.select' | translate"
+                   [nzValue]="''"></nz-option>
+        @for (item of avatarIconsSources; track item.id) {
+            <nz-option [nzLabel]="(item.text || '') | translate"
+                       [nzValue]="item.id"></nz-option>
+        }
+    </nz-select>
+</div>
+<div class="rounded bg-light-primary my-5 p-5">
+    <label class="form-label text-break required">{{ 'article.image.avatar' | translate }}</label>
+    <div class="card card-bordered overlay overflow-hidden">
+        <div class="card-body p-0 border-dashed border-gray-500">
+            <div class="overlay-wrapper">
+                <img style="object-fit: cover" class="w-100 min-h-150px mh-250px card-rounded" alt=""
+                     [src]="newsModel.avatarUrl || newsModel.avatarOriginUrl || noImage" />
+                @if (iconAvatarUrl) {
+                    <div class="position-absolute  {{ iconAvatarClass }}">
+                        <img [src]="iconAvatarUrl" alt="icon avatar"
+                             class="w-100">
+                    </div>
+                }
+            </div>
+
+            @if (editable) {
+                <div class="overlay-layer bg-dark bg-opacity-25" [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                    <div class="d-flex gap-3">
+                        <app-news-button-image
+                            (clickFunc)="onOpenFileManagerModal(MediaThumbChangeEnum.Avatar)"
+                            [checkPermission]="false"></app-news-button-image>
+<!--                        @if (newsModel.avatarUrl) {-->
+<!--                            <app-news-button-change-->
+<!--                                (clickFunc)="onOpenFileCropModal(newsModel.avatarUrl!, MediaThumbChangeEnum.Avatar)"-->
+<!--                                [checkPermission]="false"></app-news-button-change>-->
+<!--                        }-->
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!--    <label class="text-break">{{ 'news.image.limit.size' | translate }}</label>-->
+</div>
+
+<h4 class="fw-bold mb-5 fs-4">
+    {{ 'news.online.add.or.change.thumb.facebook'| translate }}
+    <app-news-button-icon [checkPermission]="false"
+                          [buttonIcon]="true"
+                          [buttonClassType]="'btn-danger'"
+                          [keenIcon]="'arrows-circle'"
+                          (clickFunc)="onReloadFacebookImage()"></app-news-button-icon>
+</h4>
+<div class="rounded bg-light-primary mb-5 p-5">
+    <!--    <label-->
+    <!--        class="form-label">{{ 'news.online.thumb.facebook.size.valid' | translate }}</label>-->
+    <div class="card card-bordered overlay overflow-hidden">
+        <div class="card-body p-0 border-dashed border-gray-500">
+            <div class="overlay-wrapper">
+                <img style="object-fit: cover" class="w-100 min-h-150px mh-200px card-rounded" alt=""
+                     [src]="newsModel.facebookImageUrl || newsModel.facebookImageOriginUrl || noImage" />
+            </div>
+            @if (editable) {
+                <div class="overlay-layer bg-dark bg-opacity-25" [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                    <div class="d-flex gap-3">
+                        <app-news-button-image
+                            (clickFunc)="onOpenFileManagerModal(MediaThumbChangeEnum.Facebook)"
+                            [checkPermission]="false"></app-news-button-image>
+<!--                        @if (newsModel.facebookImageUrl) {-->
+                        <!--                            <app-news-button-change-->
+                        <!--                                (clickFunc)="onOpenFileCropModal(newsModel.facebookImageUrl!, MediaThumbChangeEnum.Facebook)"-->
+                        <!--                                [checkPermission]="false"></app-news-button-change>-->
+                        <!--                        }-->
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!--        <label class="text-break">{{ 'news.image.limit.size' | translate }}</label>-->
+</div>

@@ -1,0 +1,141 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (isChange) {
+                            {{ 'icon.config.title.edit'| translate }}
+                        } @else {
+                            {{ 'icon.config.title.create'| translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save'|translate"
+                                                  [permissionKey]="isChange ? 'IconConfig/Change' : 'IconConfig/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close'|translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'icon.title'|translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='titleTpl'>
+                        <input nz-input type='text' required [placeholder]="'icon.title'|translate"
+                               [(ngModel)]='iconSettingModel.title' name='iconSettingModel.title'>
+                        <ng-template #titleTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'icon.title.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'icon.url'|translate }}
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='titleTpl'>
+                        <div class="card card-bordered overlay mw-150px">
+                            <div class="card-body p-0">
+                                <div class="overlay-wrapper">
+                                    <img class="w-100 min-h-150px card-rounded object-fit-cover"
+                                         alt=""
+                                         [src]="iconSettingModel.url || noImageMobile" />
+                                </div>
+                                <div class="overlay-layer bg-dark bg-opacity-25"
+                                     [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                                    <div class="d-flex gap-3">
+                                        <app-news-button-icon [keenIcon]="'picture'"
+                                                              [buttonIcon]="true"
+                                                              [checkPermission]="false"
+                                                              (clickFunc)="onOpenFileManagerModal()"
+                                                              [buttonClassType]="'btn-info'"
+                                                              [text]="'event.choose.avatar.image'"
+                                        >
+                                        </app-news-button-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'icon.type'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear
+                                   [(ngModel)]="iconSettingModel.type"
+                                   [nzPlaceHolder]="'icon.type'|translate"
+                                   [name]="'iconSettingModel.type'">
+                            @for (item of iconTypeSources; track item.id) {
+                                <nz-option [nzLabel]="('icon.type.' + item.text) | translate"
+                                           [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'icon.avatar.positions'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear
+                                   [(ngModel)]="iconSettingModel.avatarPosition"
+                                   [nzPlaceHolder]="'icon.avatar.positions'|translate"
+                                   [name]="'iconSettingModel.avatarPosition'">
+                            @for (item of avatarPositionSources; track item.id) {
+                                <nz-option [nzLabel]="item.text! | translate" [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Status'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear
+                                   [(ngModel)]="iconSettingModel.status"
+                                   [nzPlaceHolder]="'Status'|translate"
+                                   [name]="'iconSettingModel.status'">
+                            @for (item of statusSources; track item.id) {
+                                <nz-option [nzLabel]="item.text! | translate" [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="card-footer">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                    <app-news-button-save [text]="'Save'|translate"
+                                          [permissionKey]="isChange ? 'IconConfig/Change' : 'IconConfig/Add'"
+                                          (clickFunc)="onSave(addOrChangeForm)">
+                    </app-news-button-save>
+                    <app-news-button-close [text]="'Close'|translate"
+                                           (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+
+

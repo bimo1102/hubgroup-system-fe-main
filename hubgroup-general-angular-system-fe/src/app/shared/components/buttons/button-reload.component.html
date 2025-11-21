@@ -1,0 +1,33 @@
+@if (isShow) {
+    @if (btnConfirm) {
+        <button
+            nz-popconfirm
+            [nzPopconfirmTitle]="confirmTitle| translate"
+            (nzOnConfirm)="onClick($event)"
+            (nzOnCancel)="onCancel($event)"
+            [disabled]="isLoading || disabled" type="button" [title]="text"
+            [nzOkText]="okText | translate"
+            [nzCancelText]="cancelText | translate"
+            [ngClass]="{'btn-icon' : buttonIcon}"
+            [class]=" 'btn btn-shadow btn-sm btn-info'">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status"
+                  aria-hidden="true"></span>
+            <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon" [class]="keenIconClass"
+                          [type]="keenIconType"></app-news-keenicon>
+
+            {{ text || 'refresh'| translate }}
+        </button>
+    } @else {
+        <button
+            [disabled]="isLoading || disabled" type="button"
+            [title]="text" (click)="onClick($event)"
+            [ngClass]="{'btn-icon' : buttonIcon}"
+            [class]=" 'btn btn-shadow btn-sm btn-info'">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status"
+                  aria-hidden="true"></span>
+            <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon" [class]="keenIconClass"
+                          [type]="keenIconType"></app-news-keenicon>
+            {{ text || 'refresh'| translate }}
+        </button>
+    }
+}

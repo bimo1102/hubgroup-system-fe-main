@@ -1,0 +1,34 @@
+<ng-container *ngIf="isShow && !btnConfirm">
+    <button
+        [disabled]="isLoading || disabled" type="button" [title]="text" (click)="onClick($event)"
+        [ngClass]="{'btn-icon' : buttonIcon}"
+        [class]=" buttonClassType + ' btn btn-shadow btn-sm ' + buttonClass">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon" [class]="keenIconClass"
+                      [type]="keenIconType"></app-news-keenicon>
+        @if (!buttonIcon) {
+            {{ text | translate }}
+        }
+    </button>
+</ng-container>
+<ng-container *ngIf="isShow && btnConfirm">
+    <button
+        nz-popconfirm
+        [nzPopconfirmOverlayClassName]="'tyt-ant-pop-confirm'"
+        [nzPopconfirmTitle]="confirmTitle| translate"
+        (nzOnConfirm)="onClick($event)"
+        (nzOnCancel)="onCancel($event)"
+        [nzOkText]="okText"
+        [nzCancelText]="cancelText"
+        [disabled]="isLoading || disabled" type="button" [title]="text"
+        [ngClass]="{'btn-icon' : buttonIcon}"
+        [class]=" buttonClassType + ' btn btn-shadow btn-sm '+ buttonClass">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        <app-news-keenicon *ngIf="keenIcon && !isLoading" [name]="keenIcon" [class]="keenIconClass"
+                      [type]="keenIconType"></app-news-keenicon>
+
+        @if (!buttonIcon) {
+            {{ text | translate }}
+        }
+    </button>
+</ng-container>

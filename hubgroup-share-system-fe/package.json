@@ -1,0 +1,38 @@
+{
+    "dependencies": {
+        "@ant-design/cssinjs": "^1.23.0",
+        "@ant-design/icons": "^6.0.0",
+        "@monaco-editor/react": "^4.7.0",
+        "@react-google-maps/api": "^2.20.7",
+        "@reduxjs/toolkit": "^2.6.1",
+        "@tinymce/tinymce-react": "^6.2.1",
+        "ag-grid-community": "^33.3.0",
+        "ag-grid-enterprise": "^33.3.0",
+        "ag-grid-react": "^33.3.0",
+        "framer-motion": "^12.19.1",
+        "antd": "^5.25.1",
+        "axios": "^1.8.4",
+        "bootstrap": "5.3.2",
+        "classnames": "^2.5.1",
+        "dayjs": "^1.11.13",
+        "i18next": "^24.2.3",
+        "lodash": "^4.17.21",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "react-i18next": "15.4.1",
+        "react-redux": "^9.2.0",
+        "rxjs": "7.8.0",
+        "tinymce": "^7.9.1",
+        "uuid": "^11.1.0",
+        "smooth-scrollbar-react": "^2.4.1"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.17.16",
+        "@types/node": "^22.17.1",
+        "@types/react": "^18.3.1",
+        "@types/react-dom": "^18.3.1"
+    },
+    "resolutions": {
+        "react-i18next": "15.4.1"
+    }
+}

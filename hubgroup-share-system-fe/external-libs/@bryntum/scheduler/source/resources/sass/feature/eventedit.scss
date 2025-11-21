@@ -1,0 +1,32 @@
+@import '../variables.scss';
+
+.b-eventeditor.b-popup {
+    width : 29em;
+
+    .b-eventeditor-content.b-popup-content {
+        padding-bottom : 0;
+
+        .b-textfield, .b-checkbox > {
+            label {
+                flex : 1 0 $eventedit-label-width;
+            }
+        }
+    }
+
+    .b-bottom-toolbar > .b-toolbar-content {
+
+        @if $eventedit-label-filler-width != null {
+            // Use b-popup-content padding left from above
+            padding-left : calc(1em + #{$eventedit-label-filler-width});
+        }
+
+        > button {
+            flex         : 1;
+            margin-right : .5em;
+
+            &:last-child {
+                margin-right : 0;
+            }
+        }
+    }
+}

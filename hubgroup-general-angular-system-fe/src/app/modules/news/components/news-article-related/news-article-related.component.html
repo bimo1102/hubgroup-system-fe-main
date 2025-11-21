@@ -1,0 +1,41 @@
+<nz-form-item>
+    <nz-form-label class="fw-bold text-gray-900 " nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                   nzLabelAlign="left">
+        {{ 'news.online.add.or.change.related.article' | translate }}
+        <span class="text-danger ms-1">*</span>
+    </nz-form-label>
+    <nz-form-control>
+        @if (editable) {
+            <app-news-button-add [buttonClass]="'w-30px h-30px'" [buttonIcon]="true"
+                                 [checkPermission]="false"
+                                 (clickFunc)="onOpenRelatedModal()"></app-news-button-add>
+        }
+    </nz-form-control>
+</nz-form-item>
+
+@if (!relatedArticles || relatedArticles.length <= 0) {
+    <div class="text-warning">
+        {{ 'news.online.add.or.change.related.article.is.required' | translate }}
+    </div>
+}
+
+<div cdkDropList class="drop-list" [ngClass]="{'mb-10': isMultipleWebsite}"
+     (cdkDropListDropped)="onDropRelatedNews($event)">
+    @for (item of relatedArticles; track $index) {
+        <div
+            [title]="item.status !== NewsStatusEnum.Publish ? 'article.status.is.not.publish' : 'article.status.is.publish'"
+            class="custom-drag-item px-5 py-2 mb-1 d-flex flex-stack rounded"
+            [ngClass]=" item.status !== NewsStatusEnum.Publish ? 'bg-light-danger': 'bg-secondary-active'"
+            cdkDrag [cdkDragDisabled]="!editable">
+            <div
+                class="border-2 my-2 border-dashed border-secondary-active min-h-50px custom-placeholder"
+                *cdkDragPlaceholder></div>
+            {{ item.title }}
+            @if (editable) {
+                <app-news-button-delete [buttonIcon]="true" [btnConfirm]="false"
+                                        (clickFunc)="onRemoveRelatedNews($index)"
+                                        [checkPermission]="false"></app-news-button-delete>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,59 @@
+.menu-loading {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 30px 50px;
+    margin: 20px 0;
+}
+
+:host {
+    .aside {
+        height: 100%;
+
+        .aside-menu {
+            margin: 0;
+        }
+    }
+
+    // fixed text line break issue on minimized aside hover
+    .menu-text {
+        white-space: nowrap;
+    }
+
+
+    .topNav {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: nowrap;
+        list-style: none;
+        gap: 10px;
+        padding-inline: 25px;
+        flex-wrap: wrap;
+
+        .topNav-item {
+            flex: 1;
+
+            a {
+                border: 1px solid #1BC5BD;
+                border-radius: 20px;
+                display: block;
+                padding: 5px;
+                color: #ffffff;
+                outline: none;
+                font-weight: bold;
+                text-align: center;
+                cursor: pointer;
+
+                &.active {
+                    background: #1BC5BD;
+                }
+            }
+        }
+
+        .svg-icon {
+          color: #ffffff;
+        }
+    }
+}

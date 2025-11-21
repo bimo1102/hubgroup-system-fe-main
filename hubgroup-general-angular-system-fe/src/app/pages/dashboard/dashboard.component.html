@@ -1,0 +1,18 @@
+<div class='card'>
+    <div class='card-header'>
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bold text-gray-900">{{ 'dashboard.general'| translate }}</span>
+        </h3>
+        <div class="card-toolbar">
+        </div>
+    </div>
+    <div class='card-body px-3'>
+        @if (message) {
+            <div class='d-flex justify-content-start align-items-start flex-wrap mb-2'>
+                <nz-alert class="w-100 mb-8" nzType='error' [nzMessage]='message' nzDescription=''
+                          nzShowIcon></nz-alert>
+            </div>
+        }
+        dashboard
+    </div>
+</div>

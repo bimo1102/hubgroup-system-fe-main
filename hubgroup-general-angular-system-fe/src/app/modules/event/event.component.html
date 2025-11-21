@@ -1,0 +1,210 @@
+<div class='card card-bordered mb-xl-10'>
+    <div class='card-header'>
+        <div class='card-title m-0'>
+            {{ 'Event list' | translate }}
+        </div>
+
+        <div class="card-toolbar">
+            <div nz-flex [nzGap]="'middle'" [nzAlign]="'center'">
+                <app-news-button-add [permissionKey]="'Event/Add'"
+                                     [keenIconClass]="responsive.isDesktop ? 'fs-4' : 'fs-5'"
+                                     (clickFunc)='onOpenAddOrChangeModal()'>
+                </app-news-button-add>
+
+                <app-news-button-reload (clickFunc)="onSyncAll()" [permissionKey]="'Event/Sync'"
+                                        [confirmTitle]="'async.confirm'"
+                                        [okText]="'Process'"
+                                        [text]="'Sync'"></app-news-button-reload>
+            </div>
+        </div>
+    </div>
+    <div class='card-body'>
+        @if (message) {
+            <nz-alert class="mb-1" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+        }
+        <form nz-form [nzLayout]="'horizontal'" class="position-relative" (ngSubmit)="onSearch(true)">
+            <div nz-row [nzGutter]="20">
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Keyword' | translate">
+                                <input nz-input [name]="'keyword'" [autofocus]="responsive.isDesktop"
+                                       [placeholder]="'Keyword' | translate"
+                                       type="search"
+                                       [(ngModel)]="requestSearch.keyword"
+                                       (ngModelChange)="onRequestModelChange()" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Created date' | translate">
+                                <app-news-date-range-picker [(date)]="date" (dateChange)="onRequestModelChange()"
+                                                            [format]="dateFormat"></app-news-date-range-picker>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Category' | translate">
+                                <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                           [nzMode]="'multiple'"
+                                           [(ngModel)]="requestSearch.categoryIds"
+                                           (ngModelChange)="onRequestModelChange()"
+                                           [nzPlaceHolder]="'search.main.category' | translate"
+                                           (nzOnSearch)="requestCategoryMainAutocomplete$.next({keyword: $event})"
+                                           [name]="'search.main.category'">
+                                    @for (item of categoryMainSources; track item.id) {
+                                        <nz-option [nzLabel]="(item.text || '') | translate"
+                                                   [nzValue]="item.value"></nz-option>
+                                    }
+                                </nz-select>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Event Type' | translate">
+                                <nz-select nzShowSearch nzAllowClear
+                                           [(ngModel)]="requestSearch.isSpecialEvent"
+                                           (ngModelChange)="onRequestModelChange()"
+                                           [nzPlaceHolder]="'statusFilterType' | translate"
+                                           [name]="'requestSearch.statusFilterType'">
+                                    <nz-option [nzLabel]="'event.list.type.select' | translate"
+                                               [nzValue]="SpecialEventFilterEnum.All"></nz-option>
+                                    <nz-option [nzLabel]="'event.list.type.normal' | translate"
+                                               [nzValue]="SpecialEventFilterEnum.Normal"></nz-option>
+                                    <nz-option [nzLabel]="'event.list.type.special' | translate"
+                                               [nzValue]="SpecialEventFilterEnum.Special"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="3">
+                    <div nz-flex [nzWrap]="'wrap'" [nzGap]="'middle'" [nzAlign]="'center'">
+                        <app-news-button-search [text]="'Search' | translate"
+                                                [permissionKey]="'Event/Gets'"
+                                                [buttonType]="'submit'"></app-news-button-search>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class='table-responsive'>
+            <nz-table nzBordered #dataTable
+                      [nzData]='eventModels'
+                      [nzPageIndex]='requestSearch.pageIndex! + 1'
+                      [nzPageSize]='requestSearch.pageSize!'
+                      [nzSize]="'small'"
+                      [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                      (nzPageIndexChange)='onPageIndexChange($event)'
+                      [nzTotal]='totalRow'
+                      [nzFrontPagination]='false'
+                      [nzShowSizeChanger]="responsive.isDesktop"
+                      [nzPageSizeOptions]="listPageSize"
+                      (nzPageSizeChange)="onRequestModelChange(); onPageSizeChange($event)">
+                <thead>
+                <tr>
+                    <th nzWidth="40px"
+                        [nzChecked]="checkedAll"
+                        [nzIndeterminate]="indeterminate"
+                        nzLabel="Select all"
+                        (nzCheckedChange)="onAllChecked($event)"
+                    ></th>
+                    <th nzAlign="center" nzWidth="50px">{{ 'STT' | translate }}
+                    </th>
+                    <th>{{ 'Code' | translate }}</th>
+                    <th>{{ 'Name' | translate }}</th>
+                    <th>{{ 'Event Type' | translate }}</th>
+                    <th>{{ 'Category' | translate }}</th>
+                    <th>{{ 'Total post' | translate }}</th>
+                    <th>{{ 'Created date' | translate }}</th>
+                    <th>{{ 'Created user' | translate }}</th>
+                    <th>{{ 'Status' | translate }}</th>
+                    <th nzAlign="center">{{ 'Action' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for (item of dataTable.data; track item.id) {
+                        <tr>
+                            <td [nzChecked]="setOfCheckedId.has(item.id!)"
+                                [nzLabel]="item.title || ''"
+                                (nzCheckedChange)="onItemChecked(item.id!, $event)">
+                            </td>
+                            <td nzAlign="center">
+                                {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}
+                            </td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.title }}</td>
+                            <td>
+                                @if (item.isSpecialEvent) {
+                                    {{ 'event.list.type.special' | translate }}
+                                } @else {
+                                    {{ 'event.list.type.normal' | translate }}
+                                }
+                            </td>
+                            <td>
+                                @if (item.categories) {
+                                    {{ join(item.categories, ', ') }}
+                                }
+                            </td>
+                            <td>
+                                {{ item.totalPost }}
+                            </td>
+                            <td>
+                                {{ item.createdDate| date: dateTimeFormat }}
+                            </td>
+                            <td>
+                                <p>{{ item.createdUid }} - {{ item?.createdUser?.fullName }}</p>
+                            </td>
+                            <td>
+                                <app-news-switch [permissionKey]="'Event/ChangeStatus'"
+                                                 [isControl]="true" [isLoading]="!!loadingSwitchStatusObj[item.id!]"
+                                                 [value]="item.status === StatusEnum.Active"
+                                                 (clickFunc)="onStatusChange(item.id!, item.status === StatusEnum.Active ? StatusEnum.InActive : StatusEnum.Active)"></app-news-switch>
+                            </td>
+                            <td>
+                                <div nz-flex [nzGap]="'small'" [nzJustify]="'center'" [nzAlign]="'center'">
+                                    <app-news-button-change [checkPermission]="false"
+                                                            [buttonIcon]="true"
+                                                            (clickFunc)="onOpenAddOrChangeModal(item)">
+                                    </app-news-button-change>
+
+                                    <app-news-button-delete
+                                        (clickFunc)="onStatusChange(item.id!, StatusEnum.Deleted, true)"
+                                        [buttonIcon]="true"
+                                        [permissionKey]="'Event/ChangeStatus'">
+                                    </app-news-button-delete>
+
+                                    <app-news-button-icon [keenIcon]="'menu'"
+                                                          [buttonClassType]="'btn-secondary'"
+                                                          [buttonIcon]="true"
+                                                          (clickFunc)="onViewMappingModal(item)"
+                                                          permissionKey="Event/ArticleGets"
+                                                          [text]="'news.list' | translate"
+                                    ></app-news-button-icon>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </nz-table>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                <div class="me-5">
+                    {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items' | translate }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+
+

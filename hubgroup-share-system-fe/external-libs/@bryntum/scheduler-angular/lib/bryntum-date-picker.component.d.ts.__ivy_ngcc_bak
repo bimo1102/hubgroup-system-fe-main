@@ -1,0 +1,149 @@
+/**
+ * Angular wrapper for Bryntum DatePicker
+ */
+import { ElementRef, EventEmitter, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Base, Layout, Mask, MaskConfig, Model, Month, MonthConfig, PanelHeader, Rectangle, Scroller, ScrollerConfig, Widget, WidgetConfig } from '@bryntum/scheduler/scheduler.lite.umd.js';
+import { DatePicker } from '@bryntum/scheduler/scheduler.lite.umd.js';
+export declare class BryntumDatePickerComponent implements OnInit, OnDestroy {
+    static instanceClass: typeof DatePicker;
+    private static bryntumFeatureNames;
+    private static bryntumConfigs;
+    private static bryntumConfigsOnly;
+    private static bryntumProps;
+    private elementRef;
+    instance: DatePicker;
+    private bryntumConfig;
+    constructor(element: ElementRef);
+    activeDate: Date;
+    adopt: HTMLElement | string;
+    align: object | string;
+    anchor: boolean;
+    appendTo: HTMLElement | string;
+    bbar: object[] | object;
+    bodyCls: string | object;
+    bubbleEvents: object;
+    cellRenderer: Function | string;
+    centered: boolean;
+    cls: string | object;
+    config: object;
+    constrainTo: HTMLElement | Widget | Rectangle;
+    contentElementCls: string | object;
+    dayNameFormat: string;
+    defaultBindProperty: string;
+    defaults: object;
+    disabledDates: Function | Date[] | string;
+    disableWeekends: boolean;
+    dock: string;
+    draggable: boolean | object;
+    editMonth: boolean;
+    editOnHover: boolean;
+    floating: boolean;
+    focusDisabledDates: boolean;
+    footer: object | string;
+    header: string | PanelHeader;
+    headerRenderer: Function | string;
+    hideAnimation: boolean | object;
+    hideWhenEmpty: boolean;
+    htmlCls: string | object;
+    insertBefore: HTMLElement | string;
+    insertFirst: HTMLElement | string;
+    itemCls: string;
+    lazyItems: object | object[] | Widget[] | Partial<WidgetConfig> | Partial<WidgetConfig>[];
+    listeners: object;
+    localeClass: Base;
+    localizableProperties: string[];
+    maskDefaults: object | Mask | Partial<MaskConfig>;
+    masked: boolean | string | object | Mask | Partial<MaskConfig>;
+    maxDate: Date;
+    minColumnWidth: number;
+    minDate: Date;
+    minRowHeight: number;
+    monitorResize: boolean;
+    month: Month | object | Partial<MonthConfig>;
+    multiSelect: boolean;
+    namedItems: object;
+    nonWorkingDays: object;
+    owner: Widget;
+    positioned: boolean;
+    preventTooltipOnTouch: boolean;
+    ripple: boolean | object;
+    rootElement: ShadowRoot;
+    scrollAction: string;
+    showAnimation: boolean | object;
+    showWeekColumn: boolean;
+    showWeekNumber: boolean;
+    sixWeeks: boolean;
+    strips: object;
+    tab: boolean | object;
+    tag: string;
+    tbar: object[] | object;
+    textAlign: string;
+    textContent: boolean;
+    tip: object;
+    title: string;
+    trapFocus: boolean;
+    weekRenderer: Function | string;
+    weekStartDay: number;
+    weight: number;
+    alignSelf: string;
+    content: string;
+    dataset: object;
+    date: Date;
+    disabled: boolean;
+    extraData: boolean | number | object | string;
+    flex: number | string;
+    height: number | string;
+    hidden: boolean;
+    html: string;
+    id: string;
+    items: Widget[] | object | object[] | Partial<WidgetConfig> | Partial<WidgetConfig>[];
+    layout: Layout | string;
+    layoutStyle: object;
+    margin: number | string;
+    maxHeight: number | string;
+    maxWidth: number | string;
+    minHeight: number | string;
+    minWidth: number | string;
+    readOnly: boolean;
+    scrollable: boolean | Scroller | object | Partial<ScrollerConfig>;
+    tools: object;
+    tooltip: object | string;
+    width: number | string;
+    x: number;
+    y: number;
+    anchorSize: number[];
+    isSettingValues: boolean;
+    isValid: boolean;
+    record: Model;
+    values: object;
+    onBeforeDestroy: EventEmitter<object>;
+    onBeforeHide: EventEmitter<object>;
+    onBeforeSetRecord: EventEmitter<object>;
+    onBeforeShow: EventEmitter<object>;
+    onCatchAll: EventEmitter<object>;
+    onDateChange: EventEmitter<object>;
+    onDestroy: EventEmitter<object>;
+    onFocusIn: EventEmitter<object>;
+    onFocusOut: EventEmitter<object>;
+    onHide: EventEmitter<object>;
+    onPaint: EventEmitter<object>;
+    onReadOnly: EventEmitter<object>;
+    onRefresh: EventEmitter<object>;
+    onResize: EventEmitter<object>;
+    onSelectionChange: EventEmitter<object>;
+    onShow: EventEmitter<object>;
+    onToolClick: EventEmitter<object>;
+    /**
+     * Create and append the underlying widget
+     */
+    ngOnInit(): void;
+    /**
+     * Watch for changes
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Destroy the component
+     */
+    ngOnDestroy(): void;
+}

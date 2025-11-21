@@ -1,0 +1,13 @@
+@for (application of websiteModels; track application.id) {
+    <div class="menu-item px-5">
+        <a
+            href="javascript:void(0);"
+            (click)="onSelect(application)"
+            [ngClass]="{ active: application.selected }"
+            class="menu-link px-5">
+            <span class="d-flex align-items-center">
+                <app-news-keenicon [class]="'fs-3'" [name]="'right'"></app-news-keenicon>
+                {{ application.text |titlecase }}</span>
+        </a>
+    </div>
+}

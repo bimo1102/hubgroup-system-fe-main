@@ -1,0 +1,17 @@
+<div class="card">
+    <div class="card-header border-0 py-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bold text-dark">Phiên làm việc đã hết hạn</span>
+        </h3>
+        <div class="card-toolbar">
+        </div>
+    </div>
+    <div class="card-body">
+        <h4 class="fs-1">Bạn đã không thao tác quá 1 giờ</h4>
+
+    </div>
+    <div class="card-footer">
+        <app-news-button-icon [buttonClassType]="'btn-warning'" [keenIcon]="'arrow-circle-right'"  [checkPermission]="false" (clickFunc)="onClose()"
+                            [text]="'Đăng nhập lại'|translate"></app-news-button-icon>
+    </div>
+</div>

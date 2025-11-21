@@ -1,0 +1,17 @@
+@import '../../core-sass/themes/classic-light.scss';
+
+$grid-row-odd-color : #FAFAFA;
+$grid-cell-color : #222;
+$grid-cell-action-column-color : $dark-gray;
+$grid-cell-border-color : lighten($gray, 5%);
+$grid-region-resize-splitter-color : $gray;
+$grid-header-text-color : #565656;
+//$tree-parent-color : #565656;
+
+$quickfind-font-weight : 300;
+
+@import '../variables.scss';
+
+$action-item-color : scale_color($grid-cell-color, $lightness : 60%);
+
+@import "shared";

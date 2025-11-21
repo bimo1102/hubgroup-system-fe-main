@@ -1,0 +1,25 @@
+@for (item of companies; track item.id) {
+    <div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
+        <a href="#" class="menu-link px-5">
+            <span>
+                @if (item.websites && item.websites.length > 0) {
+                   <i class="fas fa-chevron-right icon-sm"></i>
+                }
+               {{ item.text | titlecase }}
+            </span>
+        </a>
+
+        @if (item.websites && item.websites.length > 0) {
+            <div class="menu-sub menu-sub-dropdown py-4">
+                @for (website of item.websites; track $index) {
+                    <div class="menu-item px-3">
+                        <a href="#" class="menu-link px-3" [ngClass]="{ active: website.selected }"
+                           (click)="onSelect(website)">
+                            {{ website.text | titlecase }}
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,10 @@
+<ng-container *ngIf="isShow">
+    <button [disabled]="disabled" type="button" [title]="text | translate" [ngClass]="{'btn-icon':buttonIcon }"
+            [class]="'btn btn-sm ' + buttonClassType + ' ' + buttonClass"
+            (click)="onClick()">
+        <app-news-keenicon [name]="keenIcon" [class]="keenIconClass"></app-news-keenicon>
+        @if (!buttonIcon) {
+            {{ text | translate }}
+        }
+    </button>
+</ng-container>

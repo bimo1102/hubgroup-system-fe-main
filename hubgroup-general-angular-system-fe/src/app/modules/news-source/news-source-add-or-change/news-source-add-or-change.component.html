@@ -1,0 +1,118 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (isChange) {
+                            {{ 'source.title.edit'| translate }}
+                        } @else {
+                            {{ 'source.title.create'| translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save' | translate"
+                                                  [permissionKey]="isChange ? 'Sources/Change' : 'Sources/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close' | translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'source.name' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='nameTpl'>
+                        <input nz-input type='text' [placeholder]="'source.name' | translate"
+                               [min]="4"
+                               [customMaxLength]="150"
+                               [(ngModel)]='sourceModel.name' name='sourceModel.name'>
+                        <ng-template #nameTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'source.name.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'source.priority' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-input-number [(ngModel)]="sourceModel.priority" [nzMin]="0"
+                                         name="sourceModel.priority"></nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'source.options' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        @if (sourceModel.options) {
+                            <div>
+                                <label nz-checkbox class="text-gray-700 fw-bold" name="source.selfProduced"
+                                       [(ngModel)]="sourceModel.options.selfProduced">
+                                    {{ 'source.selfProduced' | translate }}
+                                </label>
+                            </div>
+                        }
+
+                        @for (item of settingTypes; track $index) {
+                            <div>
+                                <label nz-checkbox class="text-gray-700 fw-bold"
+                                       [name]="'source.setting' + $index"
+                                       [(ngModel)]="item.checked">
+                                    {{ item.text | translate }}
+                                </label>
+                            </div>
+                        }
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Status' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear
+                                   [(ngModel)]="sourceModel.status"
+                                   [nzPlaceHolder]="'Status' | translate"
+                                   [name]="'sourceModel.status'">
+                            @for (item of statusSources; track item.id) {
+                                <nz-option [nzLabel]="item.text! | translate" [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="card-footer">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                    <app-news-button-save [text]="'Save' | translate"
+                                          [permissionKey]="isChange ? 'Sources/Change' : 'Sources/Add'"
+                                          (clickFunc)="onSave(addOrChangeForm)">
+                    </app-news-button-save>
+                    <app-news-button-close [text]="'Close' | translate"
+                                           (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+
+

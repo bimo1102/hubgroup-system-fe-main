@@ -1,0 +1,113 @@
+<form nz-form #addOrChangeForm='ngForm' #formElement nzNoColon
+      autocomplete='off' novalidate='novalidate'>
+    <div class='card card-bordered'>
+        <div class="card-header bg-white">
+            <div class="card-title">
+                {{ 'news.category.title' | translate }}
+            </div>
+            <div class="card-toolbar">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'middle'">
+                    <app-news-button-add [text]="'Add'|translate" [permissionKey]="'NewsCategory/Add'"
+                                         (clickFunc)="onAddOrChange()"></app-news-button-add>
+                </div>
+            </div>
+        </div>
+        <div class='card-body'>
+            @if (message) {
+                <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+            }
+
+            <div class=" w-50" nz-flex [nzAlign]="'center'" [nzGap]="'middle'">
+                <input type="text" name="keyword" class="flex-root" nz-input placeholder="{{'Category'|translate}}"
+                       [(ngModel)]="searchValue">
+                <app-news-button-search [permissionKey]="'NewsCategory/Gets'"
+                                        [text]="'Category.list.Reload'|translate"
+                                        (clickFunc)="onSearch()">
+                </app-news-button-search>
+            </div>
+
+            <div class="separator my-5"></div>
+
+            <div nz-row [nzGutter]="30">
+                <div nz-col [nzSpan]="10">
+                    <nz-tree
+                        #nzTreeComponent
+                        nzBlockNode nzVirtualHeight="1000px"
+                        [nzData]="nodes"
+                        [nzSearchValue]="searchValue"
+                        [nzSelectedKeys]="selectedKeys"
+                        [(nzExpandedKeys)]="expandKeys"
+                        (nzExpandChange)="onExpand($event)"
+                        (nzClick)="onCategoryToggleSelect($event)"
+                    ></nz-tree>
+                </div>
+                <div nz-col class="border-start border-gray-200" [nzSpan]="24 - 10">
+                    <div class="table-responsive">
+                        <nz-table nzBordered [nzSize]="'small'" [nzShowPagination]="false"
+                                  [nzData]="selectedItem ? [1] : []" nzSimple
+                                  [nzNoResult]="noResult">
+                            <ng-template #noResult>
+                                <div class="my-5">
+                                    {{ 'Please choose a category'|translate }}
+                                </div>
+                            </ng-template>
+                            <thead>
+                            <tr class="fw-semibold border-bottom border-gray-200 fs-6">
+                                <th>{{ 'Code'|translate }}</th>
+                                <th>{{ 'Name'|translate }}</th>
+                                <th>{{ 'Status'|translate }}</th>
+                                <th>{{ 'table.created.date'|translate }}</th>
+                                <th>{{ 'table.created.user'|translate }}</th>
+                                <th class="min-w-100px">{{ 'Action'|translate }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if (selectedItem) {
+                                    <tr>
+                                        <td>
+                                            {{ selectedItem.id }}
+                                        </td>
+                                        <td>
+                                            {{ selectedItem.name }}
+                                        </td>
+                                        <td>
+                                            <app-news-switch [permissionKey]="'NewsCategory/StatusChange'"
+                                                             [isControl]="true" [isLoading]="isLoadingSwitchStatus"
+                                                             [value]="selectedItem.status === StatusEnum.Active"
+                                                             (clickFunc)="onToggleActiveStatus()"></app-news-switch>
+                                        </td>
+                                        <td>
+                                            {{ selectedItem.createdDateDisplay }}
+                                        </td>
+                                        <td>
+                                            @if (selectedItem.createdUid) {
+                                                <div>{{ selectedItem.createdUid }}</div>
+                                                <div>{{ selectedItem.createdUid }}</div>
+                                            }
+                                        </td>
+                                        <td class="text-right">
+                                            <div nz-flex [nzJustify]="'center'" [nzGap]="'small'" [nzAlign]="'center'">
+                                                <app-news-button-change (clickFunc)="onAddOrChange(selectedItem)"
+                                                                        [permissionKey]="'NewsCategory/Change'">
+                                                </app-news-button-change>
+                                                <app-news-button-change (clickFunc)="onSeoEdit(selectedItem)"
+                                                                        [buttonClassType]="'btn-success'"
+                                                                        title="{{'edit.seo' | translate}}">
+                                                </app-news-button-change>
+                                                <app-news-button-delete [buttonIcon]="true"
+                                                                        [permissionKey]="'NewsCategory/StatusChange'"
+                                                                        (clickFunc)="onStatusChange(selectedItem!.id, StatusEnum.Deleted)">
+                                                </app-news-button-delete>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </nz-table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

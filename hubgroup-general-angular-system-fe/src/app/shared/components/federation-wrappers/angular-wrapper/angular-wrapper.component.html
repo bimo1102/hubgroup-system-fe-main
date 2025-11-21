@@ -1,0 +1,17 @@
+<!-- <div [ngClass]="{
+        'd-flex flex-center min-h-200px h-100 bg-gray-100': isLoadingModule && !isModalMode
+    }" [class]="(moduleName ? moduleName.split('/')[0] : '') + ' react-app-wrapper'">
+    @if (isModalMode) {
+        <nz-skeleton [nzParagraph]="{rows: 5}"></nz-skeleton>
+    } @else {
+        <nz-spin [nzTip]="'Loading...'| translate" nzSimple></nz-spin>
+    }
+</div> -->
+
+@if (isLoadingModule) {
+    @if (isModalMode) {
+        <nz-skeleton [nzParagraph]="{rows: 5}"></nz-skeleton>
+    } @else {
+        <nz-spin [nzTip]="'Loading...'| translate" nzSimple></nz-spin>
+    }
+}

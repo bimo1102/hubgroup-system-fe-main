@@ -1,0 +1,19 @@
+{
+  "name": "@bryntum/scheduler-lib",
+  "version": "1.0.0",
+  "description": "Bryntum scheduler component library",
+  "keywords": [
+    "bryntum",
+    "scheduler"
+  ],
+  "author": {
+    "name": "Bryntum",
+    "email": "info@bryntum.com",
+    "url": "https://bryntum.com"
+  },
+  "license": "Commercial",
+  "main": "build.js",
+  "dependencies": {},
+  "devDependencies": {}
+}
+

@@ -1,0 +1,93 @@
+@import '../../core-sass/themes/material.scss';
+
+//region Grid
+
+$grid-header-background-color                  : #fafafa;
+$grid-header-text-color                        : #757575;
+$grid-header-font-weight                       : 500;
+$grid-header-border-color                      : transparent;
+$grid-header-hover-background-color            : darken($grid-header-background-color, 5);
+$grid-header-container-border-bottom-width     : 0;
+$grid-header-padding                           : 1.3em 0.5em;
+$grid-header-box-shadow                        : 0 2px 4px rgba(0, 0, 0, 0.08);
+
+$grid-header-icon-light-color                  : $gray300;
+
+$grid-footer-background-color                  : $grid-header-background-color;
+$grid-footer-box-shadow                        : 0 -2px 4px rgba(0, 0, 0, 0.08);
+
+$grid-background-color                         : #fff;
+
+$grid-cell-color                               : #212121;
+$grid-cell-action-column-color : lighten($dark-gray, 10%);
+$grid-cell-border-color                        : #e0e0e0;
+$grid-cell-font-weight                         : 300;
+
+$grid-cell-row-hover-background-color          : #eeeeee;
+$grid-cell-hover-background-color              : #e7e7e7;
+
+$grid-row-selected-background-color            : #f5f5f5;
+$grid-row-selected-cell-background-color       : #f0f0f0;
+$grid-focus-row-selected-background-color      : #f5f5f5;
+$grid-focus-row-selected-cell-background-color : #f0f0f0;
+
+$grid-cell-focused-outline-color               : $main-color;
+
+$grid-group-header-line-color                  : #d5d5d5;
+$grid-groupsummary-background-color            : $grid-header-background-color;
+
+$tree-parent-font-weight                       : 500;
+
+//endregion
+
+//region Features
+
+$celledit-background-color                     : #fff !default;
+$celledit-border-color                         : $main-color;
+$celledit-border-width                         : 1px 1px 0 1px; // no bottom border, since fields have that anyway
+
+// sorted header has emphasized text
+$sort-color                                    : $grid-cell-color;
+
+$grid-header-icon-position                     : static;
+$grid-header-icon-transform                    : none;
+$grid-header-icon-top                          : auto;
+
+$grid-region-resize-splitter-color             : #ebebeb;
+$grid-region-resize-splitter-narrow-color      : $grid-cell-border-color;
+
+$columndragtoolbar-background                  : $white;
+$columndragtoolbar-box-shadow                  : 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.24);
+$columndragtoolbar-border-radius               : .2em;
+$columndragtoolbar-opacity                     : .8;
+$columndragtoolbar-hover-opacity               : 1;
+$columndragtoolbar-button-background-color     : $main-color;
+$columndragtoolbar-button-border-width         : 0;
+$columndragtoolbar-icon-color                  : $white;
+$columndragtoolbar-title-color                 : $grid-header-text-color;
+$columndragtoolbar-button-box-shadow           : 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+$columndragtoolbar-default-hover-color         : lighten($main-color, 5);
+$columndragtoolbar-button-hover-box-shadow     : 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+$columndragtoolbar-secondary-color             : $white;
+$columndragtoolbar-secondary-background-color  : $secondary-color;
+$columndragtoolbar-secondary-hover-color       : lighten($secondary-color, 5);
+
+$quickfind-background-color                    : $yellow200;
+
+//endregion
+
+//region Columns
+
+$action-item-color                             : scale_color($grid-cell-color, $lightness : 40%);
+
+$percent-bar-fill                              : $main-color;
+$percent-bar-low-fill                          : $red500;
+$percent-bar-color                             : #fff;
+
+$rating-filled-color                           : $yellow600;
+
+$rownumber-background                          : $grid-header-background-color;
+$rownumber-border-color                        : transparent;
+
+//endregion
+

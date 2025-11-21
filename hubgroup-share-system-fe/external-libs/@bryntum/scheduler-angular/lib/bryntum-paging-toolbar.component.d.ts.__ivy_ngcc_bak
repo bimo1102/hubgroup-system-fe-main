@@ -1,0 +1,118 @@
+/**
+ * Angular wrapper for Bryntum PagingToolbar
+ */
+import { ElementRef, EventEmitter, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AjaxStore, Base, Layout, Mask, MaskConfig, Model, Rectangle, Scroller, ScrollerConfig, Widget, WidgetConfig } from '@bryntum/scheduler/scheduler.lite.umd.js';
+import { PagingToolbar } from '@bryntum/scheduler/scheduler.lite.umd.js';
+export declare class BryntumPagingToolbarComponent implements OnInit, OnDestroy {
+    static instanceClass: typeof PagingToolbar;
+    private static bryntumFeatureNames;
+    private static bryntumConfigs;
+    private static bryntumConfigsOnly;
+    private static bryntumProps;
+    private elementRef;
+    instance: PagingToolbar;
+    private bryntumConfig;
+    constructor(element: ElementRef);
+    adopt: HTMLElement | string;
+    align: object | string;
+    anchor: boolean;
+    appendTo: HTMLElement | string;
+    bubbleEvents: object;
+    centered: boolean;
+    cls: string | object;
+    config: object;
+    constrainTo: HTMLElement | Widget | Rectangle;
+    contentElementCls: string | object;
+    defaultBindProperty: string;
+    defaults: object;
+    dock: string;
+    draggable: boolean | object;
+    floating: boolean;
+    hideAnimation: boolean | object;
+    hideWhenEmpty: boolean;
+    htmlCls: string | object;
+    insertBefore: HTMLElement | string;
+    insertFirst: HTMLElement | string;
+    itemCls: string;
+    lazyItems: object | object[] | Widget[] | Partial<WidgetConfig> | Partial<WidgetConfig>[];
+    listeners: object;
+    localeClass: Base;
+    localizableProperties: string[];
+    maskDefaults: object | Mask | Partial<MaskConfig>;
+    masked: boolean | string | object | Mask | Partial<MaskConfig>;
+    monitorResize: boolean;
+    namedItems: object;
+    overflow: string | object | null;
+    owner: Widget;
+    positioned: boolean;
+    preventTooltipOnTouch: boolean;
+    ripple: boolean | object;
+    rootElement: ShadowRoot;
+    scrollAction: string;
+    showAnimation: boolean | object;
+    store: AjaxStore;
+    tab: boolean | object;
+    tag: string;
+    textAlign: string;
+    textContent: boolean;
+    title: string;
+    tools: object;
+    weight: number;
+    widgetCls: string;
+    alignSelf: string;
+    content: string;
+    dataset: object;
+    disabled: boolean;
+    extraData: boolean | number | object | string;
+    flex: number | string;
+    height: number | string;
+    hidden: boolean;
+    html: string;
+    id: string;
+    items: Widget[] | object | object[] | Partial<WidgetConfig> | Partial<WidgetConfig>[];
+    layout: Layout | string;
+    layoutStyle: object;
+    margin: number | string;
+    maxHeight: number | string;
+    maxWidth: number | string;
+    minHeight: number | string;
+    minWidth: number | string;
+    readOnly: boolean;
+    scrollable: boolean | Scroller | object | Partial<ScrollerConfig>;
+    tooltip: object | string;
+    width: number | string;
+    x: number;
+    y: number;
+    anchorSize: number[];
+    isSettingValues: boolean;
+    isValid: boolean;
+    record: Model;
+    values: object;
+    onBeforeDestroy: EventEmitter<object>;
+    onBeforeHide: EventEmitter<object>;
+    onBeforeSetRecord: EventEmitter<object>;
+    onBeforeShow: EventEmitter<object>;
+    onCatchAll: EventEmitter<object>;
+    onDestroy: EventEmitter<object>;
+    onFocusIn: EventEmitter<object>;
+    onFocusOut: EventEmitter<object>;
+    onHide: EventEmitter<object>;
+    onPaint: EventEmitter<object>;
+    onReadOnly: EventEmitter<object>;
+    onResize: EventEmitter<object>;
+    onShow: EventEmitter<object>;
+    /**
+     * Create and append the underlying widget
+     */
+    ngOnInit(): void;
+    /**
+     * Watch for changes
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Destroy the component
+     */
+    ngOnDestroy(): void;
+}

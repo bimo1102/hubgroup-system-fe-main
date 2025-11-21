@@ -1,0 +1,30 @@
+// additional scheduler icons
+
+.b-icon-unassign:before {
+    content: "#{ $fa-var-unlink }";
+}
+
+.b-icon-valid:before {
+    content: "#{ $fa-var-check }";
+}
+
+.b-icon-invalid:before {
+    content: "#{ $fa-var-ban }";
+}
+
+.b-icon-checking:before {
+    content: "#{ $fa-var-spinner }";
+}
+
+.b-icon-prev:before {
+    content: "#{ $fa-var-angle-left }";
+}
+
+.b-icon-next:before {
+    content: "#{ $fa-var-angle-right }";
+}
+
+
+.b-icon-expand-resource:before {
+    content : "#{ $fa-var-angle-double-down }";
+}

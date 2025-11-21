@@ -1,0 +1,26 @@
+{
+  "name": "@bryntum/scheduler-react",
+  "description": "React wrappers for Bryntum Scheduler JavaScript component",
+  "version": "4.2.7",
+  "author": {
+    "name": "Bryntum",
+    "url": "https://bryntum.com",
+    "email": "info@bryntum.com"
+  },
+  "license": "Commercial",
+  "homepage": "https://bryntum.com/",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "bryntum",
+    "scheduler",
+    "react",
+    "wrapper"
+  ],
+  "bugs": "https://github.com/bryntum/support/issues",
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

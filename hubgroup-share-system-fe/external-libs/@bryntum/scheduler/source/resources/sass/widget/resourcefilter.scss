@@ -1,0 +1,26 @@
+.b-resourcefilter {
+    .b-list-item {
+        border        : 0 none;
+        border-radius : 0;
+    }
+    .b-icon {
+        visibility : visible !important;
+        &:before {
+            content : "\f0c8";
+            opacity : 0.6;
+        }
+    }
+    .b-selected {
+        .b-icon:before {
+            content : "\f14a";
+            opacity : 1;
+        }
+    }
+
+    // Only show focus rendition if user has used UP/DOWN keys to navigate
+    .b-outer:not(.b-using-keyboard) & {
+        .b-list-item:focus, .b-list-item.b-active {
+            background-color: transparent;
+        }
+    }
+}

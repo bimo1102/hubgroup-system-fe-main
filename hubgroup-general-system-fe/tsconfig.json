@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "allowJs": true,
+        "sourceMap": false,
+        "outDir": "./build",
+        "baseUrl": "./",
+        "checkJs": false,
+        "allowUnusedLabels": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "strict": false,
+        "jsx": "react",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "emitDeclarationOnly": false,
+        "emitDecoratorMetadata": false,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "target": "ES2015",
+        "paths": {
+            "@hubgroup-share-system-fe/*": ["../hubgroup-share-system-fe/*"],
+            "@shareds/*": ["./shareds/*"],
+            "@hooks/*": ["./hooks/*"],
+            "@services/*": ["./services/*"],
+            "@modules/*": ["./modules/*"]
+        }
+    },
+    "include": [
+        "./src"
+    ],
+    "exclude": ["node_modules"]
+}

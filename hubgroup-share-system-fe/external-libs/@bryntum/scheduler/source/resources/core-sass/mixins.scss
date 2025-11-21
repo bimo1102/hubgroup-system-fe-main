@@ -1,0 +1,18 @@
+@mixin user-select($value) {
+    -moz-user-select    : $value;
+    -webkit-user-select : $value;
+    -ms-user-select     : $value;
+    user-select         : $value;
+}
+
+@mixin user-select-none() {
+    @include user-select(none);
+}
+
+@mixin user-select-all() {
+    @include user-select(all);
+}
+
+@mixin user-select-text() {
+    @include user-select(text);
+}

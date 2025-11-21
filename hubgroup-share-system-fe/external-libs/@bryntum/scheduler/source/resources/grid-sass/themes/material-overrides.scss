@@ -1,0 +1,64 @@
+@import '../variables.scss';
+
+//region Custom icons
+
+.b-icon-column-move-left:before {
+    content : '\f060';
+}
+
+.b-icon-column-move-right:before {
+    content : '\f061';
+}
+
+.b-icon-group-collapse:before {
+    content    : '\f0d7';
+    width      : .6em;
+    text-align : center;
+}
+
+.b-icon-group-expand:before {
+    content    : '\f0da';
+    width      : .6em;
+    text-align : center;
+}
+
+.b-icon-sort-asc:before {
+    content : '\f062';
+}
+
+.b-icon-sort-desc:before {
+    content : '\f063';
+}
+
+//endregion
+
+@import './material/material-columndragtoolbar.scss';
+
+.b-gridbase {
+    // no border between cells (horizontally)
+    .b-grid-cell {
+        border-right-color : transparent;
+    }
+}
+
+.b-grid-header-text {
+    // Not full width on Material so that the sort icon is immediately on its right
+    > .b-grid-header-text-content {
+        flex: none;
+        // Need to override `width: 0` added to make IE resize correctly
+        width: auto;
+    }
+}
+
+.b-grid-header-align-center .b-grid-header-text {
+    justify-content: center;
+}
+
+.b-grid-header-align-right .b-grid-header-text {
+    justify-content: flex-end;
+}
+
+.b-grid-footer-scroller {
+    background : $grid-footer-background-color;
+}
+

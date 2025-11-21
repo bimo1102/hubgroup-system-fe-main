@@ -1,0 +1,18 @@
+/**
+ * Angular wrapper for Bryntum Demo Header
+ */
+import { ElementRef, OnDestroy, OnInit } from '@angular/core';
+export declare class BryntumDemoHeaderComponent implements OnInit, OnDestroy {
+    private elementRef;
+    title: String;
+    link: String;
+    constructor(element: ElementRef);
+    /**
+     * Initializes component
+     */
+    ngOnInit(): void;
+    /**
+     * Destroys component
+     */
+    ngOnDestroy(): void;
+}

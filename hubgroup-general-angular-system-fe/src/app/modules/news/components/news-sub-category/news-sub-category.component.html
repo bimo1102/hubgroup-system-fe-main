@@ -1,0 +1,42 @@
+<nz-form-item [nzGutter]="20" [ngClass]="{'mb-1': layout === 'vertical'}">
+    <nz-form-label class="fw-bold text-gray-900 text-break" nzLabelWrap [nzSpan]="24" [nzMd]="4"
+                   nzLabelAlign="left"
+                   nzFor='news.online.add.or.change.sub.category'>
+        {{ 'news.online.add.or.change.sub.category' | translate }}
+        @if (layout === 'vertical' && editable) {
+            <app-news-button-add (clickFunc)="onAddSubCategory()"
+                               [checkPermission]="false"
+                               [buttonClass]="'w-30px h-30px'"
+                               [buttonIcon]="true"></app-news-button-add>
+        }
+    </nz-form-label>
+    @if (layout === 'horizontal') {
+        <nz-form-control>
+            @if (editable) {
+                <app-news-button-add (clickFunc)="onAddSubCategory()"
+                                   [checkPermission]="false"
+                                   [buttonClass]="'mb-3 w-30px h-30px'"
+                                   [buttonIcon]="true"></app-news-button-add>
+            }
+            <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+        </nz-form-control>
+    }
+</nz-form-item>
+
+@if (layout === 'vertical') {
+    <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+}
+
+<ng-template #itemTemplate>
+    @for (subCategory of categorySubs; track $index) {
+        <app-newspaper-sub-category-item (detectDataChangeFunc)="detectDataSubCategoryChange($event)"
+                                         [subCategory]="subCategory"
+                                         (removeCategorySubFunc)="onRemoveCategorySub($index)"
+                                         [prOption]="prOption"
+                                         [websiteId]="websiteId"
+                                         [editable]="editable"
+                                         [newsDisplayType]="newsDisplayType"
+                                         (selectSubCategoryFunc)="onSelectSubCategory($event)">
+        </app-newspaper-sub-category-item>
+    }
+</ng-template>

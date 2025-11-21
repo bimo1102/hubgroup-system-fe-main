@@ -1,0 +1,34 @@
+.b-stickycells {
+    .b-grid-sticky-row {
+        position  : absolute;
+        top       : 0;
+        left      : 0;
+        min-width : auto;
+        border    : 0 none;
+        padding   : 0;
+        contain   : initial;
+
+        .b-grid-cell {
+            width   : min-content;
+            contain : initial;
+            padding : 0;
+            border  : 0 none;
+        }
+    }
+
+    // Change look of the current top row
+    .b-sticky-cells-current-top-row {
+        // The cloned cells are hidden for the duration of it being the top row
+        .b-sticky-content-el {
+            visibility: hidden;
+        }
+        // Until the row's visible height isn't enough, in which case the content is 
+        // aligned to the bottom and scrolls out naturally
+        &.b-not-enough-height {
+            .b-sticky-content-el {
+                visibility : visible;
+                align-self : flex-end;
+            }
+        }
+    }
+}

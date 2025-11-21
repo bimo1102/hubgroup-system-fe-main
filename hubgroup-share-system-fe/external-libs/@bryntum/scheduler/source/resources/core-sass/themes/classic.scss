@@ -1,0 +1,12 @@
+@import '../variables.scss';
+
+$button-default-color : scale-color($gray, $lightness : 20%);
+
+@import "shared";
+
+// Embed theme details in content.
+// See DomHelper#themeInfo
+.b-theme-info:before {
+    content : '{"name":"Classic"}';
+}
+

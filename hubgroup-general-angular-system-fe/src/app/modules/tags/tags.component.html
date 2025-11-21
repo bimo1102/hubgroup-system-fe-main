@@ -1,0 +1,172 @@
+<div class='card card-bordered mb-xl-10'>
+    <div class='card-header'>
+        <div class='card-title m-0'>
+            {{ 'Tags list' | translate }}
+        </div>
+
+        <div class="card-toolbar">
+            <div nz-flex [nzGap]="'middle'" [nzAlign]="'center'">
+                <app-news-button-add [permissionKey]="'Tags/Add'"
+                                     [keenIconClass]="responsive.isDesktop ? 'fs-4' : 'fs-5'"
+                                     (clickFunc)='onOpenAddOrChangeModal()'>
+                </app-news-button-add>
+
+                <app-news-button-reload (clickFunc)="onSyncAll()" [permissionKey]="'Tags/SyncAll'"
+                                        [confirmTitle]="'Async all confirm'" [okText]="'Process'"
+                                        [text]="'Sync all tags'"></app-news-button-reload>
+                @if (setOfCheckedId.size > 0) {
+                    <app-news-button-delete [permissionKey]="'Tags/Delete'" [text]="'Delete.Selected' | translate"
+                                            (clickFunc)="onDelete()"></app-news-button-delete>
+                }
+            </div>
+        </div>
+    </div>
+    <div class='card-body'>
+        @if (message) {
+            <nz-alert class="mb-1" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+        }
+        <form nz-form [nzLayout]="'horizontal'" class="position-relative" (ngSubmit)="onSearch(true)">
+            <div nz-row [nzGutter]="20">
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Keyword' | translate">
+                                <input nz-input [name]="'keyword'" [autofocus]="responsive.isDesktop"
+                                       [placeholder]="'Keyword' | translate" type="search"
+                                       [(ngModel)]="requestSearch.keyword" (ngModelChange)="onRequestModelChange()" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'tags.article.number' | translate">
+                                <nz-input-number [name]="'tags.article.number'" class="w-100"
+                                                 [(ngModel)]="requestSearch.numberArticle"
+                                                 (ngModelChange)="onRequestModelChange()"></nz-input-number>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'Status' | translate">
+                                <nz-select nzShowSearch nzAllowClear
+                                           [(ngModel)]="requestSearch.statusFilterType"
+                                           (ngModelChange)="onRequestModelChange()"
+                                           [nzPlaceHolder]="'Status' | translate"
+                                           [name]="'requestSearch.statusFilterType'">
+                                    <nz-option [nzLabel]="'Active' | translate"
+                                               [nzValue]="StatusEnum.Active"></nz-option>
+                                    <nz-option [nzLabel]="'InActive' | translate"
+                                               [nzValue]="StatusEnum.InActive"></nz-option>
+
+                                </nz-select>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/4 - 1">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzAddOnBefore]="'tags.publish.date' | translate">
+                                <app-news-date-range-picker [(date)]="date" (dateChange)="onRequestModelChange()"
+                                                            [format]="dateFormat"></app-news-date-range-picker>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="3">
+                    <div nz-flex [nzWrap]="'wrap'" [nzGap]="'middle'" [nzAlign]="'center'">
+                        <app-news-button-search [text]="'Search' | translate"
+                                                [permissionKey]="'Tags/Gets'"
+                                                [buttonType]="'submit'"></app-news-button-search>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class='table-responsive'>
+            <nz-table nzBordered #dataTable [nzData]='tagModels' [nzPageIndex]='requestSearch.pageIndex! + 1'
+                      [nzPageSize]='requestSearch.pageSize!' [nzSize]="'small'"
+                      [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                      (nzPageIndexChange)='onPageIndexChange($event)' [nzTotal]='totalRow' [nzFrontPagination]='false'
+                      [nzShowSizeChanger]="responsive.isDesktop" [nzPageSizeOptions]="listPageSize"
+                      (nzPageSizeChange)="onRequestModelChange(); onPageSizeChange($event)">
+                <thead>
+                <tr>
+                    <th nzWidth="50px" [nzChecked]="checkedAll" [nzIndeterminate]="indeterminate"
+                        nzLabel="Select all" (nzCheckedChange)="onAllChecked($event)"></th>
+                    <th nzAlign="center" nzWidth="50px">{{ 'STT' | translate }}
+                    </th>
+                    <th>{{ 'Code' | translate }}</th>
+                    <th>{{ 'Name' | translate }}</th>
+                    <th>{{ 'Total post' | translate }}</th>
+                    <th>{{ 'Created date' | translate }}</th>
+                    <th>{{ 'Created user' | translate }}</th>
+                    <th>{{ 'Status' | translate }}</th>
+                    <th>{{ 'TagLockOptions' | translate }}</th>
+                    <th nzAlign="center">{{ 'Action' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for (item of dataTable.data; track item.id) {
+                        <tr>
+                            <td [nzChecked]="setOfCheckedId.has(item.id)" [nzLabel]="item.title || ''"
+                                (nzCheckedChange)="onItemChecked(item.id, $event)"></td>
+                            <td nzAlign="center">
+                                {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}
+                            </td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.title }}</td>
+                            <td>
+                                {{ item.totalPost }}
+                            </td>
+                            <td>
+                                {{ item.createdDateDisplay }}
+                            </td>
+                            <td>
+                                <p>{{ item.createdUid }} - {{ item?.createdUser?.fullName }}</p>
+                            </td>
+                            <td>
+                                <app-news-switch [permissionKey]="'Tags/StatusChange'" [isControl]="true"
+                                                 [isLoading]="!!loadingSwitchStatusObj[item.id]"
+                                                 [value]="item.status === StatusEnum.Active"
+                                                 (clickFunc)="onStatusChange(item.id, item.status === StatusEnum.Active ? StatusEnum.InActive : StatusEnum.Active)"></app-news-switch>
+                            </td>
+                            <td>
+                                <app-news-switch [permissionKey]="'Tags/OptionsChange'" [isControl]="true"
+                                                 [isLoading]="!!loadingSwitchLockObj[item.id]"
+                                                 [value]="item.options === TagOptionEnum.Lock"
+                                                 (clickFunc)="onOptionsChange(item.id, item.options === TagOptionEnum.Lock ? 0 : 1)"></app-news-switch>
+                            </td>
+                            <td>
+                                <div nz-flex [nzGap]="'small'" [nzJustify]="'center'" [nzAlign]="'center'">
+                                    <app-news-button-change [checkPermission]="false" [buttonIcon]="true"
+                                                            (clickFunc)="onOpenAddOrChangeModal(item)">
+                                    </app-news-button-change>
+
+                                    <app-news-button-delete (clickFunc)="onDelete([item.id])" [buttonIcon]="true"
+                                                            [permissionKey]="'Tags/Delete'">
+                                    </app-news-button-delete>
+
+                                    <app-news-button-icon [keenIcon]="'menu'" [buttonClassType]="'btn-secondary'"
+                                                          [buttonIcon]="true" (clickFunc)="onViewMappingModal(item)"
+                                                          permissionKey="Tags/Gets"
+                                                          [text]="'news.lsit' | translate"></app-news-button-icon>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </nz-table>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                <div class="me-5">
+                    {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items' | translate }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

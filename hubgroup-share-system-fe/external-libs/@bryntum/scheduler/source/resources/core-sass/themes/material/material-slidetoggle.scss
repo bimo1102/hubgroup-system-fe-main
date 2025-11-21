@@ -1,0 +1,11 @@
+.b-slidetoggle {
+    .b-field-inner::before {
+        transition : left $slidetoggle-transition-duration;
+    }
+
+    &.b-slidetoggle-checked {
+        .b-field-inner::before {
+            left : .35em;
+        }
+    }
+}

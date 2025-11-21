@@ -1,0 +1,8 @@
+.b-stickyevents {
+    // Because we start pushing the content as soon as the outer bar's start
+    // goes out of view, the content cannot be centered when using sticky events.
+    .b-sch-resourcetimerange {
+        justify-content : start;
+        overflow        : hidden;
+    }
+}

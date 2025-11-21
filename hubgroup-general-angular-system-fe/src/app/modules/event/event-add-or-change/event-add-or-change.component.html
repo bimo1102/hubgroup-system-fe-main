@@ -1,0 +1,262 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (eventModel.id) {
+                            {{ 'event edit'|translate }}
+                        } @else {
+                            {{ 'event create'|translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save'|translate"
+                                                  [permissionKey]="isChange ? 'Event/Change' : 'Event/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close'|translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'event.title'|translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='titleTpl'>
+                        <input nz-input required type='text' [placeholder]="'event.title'|translate"
+                               [(ngModel)]='eventModel.title' name='event.title'>
+                        <ng-template #titleTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'event.title.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'event.description'|translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='descriptionTpl'>
+                                <textarea nz-input required rows="2" type='text'
+                                          [placeholder]="'event.description'|translate"
+                                          [(ngModel)]='eventModel.description' name='event.description'></textarea>
+                        <ng-template #descriptionTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'event.description.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'event.date'|translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control>
+                        <app-news-date-range-picker [(date)]="date"
+                                                    [format]="dateFormat"></app-news-date-range-picker>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzNoColon nzLabelWrap [nzSpan]="24" [nzXl]="5"
+                                   [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'event.special'| translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <label nz-checkbox [(ngModel)]="eventModel.isSpecialEvent"
+                               name="eventModel.isSpecialEvent">
+                            {{ 'is.event.special'|translate }}
+                        </label>
+                    </nz-form-control>
+                </nz-form-item>
+                @if (eventModel.isSpecialEvent && eventModel.subs) {
+                    <nz-form-item>
+                        <nz-form-label nzNoColon nzLabelWrap [nzSpan]="24" [nzXl]="5"
+                                       [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'event.subs'| translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <app-news-button-add [checkPermission]="false"
+                                                 [buttonIcon]="true"
+                                                 [buttonClass]="'mb-2'"
+                                                 (clickFunc)="onSubAdd()">
+                            </app-news-button-add>
+
+                            @for (sub of eventModel.subs; track $index) {
+                                <div nz-row [nzGutter]="20" class="mb-2">
+                                    <div nz-col [nzSpan]="24 / 2 - 1">
+                                        <input nz-input type='text' [placeholder]="'event.sub.name'|translate"
+                                               [(ngModel)]='sub.name' [name]="'sub.name' + $index">
+                                    </div>
+                                    <div nz-col [nzSpan]="24 / 2 - 1">
+                                        <input nz-input type='text' [placeholder]="'event.sub.url'|translate"
+                                               [(ngModel)]='sub.url' [name]="'sub.url' + $index">
+                                    </div>
+                                    <div nz-col [nzSpan]="2">
+                                        <app-news-button-delete [checkPermission]="false"
+                                                                [buttonIcon]="true"
+                                                                (clickFunc)="onSubRemove($index)"
+                                                                [title]="'event.remove.sub'|translate">
+                                        </app-news-button-delete>
+                                    </div>
+                                </div>
+                            }
+                        </nz-form-control>
+                    </nz-form-item>
+                }
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'Category'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                   [nzMode]="'multiple'"
+                                   [(ngModel)]="eventModel.categoryIds"
+                                   [nzPlaceHolder]="'Category'|translate"
+                                   (nzOnSearch)="requestCategoryMainAutocomplete$.next({keyword: $event})"
+                                   [name]="'Category'">
+                            @for (item of categoryMainSources; track item.id) {
+                                <nz-option [nzLabel]="(item.text || '') | translate"
+                                           [nzValue]="item.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'event.options'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        @for (item of eventModel.optionObjects; track $index) {
+                            <div>
+                                <label nz-checkbox name="options_{{$index}}"
+                                       [(ngModel)]="item.checked">{{ item.text|translate }}</label>
+                            </div>
+                        }
+                    </nz-form-control>
+                </nz-form-item>
+
+                <ng-template #countTpl let-value let-maxLength="maxLength">
+                    <div [ngClass]="value && value.length > maxLength ? 'text-danger': 'text-primary'">
+                        {{ 'count.character'| translate }}: {{ value ? value.length : 0 }} / {{ maxLength }}
+                    </div>
+                </ng-template>
+
+                @if (eventModel.facebookOption) {
+
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.title'|translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type='text' [placeholder]="'facebook.title'|translate"
+                                   [(ngModel)]='eventModel.facebookOption.title'
+                                   name='event.facebookOption.title'
+                            >
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.description'|translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <textarea nz-input rows="2" type='text'
+                                      [placeholder]="'facebook.description'|translate"
+                                      [(ngModel)]='eventModel.facebookOption.description'
+                                      name='event.facebookOption.description'></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="5" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.seo.keyword'|translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type='text' [placeholder]="'facebook.seo.keyword'|translate"
+                                   [(ngModel)]='eventModel.facebookOption.keywords'
+                                   name='event.facebookOption.keywords'
+                            >
+                        </nz-form-control>
+                    </nz-form-item>
+                }
+                <div class="separator my-2">
+                </div>
+                <div nz-row [nzGutter]="20">
+                    @for (media of mediaObjects; track $index) {
+                        <div nz-col [nzSpan]="24/5">
+                            <div class="mb-2">
+                                {{ ('event.media' + MediaTypeEnum[media.type]) | lowercase | translate }}
+                            </div>
+                            <div class="card card-bordered overlay mw-150px">
+                                <div class="card-body p-0">
+                                    <div class="overlay-wrapper">
+                                        <img class="w-100 min-h-150px card-rounded object-fit-cover"
+                                             alt=""
+                                             [src]="media.url || noImageMobile" />
+                                    </div>
+                                    <div class="overlay-layer bg-dark bg-opacity-25"
+                                         [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                                        <div class="d-flex gap-3">
+                                            <app-news-button-icon [keenIcon]="'picture'"
+                                                                  [buttonIcon]="true"
+                                                                  [checkPermission]="false"
+                                                                  (clickFunc)="onOpenFileManagerModal(media)"
+                                                                  [buttonClassType]="'btn-info'"
+                                                                  [text]="'event.choose.image'"
+                                            >
+                                            </app-news-button-icon>
+                                            @if (media.url) {
+                                                <app-news-button-delete [checkPermission]="false"
+                                                                        [buttonIcon]="true"
+                                                                        [btnConfirm]="false"
+                                                                        (clickFunc)="media.url=''"
+                                                                        [title]="'event.remove.image'|translate">
+                                                    <i class="fas fa-times icon-xl"></i>
+                                                </app-news-button-delete>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="card-footer">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                    <app-news-button-save [text]="'Save'|translate"
+                                          [permissionKey]="isChange ? 'Event/Change' : 'Event/Add'"
+                                          (clickFunc)="onSave(addOrChangeForm)">
+                    </app-news-button-save>
+                    <app-news-button-close [text]="'Close'|translate"
+                                           (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+

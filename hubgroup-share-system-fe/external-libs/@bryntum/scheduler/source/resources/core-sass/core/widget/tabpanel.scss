@@ -1,0 +1,159 @@
+@import '../../functions.scss';
+@import '../../variables.scss';
+
+.b-tabpanel {
+    &-tabs {
+        display          : flex;
+        flex             : 0 0 auto;
+        flex-direction   : row;
+
+        // The bottom of the tab strip sits under the container's top border.
+        // The active tab gets a z-index to rise above to "connect" to the content.
+        margin-bottom    : -$tabpanel-border-width;
+
+        // background-color : $tabpanel-tabs-background-color;
+        background-color : transparent;
+
+        // Edge needs one more
+        &.b-edge {
+            margin-bottom : -#{$tabpanel-border-width + 1}px;
+        }
+    }
+
+    &-tab {
+        display                 : flex;
+        padding                 : $tabpanel-tab-padding;
+        cursor                  : pointer;
+        transition              : background-color 0.2s, color 0.2s;
+        align-items             : center;
+        justify-content         : center;
+        font-size               : $tabpanel-tab-font-size;
+        font-weight             : $tabpanel-tab-font-weight;
+        text-transform          : $tabpanel-tab-text-transform;
+
+        color                   : $tabpanel-tab-color;
+        background-color        : $tabpanel-tab-background-color;
+
+        border-width            : $tabpanel-tab-border-width;
+        border-style            : $tabpanel-tab-border-style;
+        border-color            : $tabpanel-tab-border-color;
+
+        border-top-left-radius  : $widget-border-radius;
+        border-top-right-radius : $widget-border-radius;
+
+        &.b-rotate-vertical {
+            min-width  : $tabpanel-tab-height;
+            min-height : $tabpanel-tab-min-width;
+        }
+
+        &:not(.b-rotate-vertical) {
+            min-height : $tabpanel-tab-height;
+            min-width  : $tabpanel-tab-min-width;
+        }
+
+        &.b-active {
+            background-color : $tabpanel-tab-active-background-color;
+            border-color     : $tabpanel-tab-active-border-color;
+            color            : $tabpanel-tab-active-color;
+            font-weight      : $tabpanel-tab-active-font-weight;
+
+            // Occludes the top border of the b-tabpanel-body element.
+            z-index          : 1;
+        }
+
+        .b-dock-left > .b-tabpanel-tabs > & {
+            //          T                       R
+            //      +-------+               +-------+
+            //    L |       | R     -->   T |       | B
+            //      +-------+               +-------+
+            //          B                       L
+            border-width : right($tabpanel-tab-border-width) bottom($tabpanel-tab-border-width) left($tabpanel-tab-border-width) top($tabpanel-tab-border-width);
+        }
+
+        .b-dock-right > .b-tabpanel-tabs > & {
+            //          T                       L
+            //      +-------+               +-------+
+            //    L |       | R     -->   B |       | T
+            //      +-------+               +-------+
+            //          B                       R
+            border-width : left($tabpanel-tab-border-width) top($tabpanel-tab-border-width) right($tabpanel-tab-border-width) bottom($tabpanel-tab-border-width);
+        }
+
+        .b-dock-bottom > .b-tabpanel-tabs > & {
+            //          T                       B
+            //      +-------+               +-------+
+            //    L |       | R     -->   L |       | R
+            //      +-------+               +-------+
+            //          B                       T
+            border-width : bottom($tabpanel-tab-border-width) right($tabpanel-tab-border-width) top($tabpanel-tab-border-width) left($tabpanel-tab-border-width);
+        }
+
+        &.b-hidden {
+            display : none !important; // ugly but needed since subclasses can override normal display with more specificity
+        }
+
+        &.b-disabled {
+            background-color : transparent;
+            color            : transparentize($tabpanel-tab-color, .7);
+            border-color     : transparentize($tabpanel-tab-border-color, .2);
+        }
+
+        &:focus {
+            outline : none;
+        }
+
+        &:hover:not(.b-active):not(.b-disabled),
+        &:focus:not(.b-active):not(.b-disabled) {
+            background-color : $tabpanel-tab-hover-background-color;
+            color            : $tabpanel-tab-hover-color;
+        }
+    }
+
+    &-body.b-card-container {
+        background-color : $tabpanel-background-color;
+        border-radius    : $widget-border-radius;
+        border           : $tabpanel-border-width solid $tabpanel-border-color;
+        flex             : 1 0 auto;
+        padding          : $tabpanel-body-padding;
+    }
+
+    &[data-active-index="0"] {
+        .b-tabpanel-body {
+            border-top-left-radius : 0;
+        }
+    }
+
+    .b-html {
+        color : $container-color;
+    }
+}
+
+// We need this extra specificity to overcome toolbar styles:
+.b-toolbar.b-tabbar {
+    background-color : transparent;
+    min-height       : auto;
+
+    > .b-tabpanel-tabs {
+        padding : 0;
+    }
+
+    &.b-dock-top {
+        border-bottom : $tabpanel-tabs-border-bottom;
+    }
+
+    &.b-dock-right {
+        border-left : $tabpanel-tabs-border-bottom;
+    }
+
+    &.b-dock-bottom {
+        border-top : $tabpanel-tabs-border-bottom;
+    }
+
+    &.b-dock-left {
+        border-right : $tabpanel-tabs-border-bottom;
+    }
+}
+
+.b-tabbar .b-tabpanel-tabs > .b-widget:not(.b-last-visible-child) {
+    margin-right : 0;
+}

@@ -1,0 +1,40 @@
+.b-resourcecombo {
+    .b-resource-icon {
+        display     : none;
+        margin-left : 0.5em;
+    }
+
+    // Only show the colour if it's not multiselecting
+    &.b-show-event-color:not(.b-uses-chipview) {
+        .b-resource-icon {
+            display : block;
+        }
+    }
+}
+
+// Resource picker list in EventEditor
+.b-resourcecombo-picker {
+    .b-icon {
+        display      : none;
+        margin-right : 0.5em;
+    }
+
+    &.b-show-event-color {
+        .b-icon {
+            display : block;
+        }
+        // Show checked square if item is selected.
+        .b-selected .b-icon-square:before {
+            content : "\f14a";
+        }
+    }
+}
+
+.b-theme-material {
+    .b-resourcecombo {
+        .b-resource-icon {
+            margin-left  : 0;
+            margin-right : 0.5em;
+        }
+    }
+}

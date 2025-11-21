@@ -1,0 +1,217 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card card-bordered'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        {{ 'edit.seo.category' | translate }}
+                    </div>
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'middle'">
+                            <app-news-button-save [permissionKey]="'NewsCategory/ChangeSeo'"
+                                                  (clickFunc)="onSave(addOrChangeForm)"
+                                                  [text]="'Save'| translate">
+                            </app-news-button-save>
+                            <app-news-button-close (clickFunc)="onClose()"
+                                                   [text]="'Cancel'| translate"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class='card-body'>
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'category.seo.name'|translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <input required nz-input type='text' [(ngModel)]='categorySeoModel.name'
+                               [placeholder]="'category.seo.name' | translate"
+                               name='seoModel.name' />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <ng-template #countTpl let-value let-maxLength="maxLength">
+                    <div [ngClass]="value && value.length > maxLength ? 'text-danger': 'text-primary'">
+                        {{ 'count.character' | translate }}: {{ value ? value.length : 0 }}
+                        / {{ maxLength }}
+                    </div>
+                </ng-template>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'category.seo.name.description'|translate }}
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='seoModelDescriptionTpl'>
+                                <textarea rows="2" nz-input type='text' [(ngModel)]='categorySeoModel.description'
+                                          [placeholder]="'category.seo.name.description' | translate"
+                                          [maxlength]="180"
+                                          name='seoModel.description'></textarea>
+                        <ng-container [ngTemplateOutlet]="countTpl"
+                                      [ngTemplateOutletContext]="{ $implicit: categorySeoModel.description, maxLength: 180 }">
+                        </ng-container>
+                        <ng-template #seoModelDescriptionTpl let-control>
+                            @if (control.hasError('maxlength')) {
+                                {{ 'category.seo.name.description.warning.max.length' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+
+                @if (categorySeoModel.seoOption; as seoOptionModel) {
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'seo.title'|translate }}
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]='seoOptionModelTitleTpl'>
+                            <input nz-input type='text' [(ngModel)]='seoOptionModel.title'
+                                   [placeholder]="'seo.title' | translate"
+                                   [maxlength]="80"
+                                   name='seoOption.title' />
+                            <ng-container [ngTemplateOutlet]="countTpl"
+                                          [ngTemplateOutletContext]="{ $implicit: seoOptionModel.title, maxLength: 80 }">
+                            </ng-container>
+                            <ng-template #seoOptionModelTitleTpl let-control>
+                                @if (control.hasError('maxlength')) {
+                                    {{ 'seo.title.warning.max.length' | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'seo.description'|translate }}
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]='seoOptionModelDescriptionTpl'>
+                            <input nz-input type='text' [(ngModel)]='seoOptionModel.description'
+                                   [placeholder]="'seo.description' | translate"
+                                   [maxlength]="180"
+                                   name='seoOptionModel.description' />
+                            <ng-container [ngTemplateOutlet]="countTpl"
+                                          [ngTemplateOutletContext]="{ $implicit: seoOptionModel.description, maxLength: 180 }">
+                            </ng-container>
+                            <ng-template #seoOptionModelDescriptionTpl let-control>
+                                @if (control.hasError('maxlength')) {
+                                    {{ 'seo.description.warning.max.length' | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'seo.keyword'|translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type='text' [(ngModel)]='seoOptionModel.keywords'
+                                   [placeholder]="'seo.keyword' | translate"
+                                   name='seoOptionModel.keywords' />
+                        </nz-form-control>
+                    </nz-form-item>
+                }
+
+                @if (categorySeoModel.facebookOption; as facebookOptionModel) {
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.title'|translate }}
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]='facebookOptionModelTitleTpl'>
+                            <input nz-input type='text' [(ngModel)]='facebookOptionModel.title'
+                                   [placeholder]="'facebook.title' | translate"
+                                   [maxlength]="80"
+                                   name='facebookOptionModel.title' />
+                            <ng-container [ngTemplateOutlet]="countTpl"
+                                          [ngTemplateOutletContext]="{ $implicit: facebookOptionModel.title, maxLength: 80 }">
+                            </ng-container>
+                            <ng-template #facebookOptionModelTitleTpl let-control>
+                                @if (control.hasError('maxlength')) {
+                                    {{ 'facebook.title.warning.max.length' | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzLabelWrap [nzSpan]="24" [nzXl]="6" [nzLabelAlign]="'left'"
+                                       class="text-gray-700 fw-bold text-break">
+                            {{ 'facebook.description'|translate }}
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]='facebookOptionModelDescriptionTpl'>
+                                <textarea nz-input type='text' [(ngModel)]='facebookOptionModel.description'
+                                          [placeholder]="'facebook.description' | translate"
+                                          [maxlength]="180" rows="2"
+                                          name='facebookOptionModel.description'></textarea>
+                            <ng-container [ngTemplateOutlet]="countTpl"
+                                          [ngTemplateOutletContext]="{ $implicit: facebookOptionModel.description, maxLength: 180 }">
+                            </ng-container>
+                            <ng-template #facebookOptionModelDescriptionTpl let-control>
+                                @if (control.hasError('maxlength')) {
+                                    {{ 'facebook.description.warning.max.length' | translate }}
+                                }
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                }
+                <div class="separator my-2"></div>
+                <div nz-row [nzGutter]="20">
+                    @for (media of mediaObjects; track $index) {
+                        <div nz-col [nzSpan]="24/5">
+                            <div class="mb-2">
+                                {{ ('category.media' + MediaTypeEnum[media.type]) | lowercase | translate }}
+                            </div>
+                            <div class="card card-bordered overlay mw-150px">
+                                <div class="card-body p-0">
+                                    <div class="overlay-wrapper">
+                                        <img class="w-100 min-h-150px card-rounded object-fit-cover"
+                                             alt=""
+                                             [src]="media.url || noImageMobile" />
+                                    </div>
+                                    <div class="overlay-layer bg-dark bg-opacity-25"
+                                         [ngClass]="{'opacity-100': !responsive.isDesktop}">
+                                        <div class="d-flex gap-3">
+                                            <app-news-button-icon [keenIcon]="'picture'"
+                                                                  [buttonIcon]="true"
+                                                                  [checkPermission]="false"
+                                                                  (clickFunc)="onOpenFileManagerModal(media)"
+                                                                  [buttonClassType]="'btn-info'"
+                                                                  [text]="'event.choose.image'"
+                                            >
+                                            </app-news-button-icon>
+                                            @if (media.url) {
+                                                <app-news-button-delete [checkPermission]="false"
+                                                                        [buttonIcon]="true"
+                                                                        [btnConfirm]="false"
+                                                                        (clickFunc)="media.url=''"
+                                                                        [title]="'event.remove.image'|translate">
+                                                    <i class="fas fa-times icon-xl"></i>
+                                                </app-news-button-delete>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="flex flex-center gap-3">
+                    <app-news-button-save [permissionKey]="'NewsCategory/ChangeSeo'"
+                                          (clickFunc)="onSave(addOrChangeForm)"
+                                          [text]="'Save'| translate">
+                    </app-news-button-save>
+                    <app-news-button-close (clickFunc)="onClose()"
+                                           [text]="'Cancel'| translate"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+

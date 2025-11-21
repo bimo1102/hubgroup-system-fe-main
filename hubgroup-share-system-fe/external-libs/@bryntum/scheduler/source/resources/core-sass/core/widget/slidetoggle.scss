@@ -1,0 +1,96 @@
+@import '../../variables.scss';
+
+.b-container {
+    .b-slidetoggle {
+        .b-slidetoggle-label {
+            margin-left : 0;
+        }
+    }
+}
+
+.b-slidetoggle {
+    height : $checkbox-box-height + $checkbox-container-vertical-margin * 2 + $checkbox-box-padding * 2;
+
+    .b-field-inner::before {
+        width : $slidetoggle-size * 2 + $slidetoggle-offset * 2;
+    }
+
+    input,
+    .b-slidetoggle-toggle {
+        width      : $slidetoggle-size * 2 + $slidetoggle-offset * 2;
+        height     : $slidetoggle-wrapper-height;
+        margin-top : -$slidetoggle-offset / 2;
+        font-size  : inherit;
+    }
+
+    input:checked + .b-slidetoggle-toggle {
+        opacity : 1;
+
+        .b-slidetoggle-thumb {
+            background-color : $white;
+            transform        : translate($slidetoggle-size + $slidetoggle-offset, $slidetoggle-offset);
+        }
+    }
+
+    .b-slidetoggle-toggle {
+        transition    : background-color .2s, opacity .2s;
+        opacity       : 0.7;
+        border-radius : $slidetoggle-wrapper-height / 2;
+        margin-right  : $slidetoggle-size * 0.4;
+    }
+
+    &:hover .b-slidetoggle-toggle {
+        opacity : 1;
+    }
+
+    .b-slidetoggle-thumb {
+        height           : $slidetoggle-size;
+        width            : $slidetoggle-size;
+        background-color : scale-color($white, $saturation : -60%);
+        border-radius    : $slidetoggle-size / 2;
+        position         : absolute;
+        transform        : translate($slidetoggle-offset, $slidetoggle-offset);
+        transition       : transform $slidetoggle-transition-duration ease;
+    }
+}
+
+.b-slidetoggle-label {
+    cursor : pointer;
+}
+
+@mixin slide-color($colorName, $color) {
+    @if $colorName == "default" {
+        $colorName : null;
+    } @else {
+        $colorName : ".b-#{$colorName}"
+    }
+
+    .b-slidetoggle#{$colorName} {
+        input:checked + .b-slidetoggle-toggle {
+            background-color : $color;
+        }
+
+        .b-slidetoggle-toggle {
+            background-color : scale-color($color, $lightness : 50%, $saturation : 5%);
+        }
+    }
+}
+
+@include slide-color("white", $white);
+@include slide-color("blue", $blue);
+@include slide-color("deep-orange", $deep-orange);
+@include slide-color("orange", $orange);
+@include slide-color("amber", $amber);
+@include slide-color("indigo", $indigo);
+@include slide-color("lime", $lime);
+@include slide-color("teal", $teal);
+@include slide-color("green", $green);
+@include slide-color("light-green", $light-green);
+@include slide-color("purple", $purple);
+@include slide-color("yellow", $yellow);
+@include slide-color("red", $red);
+@include slide-color("dark-gray", $dark-gray);
+@include slide-color("gray", $gray);
+@include slide-color("light-gray", $light-gray);
+
+@include slide-color("default", $button-default-color);

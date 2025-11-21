@@ -1,0 +1,33 @@
+@if (responsive.isMobile && date) {
+    <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="24/2">
+            <nz-date-picker class="w-100"
+                            [nzDisabledDate]="disabledStartDate"
+                            [nzShowTime]="showTime ? { nzFormat: timeFormat } : false"
+                            [nzFormat]="format"
+                            [(ngModel)]="date[0]"
+                            [nzPlaceHolder]="placeHolder[0]"
+                            (nzOnOpenChange)="handleStartOpenChange($event)"
+            ></nz-date-picker>
+        </div>
+
+        <div nz-col [nzSpan]="24/2">
+            <nz-date-picker class="w-100"
+                            #endDatePicker
+                            [nzDisabledDate]="disabledEndDate"
+                            [nzShowTime]="showTime ? { nzFormat: timeFormat } : false"
+                            [nzFormat]="format"
+                            [(ngModel)]="date[1]"
+                            [nzPlaceHolder]="placeHolder[1]"
+            ></nz-date-picker>
+        </div>
+    </div>
+} @else {
+    <nz-range-picker [nzShowTime]="showTime ? { nzFormat: timeFormat } : false"
+                     [(ngModel)]="date"
+                     (ngModelChange)="onDateChange($event)"
+                     [disabled]="disable" class="w-100" [nzFormat]="format"
+                     [nzPlaceHolder]="placeHolder">
+    </nz-range-picker>
+
+}

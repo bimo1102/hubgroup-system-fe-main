@@ -1,0 +1,306 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <div class='card card-bordered'>
+        <div class='card-header'>
+            <div class='card-title m-0'>
+                {{ 'news.list' | translate }}
+            </div>
+            <div class="card-toolbar">
+                <div nz-flex [nzGap]="'middle'" [nzAlign]="'center'">
+                    <app-news-button-close (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+        <div class='card-body'>
+            @if (message) {
+                <nz-alert class="mb-3" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+            }
+
+            <form nz-form [nzLayout]="'vertical'" (ngSubmit)="onSearch(true)">
+                <div nz-row [nzGutter]="30" [nzAlign]="'middle'">
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 1">
+                        <nz-form-item>
+                            <nz-form-label class="text-gray-700 fw-bold">
+                                {{ 'search.keyword'|translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnAfter]="addOnAfterTemplateKeyWord">
+                                    <input nz-input [name]="'search.keyword'"
+                                           [placeholder]="'search.keyword'|translate"
+                                           [(ngModel)]="requestSearch.keyword" />
+                                </nz-input-group>
+                                <ng-template #addOnAfterTemplateKeyWord>
+                                    <div nz-flex [nzAlign]="'center'">
+                                        <label nz-checkbox
+                                               [name]="'requestSearch.searchInContent'"
+                                               [(ngModel)]="requestSearch.searchInContent"></label>
+                                        <app-news-keenicon [name]="'question'" [title]="'search.in.content'|translate"
+                                                           [class]="'text-primary ms-3 fs-2'"></app-news-keenicon>
+                                    </div>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 2">
+                        <nz-form-item>
+                            <nz-form-label
+                                class="text-gray-700 fw-bold">{{ 'search.created.date'|translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <app-news-date-range-picker [format]="dateFormat" class="w-100"
+                                                            [(date)]="date"
+                                                            (keydown.enter)="onEnterDate($event)">
+                                </app-news-date-range-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3" [nzXXl]="24/3 - 3">
+                        <nz-form-item>
+                            <nz-form-label
+                                class="text-gray-700 fw-bold">{{ 'search.main.category'|translate }}
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                                    <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                               [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.categoryMainIds"
+                                               [nzPlaceHolder]="'search.main.category'|translate"
+                                               (nzOnSearch)="onSearchNewsCategoryAutocomplete($event)"
+                                               [name]="'search.main.category'">
+                                        @for (item of sources.categoryMainSources; track item.id) {
+                                            <nz-option [nzLabel]="(item.text || '') | translate"
+                                                       [nzValue]="item.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-input-group>
+                                <ng-template #addOnAfterTemplate>
+                                    <div nz-flex [nzAlign]="'center'">
+                                        <label nz-checkbox
+                                               [name]="'requestSearch.mainCategoriesOnlyParent'"
+                                               [(ngModel)]="requestSearch.isSearchInCategoryMainTree"></label>
+                                        <app-news-keenicon [name]="'question'"
+                                                           [title]="'news.list.search.mainCategoriesOnlyParent'|translate"
+                                                           [class]="'text-primary ms-3 fs-2'"></app-news-keenicon>
+                                    </div>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/2" [nzXXl]="6">
+                        <div class="mt-5" nz-flex [nzWrap]="'wrap'" [nzGap]="'middle'" [nzAlign]="'center'">
+                            <app-news-button-search [buttonType]="'submit'"
+                                                    [permissionKey]="'NewsOnlineNormal/Gets'"></app-news-button-search>
+                            <app-news-button-search [text]="'search.advance'| translate"
+                                                    [keenIcon]="'filter'" [permissionKey]="'NewsOnlineNormal/Gets'"
+                                                    (clickFunc)="isCollapsed = !isCollapsed"
+                            ></app-news-button-search>
+                        </div>
+                    </div>
+                </div>
+                <div [(ngbCollapse)]="isCollapsed">
+                    <div nz-row [nzGutter]="30" class="me-4 flex-column-fluid pt-5">
+                        <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                            <nz-form-item>
+                                <nz-form-label
+                                    class="text-gray-700 fw-bold">{{ 'search.news.display.type'|translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.displayTypes"
+                                               [nzPlaceHolder]="'search.news.display.type'|translate"
+                                               [name]="'search.news.display.type'">
+                                        @for (displayType of sources.newsDisplayTypeSources; track displayType.id) {
+                                            <nz-option [nzLabel]="displayType.text || ''"
+                                                       [nzValue]="displayType.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                            <nz-form-item>
+                                <nz-form-label
+                                    class="text-gray-700 fw-bold">{{ 'News status'|translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.statuses"
+                                               [nzPlaceHolder]="'News status'|translate"
+                                               [name]="'requestSearch.status'">
+                                        @for (displayType of sources.newsStatusSources; track displayType.id) {
+                                            <nz-option [nzLabel]="displayType.text || ''"
+                                                       [nzValue]="displayType.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                            <nz-form-item>
+                                <nz-form-label
+                                    class="text-gray-700 fw-bold">{{ 'search.news.source'|translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.sourceIds"
+                                               [nzPlaceHolder]="'search.news.source'|translate"
+                                               [name]="'search.news.source'">
+                                        @for (source of sources.sourceNewsSources; track source.id) {
+                                            <nz-option [nzLabel]="source.text || ''"
+                                                       [nzValue]="source.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="24" [nzMd]="24/2" [nzXl]="24/3">
+                            <nz-form-item>
+                                <nz-form-label
+                                    class="text-gray-700 fw-bold">{{ 'search.news.icons'|translate }}
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear
+                                               [nzMode]="'multiple'"
+                                               [(ngModel)]="requestSearch.iconIds"
+                                               [nzPlaceHolder]="'search.news.icons'|translate"
+                                               [name]="'search.news.icons'">
+                                        @for (icon of sources.newsIconSources; track icon.id) {
+                                            <nz-option [nzLabel]="icon.text!" [nzValue]="icon.value"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @if (setOfCheckedId.size > 0) {
+                <div class="d-flex gap-3 my-2">
+                    <app-news-button-add (clickFunc)="onAddArticleToList()"
+                                         [checkPermission]="false"></app-news-button-add>
+                    <app-news-button-close [checkPermission]="false"></app-news-button-close>
+                </div>
+            }
+
+            <div class='table-responsive'>
+                <nz-table nzBordered #newspaperArticleTable
+                          [nzData]='newsArticleModels' [nzPageIndex]='requestSearch.pageIndex! + 1'
+                          [nzPageSize]='requestSearch.pageSize!'
+                          [nzSize]="'small'"
+                          [nzShowTotal]="responsive.isDesktop ? rangeTemplate : null"
+                          (nzPageIndexChange)='onPageIndexChange($event)'
+                          [nzTotal]='totalRow'
+                          [nzPaginationPosition]="'bottom'"
+                          [nzFrontPagination]='false'
+                          [nzShowSizeChanger]="responsive.isDesktop"
+                          [nzPageSizeOptions]="listPageSize"
+                          (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead>
+                    <tr>
+                        <th nzWidth="50px"
+                            [nzChecked]="checkedAll"
+                            [nzIndeterminate]="indeterminate"
+                            nzLabel="Select all"
+                            (nzCheckedChange)="onAllChecked($event)">
+                        </th>
+                        @if (responsive.isDesktop) {
+                            <th nzAlign="center" nzWidth="50px">{{ 'STT' | translate }}
+                            </th>
+                        }
+                        <th [ngClass]="{'min-w-500px': responsive.isDesktop}">{{ 'table.article' | translate }}</th>
+
+                        @if (responsive.isDesktop) {
+                            <th class="min-w-200px">{{ 'table.news.main.category' | translate }}</th>
+                            <th nzAlign="center">{{ 'table.news.source' | translate }}</th>
+                            <th nzAlign="center">{{ 'table.page.view.ga' | translate }}</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of newspaperArticleTable.data; track item.id) {
+                            <tr>
+                                <td
+                                    [nzChecked]="setOfCheckedId.has(item.id)"
+                                    [nzLabel]="item.title"
+                                    (nzCheckedChange)="onItemChecked(item)"
+                                ></td>
+                                @if (responsive.isDesktop) {
+                                    <td nzAlign="center">
+                                        {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}
+                                    </td>
+                                }
+                                <td>
+                                    @if (!responsive.isDesktop) {
+                                        <div class="fw-bold mb-3 fs-4 lh-sm">
+                                            {{ requestSearch.pageIndex! * requestSearch.pageSize! + ($index + 1) }}.
+
+                                            [{{ item.id }}]
+                                            <span class="cursor-pointer"
+                                                  (click)="onArticleOpenNewTab({id: item.id,type: item.displayType })"> {{ item.title }}</span>
+                                        </div>
+                                    }
+
+                                    <div nz-flex [nzGap]="responsive.isDesktop ? 'middle': 'small'">
+                                        <div class="symbol symbol-75px symbol-2by3">
+                                            <div class="symbol-label"
+                                                 [style]="'background-image:url('+ (item.avatarUrl || noImage) +')'"></div>
+                                            @if (!responsive.isDesktop) {
+                                                <span
+                                                    class="badge badge-dark mt-3">{{ (item.displayTypeName || '') | lowercase | translate }}</span>
+                                            }
+                                        </div>
+                                        <div>
+                                            @if (responsive.isDesktop) {
+                                                <div class="fw-bold fs-4 lh-sm">
+                                                <span class="cursor-pointer"
+                                                      (click)="onArticleOpenNewTab({id: item.id,type: item.displayType })">
+                                                        [{{ item.id }}] {{ item.title }}
+                                                    </span>
+                                                </div>
+                                            } @else {
+                                                <div>
+                                                    {{ item.id }}
+                                                    - {{ (item.displayTypeName || '') | lowercase | translate }}
+                                                </div>
+                                            }
+                                            <div>
+                                                {{ 'table.author.name' | translate }} :
+                                                {{ item.authorName }}
+                                            </div>
+                                            <div>
+                                                {{ 'table.publish.date' | translate }} :
+                                                {{ item.publishDate | date: dateTimeFormat }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                @if (responsive.isDesktop) {
+                                    <td>
+                                        <div class="text-break">{{ item.categoryName }}</div>
+                                    </td>
+                                    <td nzAlign="center">
+                                        {{ item.sourceName }}
+                                    </td>
+                                    <td nzAlign="center">
+                                        <div>{{ item.viewDisplay || '00' }}</div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+
+                    </tbody>
+                </nz-table>
+                <ng-template #rangeTemplate let-range="range" let-total>
+                    <div class="me-5">
+                        {{ range[0] }}-{{ range[1] }} {{ 'of'| translate }} {{ total }} {{ 'items'|translate }}
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</nz-spin>

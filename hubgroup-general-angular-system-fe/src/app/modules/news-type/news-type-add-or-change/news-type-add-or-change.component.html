@@ -1,0 +1,115 @@
+<nz-spin [nzSpinning]="isLoadingModal" [nzSize]="'large'" [nzTip]="'Loading...'| translate">
+    <form nz-form #addOrChangeForm='ngForm' nzNoColon
+          autocomplete='off' novalidate='novalidate'>
+        <div class='card'>
+            <nz-affix [nzOffsetTop]="0" [nzTarget]="target">
+                <div class="card-header bg-white">
+                    <div class="card-title">
+                        @if (isChange) {
+                            {{ 'news.type.title.edit'| translate }}
+                        } @else {
+                            {{ 'news.type.title.create'| translate }}
+                        }
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                            <app-news-button-save [text]="'Save' | translate"
+                                                  [permissionKey]="isChange ? 'NewsType/Change' : 'NewsType/Add'"
+                                                  (clickFunc)="onSave(addOrChangeForm)">
+                            </app-news-button-save>
+                            <app-news-button-close [text]="'Close' | translate"
+                                                   (clickFunc)="onClose()"></app-news-button-close>
+                        </div>
+                    </div>
+                </div>
+            </nz-affix>
+            <div class="card-body">
+                @if (message) {
+                    <nz-alert class="mb-2" nzType='error' [nzMessage]='message' nzDescription='' nzShowIcon></nz-alert>
+                }
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'news.type.name' | translate }}
+                        <span class="text-danger">*</span>
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]='nameTpl'>
+                        <input nz-input type='text' [placeholder]="'news.type.name' | translate"
+                               [min]="4"
+                               [customMaxLength]="150"
+                               [(ngModel)]='newsTypeModel.name' name='newsTypeModel.name'>
+                        <ng-template #nameTpl let-control>
+                            @if (control.hasError('required')) {
+                                {{ 'news.type.name.is.required' | translate }}
+                            }
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'news.type.parent' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                   [(ngModel)]="newsTypeModel.parentId"
+                                   [nzPlaceHolder]="'news.type.parent' | translate"
+                                   (nzOnSearch)="requestNewsTypeParentAutocomplete$.next({keyword: $event, currentId: newsTypeModel.id || ''})"
+                                   [name]="'newsTypeModel.parentId'">
+                            @for (item of newsTypeParentSources; track item.id) {
+                                @if (newsTypeModel.id !== item.value) {
+                                    <nz-option [nzLabel]="item.text || ''"
+                                               [nzValue]="item.value"></nz-option>
+                                }
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'news.type.mapping.source' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear nzServerSearch
+                                   [(ngModel)]="newsTypeModel.sourceIds"
+                                   nzMode="multiple"
+                                   [nzPlaceHolder]="'news.type.mapping.source' | translate"
+                                   (nzOnSearch)="requestSourceMappingAutocomplete$.next({name: $event})"
+                                   [name]="'newsTypeModel.sourceIds'">
+                            @for (source of sourceMappingSources; track source.id) {
+                                <nz-option [nzLabel]="source.text || ''"
+                                           [nzValue]="source.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzLabelWrap [nzSpan]="5" [nzLabelAlign]="'left'"
+                                   class="text-gray-700 fw-bold text-break">
+                        {{ 'news.type.priority' | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <nz-input-number [(ngModel)]="newsTypeModel.priority" [nzMin]="0"
+                                         name="newsTypeModel.priority"></nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+
+            </div>
+            <div class="card-footer">
+                <div nz-flex [nzAlign]="'center'" [nzGap]="'small'" [nzJustify]="'center'">
+                    <app-news-button-save [text]="'Save' | translate"
+                                          [permissionKey]="isChange ? 'NewsType/Change' : 'NewsType/Add'"
+                                          (clickFunc)="onSave(addOrChangeForm)">
+                    </app-news-button-save>
+                    <app-news-button-close [text]="'Close' | translate"
+                                           (clickFunc)="onClose()"></app-news-button-close>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+
+

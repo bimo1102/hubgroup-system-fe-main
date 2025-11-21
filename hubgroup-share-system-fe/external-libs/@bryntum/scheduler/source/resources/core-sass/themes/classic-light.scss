@@ -1,0 +1,47 @@
+// Embed theme details in content.
+// See DomHelper#themeInfo
+.b-theme-info:before {
+    content : '{"name":"Classic-Light"}';
+}
+
+// redefine variables here
+$blue                                : #64b5f6;
+$orange                              : #ffcc80;
+$amber                               : #ffd54f;
+$red                                 : #ef9a9a;
+$yellow                              : #fff176;
+$green                               : #a5d6a7;
+$gray                                : #e0e0e0;
+$light-gray                          : #f9f9f9;
+$dark-gray                           : #757575;
+
+$widget-border-color                 : transparentize(#bdbdbd, .5);
+$checkbox-color                      : #fff;
+$float-box-shadow                    : 2px 2px 6px rgba(0, 0, 0, 0.1);
+$aligned-above-float-box-shadow      : 2px -2px 6px rgba(0, 0, 0, 0.1);
+$datepicker-background-color         : $light-gray;
+$datepicker-weekdays-color           : #fff;
+//$datepicker-month-color : $light-gray;
+$widget-text-bright-color            : #616161;
+$tooltip-background-color            : lighten(#fffde7, 3);
+$menu-item-border-color              : darken($light-gray, 10);
+$list-item-border-color              : $menu-item-border-color;
+$popup-background-color              : #f9f9f9;
+$panel-background-color              : #eee;
+$container-label-color               : #616161;
+$field-container-active-label-color  : #212121;
+$panel-background-color              : #fafafa;
+$panel-toolbar-background-color      : $popup-background-color;
+$panel-toolbar-top-border-bottom     : 1px solid #e0e0e0;
+
+$button-color                        : #fff;
+$percent-bar-color                   : $light-gray;
+
+$splitter-background-color           : #f0f0f0;
+
+$tabpanel-border-color               : transparent;
+$tabpanel-background-color           : #fefefe;
+$tabpanel-tab-hover-background-color : #f4f4f4;
+$tabpanel-tab-color                  : #777;
+
+@import "shared";

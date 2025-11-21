@@ -1,0 +1,8 @@
+$fa-css-prefix    : b-fa;
+$fa-font-path     : 'fonts' !default;
+$icon-font        : 'Font Awesome 5 Free', FontAwesome5Free !default;
+$icon-font-weight : 900 !default;
+
+@import '../fa-solid.scss';
+@import '../icons.scss';
+@import '../all.scss';

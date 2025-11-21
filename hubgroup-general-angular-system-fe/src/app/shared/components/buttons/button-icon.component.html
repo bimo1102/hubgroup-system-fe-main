@@ -1,0 +1,29 @@
+<ng-container *ngIf="isShow">
+    <button
+        [disabled]="isLoading || disabled" [type]="buttonType" [title]="title || text" (click)="onClick($event)"
+        [ngClass]="{'btn-icon' : buttonIcon}"
+        [class]="buttonClassBase + ' ' + buttonClassType + ' btn-shadow ' + buttonClass">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        @if (placementIcon === 'left') {
+            @if(bootstrapIcon){
+                <i [class]="bootstrapIconType + ' ' + bootstrapIcon + ' ' + bootstrapIconClass "></i>
+            }@else if(keenIcon && !isLoading){
+                <app-news-keenicon *ngIf="keenIcon && !isLoading" class="active" [name]="keenIcon"
+                              [class]="keenIconClass + (text ? ' me-1' : '')"
+                              [type]="keenIconType"></app-news-keenicon>
+            }
+        }
+        @if (!buttonIcon) {
+            {{ text }}
+        }
+        @if (placementIcon === 'right') {
+            @if(bootstrapIcon){
+                <i [class]="bootstrapIconType + ' ' + bootstrapIcon + ' ' + bootstrapIconClass "></i>
+            }@else if(keenIcon && !isLoading){
+                <app-news-keenicon *ngIf="keenIcon && !isLoading" class="active" [name]="keenIcon"
+                              [class]="keenIconClass + (text ? ' me-1' : '')"
+                              [type]="keenIconType"></app-news-keenicon>
+            }
+        }
+    </button>
+</ng-container>

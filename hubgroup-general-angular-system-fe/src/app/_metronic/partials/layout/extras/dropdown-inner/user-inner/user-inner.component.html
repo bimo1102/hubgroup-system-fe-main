@@ -1,0 +1,94 @@
+@if (user$ | async; as user) {
+    <div class="menu-item px-3">
+        <div class="menu-content d-flex align-items-center px-3">
+            <div class="symbol symbol-50px me-5">
+                @if (user.avatarUrl) {
+                    <img alt="Logo" [src]="user.avatarUrl" />
+                } @else if( user.displayName){
+                    <div class="symbol-label fs-2 fw-semibold text-success"> {{ user.displayName[0]| uppercase }}</div>
+                }
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="fw-bolder d-flex align-items-center fs-5">
+                    @if( user.displayName){
+                        {{ user.displayName }}
+                    }
+                    @if (user.isAdministrator) {
+                        <span
+                            class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">{{ 'Admin'|lowercase|translate }}</span>
+                    }
+                </div>
+                <a class="fw-bold text-muted text-hover-primary fs-7 cursor-pointer">
+                    {{ user.email }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="separator my-2"></div>
+
+    <!--  <div class="menu-item px-5">-->
+        <!--    <a routerLink="/profile" class="menu-link px-5">-->
+        <!--      {{'user.information'|translate}}-->
+        <!--    </a>-->
+        <!--  </div>-->
+
+        <!--  <div class="separator my-2"></div>-->
+        <!--  <div class="menu-item px-5">-->
+        <!--    <a href="#" class="menu-link px-5" onclick="showMyNotification();return false;">-->
+        <!--      {{'user.show.notification'|translate}}-->
+        <!--    </a>-->
+        <!--  </div>-->
+        <!--  <div class="separator my-2"></div>-->
+    <div
+        class="menu-item px-5"
+        data-kt-menu-trigger="hover"
+        data-kt-menu-placement="left-start"
+        data-kt-menu-flip="bottom"
+    >
+        @if (language) {
+            <a class="menu-link px-5 cursor-pointer">
+              <span class="menu-title position-relative">
+                {{ 'language'|translate }}
+                  <span class=" fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0 ">
+                  {{ language.name }}
+                      <img class="w-15px h-15px rounded-1 ms-2"
+                           [src]="language.imageUrl"
+                           alt="{{ language.name }}"
+                      />
+                </span>
+              </span>
+            </a>
+        }
+
+        @if (languages && languages.length > 0) {
+            <div class="menu-sub menu-sub-dropdown w-175px py-4">
+                @for (l of languages; track $index) {
+                    <div class="menu-item px-3 cursor-pointer"
+                         (click)="selectLanguage(l.uniqueSeoCode)">
+                        <a class="menu-link d-flex px-5"
+                           [ngClass]="l.uniqueSeoCode === language.uniqueSeoCode ? 'active' : ''">
+                              <span class="symbol symbol-20px me-4">
+                                <img class="rounded-1" [src]="l.imageUrl" alt="{{l.name}}" />
+                              </span>
+                            {{ l.name }}
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div class="menu-item px-5">
+        <a (click)="logout()" class="menu-link px-5 cursor-pointer">{{ 'logout'|translate }}</a>
+    </div>
+
+    <div class="separator mt-2 mb-3"></div>
+    <div class="menu-item px-5">
+        <app-news-button-reload [text]="'user.right.box.reload.permission' |translate"
+                              [checkPermission]="false"
+                              [btnConfirm]="false"
+                              (clickFunc)="onReloadPermission()">
+        </app-news-button-reload>
+    </div>
+}

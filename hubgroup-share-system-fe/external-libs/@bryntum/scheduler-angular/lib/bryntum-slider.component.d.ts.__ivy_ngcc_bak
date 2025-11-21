@@ -1,0 +1,109 @@
+/**
+ * Angular wrapper for Bryntum Slider
+ */
+import { ElementRef, EventEmitter, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Base, Mask, MaskConfig, Rectangle, Scroller, ScrollerConfig, Widget } from '@bryntum/scheduler/scheduler.lite.umd.js';
+import { Slider } from '@bryntum/scheduler/scheduler.lite.umd.js';
+export declare class BryntumSliderComponent implements OnInit, OnDestroy {
+    static instanceClass: typeof Slider;
+    private static bryntumFeatureNames;
+    private static bryntumConfigs;
+    private static bryntumConfigsOnly;
+    private static bryntumProps;
+    private elementRef;
+    instance: Slider;
+    private bryntumConfig;
+    constructor(element: ElementRef);
+    adopt: HTMLElement | string;
+    align: object | string;
+    anchor: boolean;
+    appendTo: HTMLElement | string;
+    bubbleEvents: object;
+    centered: boolean;
+    cls: string | object;
+    config: object;
+    constrainTo: HTMLElement | Widget | Rectangle;
+    contentElementCls: string | object;
+    defaultBindProperty: string;
+    dock: string;
+    draggable: boolean | object;
+    floating: boolean;
+    hideAnimation: boolean | object;
+    htmlCls: string | object;
+    insertBefore: HTMLElement | string;
+    insertFirst: HTMLElement | string;
+    listeners: object;
+    localeClass: Base;
+    localizableProperties: string[];
+    maskDefaults: object | Mask | Partial<MaskConfig>;
+    masked: boolean | string | object | Mask | Partial<MaskConfig>;
+    monitorResize: boolean;
+    owner: Widget;
+    positioned: boolean;
+    preventTooltipOnTouch: boolean;
+    ripple: boolean | object;
+    rootElement: ShadowRoot;
+    scrollAction: string;
+    showAnimation: boolean | object;
+    showTooltip: boolean;
+    showValue: boolean;
+    tab: boolean | object;
+    tag: string;
+    textAlign: string;
+    title: string;
+    weight: number;
+    alignSelf: string;
+    content: string;
+    dataset: object;
+    disabled: boolean;
+    extraData: boolean | number | object | string;
+    flex: number | string;
+    height: number | string;
+    hidden: boolean;
+    html: string;
+    id: string;
+    margin: number | string;
+    max: number;
+    maxHeight: number | string;
+    maxWidth: number | string;
+    min: number;
+    minHeight: number | string;
+    minWidth: number | string;
+    readOnly: boolean;
+    scrollable: boolean | Scroller | object | Partial<ScrollerConfig>;
+    step: number;
+    text: string;
+    tooltip: object | string;
+    value: number;
+    width: number | string;
+    x: number;
+    y: number;
+    anchorSize: number[];
+    onBeforeDestroy: EventEmitter<object>;
+    onBeforeHide: EventEmitter<object>;
+    onBeforeShow: EventEmitter<object>;
+    onCatchAll: EventEmitter<object>;
+    onChange: EventEmitter<object>;
+    onDestroy: EventEmitter<object>;
+    onFocusIn: EventEmitter<object>;
+    onFocusOut: EventEmitter<object>;
+    onHide: EventEmitter<object>;
+    onInput: EventEmitter<object>;
+    onPaint: EventEmitter<object>;
+    onReadOnly: EventEmitter<object>;
+    onResize: EventEmitter<object>;
+    onShow: EventEmitter<object>;
+    /**
+     * Create and append the underlying widget
+     */
+    ngOnInit(): void;
+    /**
+     * Watch for changes
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Destroy the component
+     */
+    ngOnDestroy(): void;
+}

@@ -1,0 +1,17 @@
+<div class="card">
+    <div class="card-header border-0 py-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bold fs-2">Phiên làm việc sẽ kết thúc trong {{countDown}} giây!</span>
+        </h3>
+        <div class="card-toolbar">
+        </div>
+    </div>
+    <div class="card-body">
+        <ngb-progressbar type="danger" [value]="countDown" [striped]="true"></ngb-progressbar>
+    </div>
+    <div class="card-footer">
+        <app-news-button-icon [buttonClassType]="'btn-warning'" [keenIcon]="'arrow-circle-right'"
+                            [checkPermission]="false" (clickFunc)="onClose()"
+                            [text]="'Tiếp tục phiên làm việc'|translate"></app-news-button-icon>
+    </div>
+</div>
