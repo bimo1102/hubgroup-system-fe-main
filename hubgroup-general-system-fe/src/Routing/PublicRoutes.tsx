@@ -5,7 +5,7 @@ import { AuthPage } from '../modules/auth';
 export function PublicRoutes() {
     return (
         <Routes>
-            <Route path="/auth" component={AuthPage} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<Navigate to="auth" replace />} />
         </Routes>
     );
