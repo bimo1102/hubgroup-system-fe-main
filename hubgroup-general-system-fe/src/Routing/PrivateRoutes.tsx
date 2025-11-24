@@ -1,9 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { FallbackView } from '../_metronic/partials/FallbackView';
+import { FallbackView } from '../_metronic/partials';
 
 export function PrivateRoutes() {
-    const ServiceCategoryModule = React.lazy(() => import('GeneralReactModule/service-category'));
+    const ServiceCategoryModule = lazy(() => import('GeneralReactModule/service-category'));
     return (
         <Suspense fallback={<FallbackView />}>
             <Routes>
