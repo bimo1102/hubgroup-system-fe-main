@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { ModuleBaseComponent } from '../../base-components/module-base-component';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from '../../common.service';
@@ -12,19 +20,21 @@ import { AngularSharedService } from 'nexussoft-angular-shared';
     templateUrl: './date-range-picker.component.html',
 })
 export class DateRangePickerComponent extends ModuleBaseComponent implements OnInit {
-
     constructor(
         cdr: ChangeDetectorRef,
         translate: TranslateService,
         commonService: CommonService,
         modalService: NzModalService,
         messageService: NzMessageService,
-        angularSharedService: AngularSharedService,
+        angularSharedService: AngularSharedService
     ) {
         super(cdr, translate, commonService, modalService, messageService, angularSharedService);
     }
 
-    @Input() placeHolder: Array<string> = [this.translate.instant('choose.date.start'), this.translate.instant('choose.date.end')];
+    @Input() placeHolder: Array<string> = [
+        this.translate.instant('choose.date.start'),
+        this.translate.instant('choose.date.end'),
+    ];
     @Input() disable: boolean = false;
     @Input() showTime: boolean = false;
     @Input() format: string = this.dateTimeFormat;
@@ -34,15 +44,14 @@ export class DateRangePickerComponent extends ModuleBaseComponent implements OnI
 
     @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     onDateChange(date: Array<Date>) {
         this.dateChange.emit(date);
     }
 
     disabledStartDate = (startValue: Date): boolean => {
-        return false
+        return false;
         //
         // if (!startValue || (this.date && !this.date[1])) {
         //     return false;
@@ -51,7 +60,7 @@ export class DateRangePickerComponent extends ModuleBaseComponent implements OnI
     };
 
     disabledEndDate = (endValue: Date): boolean => {
-        return false
+        return false;
         // if (!endValue || (this.date && !this.date[0])) {
         //     return false;
         // }
@@ -65,6 +74,5 @@ export class DateRangePickerComponent extends ModuleBaseComponent implements OnI
     }
 
     // handleEndOpenChange(open: boolean): void {
-    //     console.log('handleEndOpenChange', open);
     // }
 }

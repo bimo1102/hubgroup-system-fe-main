@@ -345,7 +345,6 @@ export class Common {
         filename: string
     ) {
         const blob = new Blob([body], options);
-        console.log(blob);
         if ((navigator as any).msSaveBlob) {
             (navigator as any).msSaveBlob(blob, filename);
         } else {

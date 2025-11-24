@@ -31,14 +31,18 @@ const ContextProvider: React.FC<Props> = ({
     const containerRef = useRef<any>(null);
     const [modal, modalContextHolder] = Modal.useModal();
     const [messages, messageContextHolder] = message.useMessage();
-    const federationResolver: FederationAppInitProps = useSelector((state: any) => state.common.federationResolver);
+    const federationResolver: FederationAppInitProps = useSelector(
+        (state: any) => state.common.federationResolver
+    );
     const defaultClassNameModalId = 'react-mfe-modal-refer';
     let lastScroll = 0;
     const onHandleModelOpenChange = (isOpen: boolean) => {
         const styleElmQuery = document.head.querySelectorAll(
             `.${defaultClassNameModalId}`
         );
-        const htmlElement = document.querySelector<HTMLElement>('html') as HTMLElement;
+        const htmlElement = document.querySelector<HTMLElement>(
+            'html'
+        ) as HTMLElement;
         if (isOpen == true) {
             if (styleElmQuery.length == 0) {
                 lastScroll = window.scrollY;
@@ -58,7 +62,6 @@ const ContextProvider: React.FC<Props> = ({
         } else {
             setTimeout(() => {
                 if (containerRef.current.children.length == 0) {
-                    // console.log(styleElmQuery);
                     [...styleElmQuery].forEach(elm => {
                         document.head.removeChild(elm);
                     });
@@ -75,7 +78,7 @@ const ContextProvider: React.FC<Props> = ({
         const {
             title,
             component: Component,
-            afterClose = () => { },
+            afterClose = () => {},
             closable = false,
             data = {},
             dataUi = {},
@@ -111,10 +114,10 @@ const ContextProvider: React.FC<Props> = ({
     const onShowDialogModalMedium = (params: CommonModalPropsConfiguration) => {
         const {
             component: Component,
-            afterClose = () => { },
+            afterClose = () => {},
             closable = false,
             data = {},
-            width
+            width,
         } = params;
 
         const reference = modal.info({
@@ -146,11 +149,11 @@ const ContextProvider: React.FC<Props> = ({
     const onShowDialogModalLarge = (params: CommonModalPropsConfiguration) => {
         const {
             component: Component,
-            afterClose = () => { },
+            afterClose = () => {},
             closable = false,
             data = {},
             width = '90%',
-            dataUi
+            dataUi,
         } = params;
         const reference = modal.info({
             afterClose: afterClose,
@@ -179,13 +182,19 @@ const ContextProvider: React.FC<Props> = ({
 
     useEffect(() => {
         // handler props FederationAppInitProps;
-        dispatch(commonActions.onGetFederationResolver(props as FederationAppInitProps));
+        dispatch(
+            commonActions.onGetFederationResolver(
+                props as FederationAppInitProps
+            )
+        );
         // init module configuration
-        dispatch(commonActions.onInitModuleConfig({
-            appVersion: process.env.APP_VERSION,
-            prefixClass: process.env.PREFIX_CLASS,
-            moduleName: process.env.MODULE_NAME
-        }))
+        dispatch(
+            commonActions.onInitModuleConfig({
+                appVersion: process.env.APP_VERSION,
+                prefixClass: process.env.PREFIX_CLASS,
+                moduleName: process.env.MODULE_NAME,
+            })
+        );
         let subscribe: any = null;
         if (props.data$) {
             subscribe = props.data$.subscribe(
@@ -193,11 +202,20 @@ const ContextProvider: React.FC<Props> = ({
                     if (event.type == DataObservableTypeEnum.ChangeUser) {
                         dispatch(commonActions.setUserInfo(event.data));
                     }
-                    if(event.type == DataObservableTypeEnum.ChangeParamUrl){
-                        dispatch(commonActions.onUpdateParams(event.data.params));
+                    if (event.type == DataObservableTypeEnum.ChangeParamUrl) {
+                        dispatch(
+                            commonActions.onUpdateParams(event.data.params)
+                        );
                     }
-                    if(event.type == DataObservableTypeEnum.ChangeDealersHasPermission) {
-                        dispatch(commonActions.setDealersHasPermission(event.data || []));
+                    if (
+                        event.type ==
+                        DataObservableTypeEnum.ChangeDealersHasPermission
+                    ) {
+                        dispatch(
+                            commonActions.setDealersHasPermission(
+                                event.data || []
+                            )
+                        );
                     }
                 }
             );
@@ -219,33 +237,31 @@ const ContextProvider: React.FC<Props> = ({
         };
     }, []);
 
-    // console.log("federationResolver.params: ",federationResolver.params);
-    // console.log("federationResolver.queryParams: ",federationResolver.queryParams);
-    // console.log("props: ",props);
-    
-
     return (
-        <AntdProvider 
-            {...props}
-            prefixClass={prefixClass}>
+        <AntdProvider {...props} prefixClass={prefixClass}>
             <AntdAppProvider>
                 <I18nProvider moduleName={moduleName}>
                     <GlobalStylesProvider {...props}>
                         <MasterLayout
                             messages={messages}
                             responsive={responsive}
-                            {...props as any}>
+                            {...(props as any)}>
                             <div className='context-provider'>
-                                <div ref={containerRef} className='container-modal-ref'></div>
+                                <div
+                                    ref={containerRef}
+                                    className='container-modal-ref'></div>
                                 <div className='message-wrapper'>
                                     {messageContextHolder}
                                 </div>
                                 <div className='modal-context-wrapper'>
                                     {modalContextHolder}
                                 </div>
-                                {(props && Object.keys(props).length > 0) ? 
-                                    (federationResolver && Object.keys(federationResolver).length > 0) && children 
-                                : children}
+                                {props && Object.keys(props).length > 0
+                                    ? federationResolver &&
+                                      Object.keys(federationResolver).length >
+                                          0 &&
+                                      children
+                                    : children}
                             </div>
                         </MasterLayout>
                     </GlobalStylesProvider>

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import ButtonAdd from '@hubgroup-share-system-fe/react/components/common/buttons/button-add';
-import { useAppSelector } from 'src/hooks/useStore';
+import { useAppSelector, useAppDispatch } from 'src/hooks/useStore';
 import { commonActions } from '@hubgroup-share-system-fe/react/providers/context/common.reducer';
-import { useDispatch } from 'react-redux';
+import { additionalInformationGetById } from 'src/shareds/providers/redux/actions/test.action';
+// import { useDispatch } from 'react-redux';
 type Props = {};
 
 const ServiceCategoryModule = React.lazy(() => import('GeneralReactModule/service-category'));
 
 const Host: React.FC<Props> = () => {
     const { count } = useAppSelector((state) => state.common);
-    const dispatch = useDispatch();
-
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        const response = dispatch(additionalInformationGetById({ surveyId: '58555125-3746-4f94-9330-f84480094327' }));
+    }, [dispatch]);
     return (
         <div className="main-wrapper">
             <div className="flex flex-row gap-10 p-5">
