@@ -1,49 +1,49 @@
 import React from 'react';
-import { AsideDefault } from './components/aside/AsideDefault';
-import { Footer } from './components/Footer';
-import { HeaderWrapper } from './components/header/HeaderWrapper';
-import { Toolbar } from './components/toolbar/Toolbar';
-import { ScrollTop } from './components/ScrollTop';
-import { Content } from './components/Content';
-import { MasterInit } from './MasterInit';
-import { PageDataProvider } from './core';
-import { ExploreMain, ActivityDrawer, Main, InviteUsers, UpgradePlan } from '../partials';
+import { MasterLayout as SharedMasterLayout } from '@hubgroup-share-system-fe/react/components/layouts/master-layout';
+
 type Props = {
     children: React.ReactNode;
+    messages?: any;
 };
-const MasterLayout: React.FC<Props> = ({ children }) => {
+
+const Header: React.FC = () => (
+    <header style={{
+        height: 64,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 16px',
+        background: '#001529',
+        color: '#fff'
+    }}>
+        <div style={{ fontWeight: 600 }}>HubGroup</div>
+        <div style={{ marginLeft: 16, opacity: 0.85 }}>General Application</div>
+    </header>
+);
+
+const Footer: React.FC = () => (
+    <footer style={{
+        height: 48,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#f0f2f5',
+        color: '#000'
+    }}>
+        <div style={{ fontSize: 12 }}>© {new Date().getFullYear()} HubGroup</div>
+    </footer>
+);
+
+const LayoutContainer: React.FC<Props> = ({ children, messages, ...rest }) => {
     return (
-        <PageDataProvider>
-            <div className="page d-flex flex-row flex-column-fluid">
-                <AsideDefault />
-                <div className="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                    <HeaderWrapper />
-
-                    <div id="kt_content" className="content d-flex flex-column flex-column-fluid">
-                        <Toolbar />
-                        <div className="post d-flex flex-column-fluid" id="kt_post">
-                            <Content>{children}</Content>
-                        </div>
-                    </div>
-                    <Footer />
-                </div>
+        <SharedMasterLayout messages={messages} {...(rest as any)}>
+            <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
+                <Header />
+                <main style={{ flex: 1, padding: 16 }}>{children}</main>
+                <Footer />
             </div>
-
-            {/* begin:: Drawers */}
-            <ActivityDrawer />
-            <ExploreMain />
-            {/* end:: Drawers */}
-
-            {/* begin:: Modals */}
-            <Main />
-            <InviteUsers />
-            <UpgradePlan />
-            {/* end:: Modals */}
-
-            <MasterInit />
-            <ScrollTop />
-        </PageDataProvider>
+        </SharedMasterLayout>
     );
 };
 
-export { MasterLayout };
+export { LayoutContainer as MasterLayout };
+export default LayoutContainer;
