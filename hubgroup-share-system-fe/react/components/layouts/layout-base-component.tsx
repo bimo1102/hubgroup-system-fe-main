@@ -8,7 +8,7 @@ type Props = {
         className?: string;
         classNameLeftBar?: string;
         classNameToolbar?: string;
-        isSticky?: boolean
+        isSticky?: boolean;
     };
     bodyClass?: string;
     body: React.ReactNode;
@@ -31,23 +31,33 @@ const LayoutBaseComponent: React.FC<Props> = ({
                 className={classNames(
                     'card-header',
                     {
-                        'bg-white position-sticky top-0 z-index-3': header?.isSticky,
+                        'bg-white position-sticky top-0 z-index-3':
+                            header?.isSticky,
                     },
                     header.className
-                )}
-            >
-                <div className={classNames('card-title', header.classNameLeftBar)}>
+                )}>
+                <div
+                    className={classNames(
+                        'card-title',
+                        header.classNameLeftBar
+                    )}>
                     {header.title}
                 </div>
                 {header.toolbar && (
-                    <div className={classNames('card-toolbar', header.classNameToolbar)}>
+                    <div
+                        className={classNames(
+                            'card-toolbar',
+                            header.classNameToolbar
+                        )}>
                         {header.toolbar}
                     </div>
                 )}
             </div>
             <div className={classNames('card-body', bodyClass)}>{body}</div>
             {footer && (
-                <div className={classNames('card-footer', footerClass)}>{footer}</div>
+                <div className={classNames('card-footer', footerClass)}>
+                    {footer}
+                </div>
             )}
         </div>
     );
