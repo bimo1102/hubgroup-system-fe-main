@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { toAbsoluteUrl } from '../../../_metronic/helpers';
 
 export function Registration() {
     const [loading, setLoading] = useState(false);
@@ -29,7 +28,6 @@ export function Registration() {
 
             {/* begin::Action */}
             <button type="button" className="btn btn-light-primary fw-bolder w-100 mb-10">
-                <img alt="Logo" src={toAbsoluteUrl('/media/svg/brand-logos/google-icon.svg')} className="h-20px me-3" />
                 Sign in with Google
             </button>
             {/* end::Action */}

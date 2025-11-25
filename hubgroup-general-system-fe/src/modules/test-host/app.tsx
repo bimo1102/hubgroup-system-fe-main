@@ -14,13 +14,11 @@ const App: React.FC<Props> = (props): React.ReactNode => {
         <ReduxProvider>
             <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
                 <Suspense fallback={<LayoutSplashScreen />}>
-                    <BrowserRouter basename={props.basename}>
-                        <LayoutProvider>
-                            <AuthInit>
-                                <AppRoutes />
-                            </AuthInit>
-                        </LayoutProvider>
-                    </BrowserRouter>
+                    <LayoutProvider>
+                        <AuthInit>
+                            <AppRoutes />
+                        </AuthInit>
+                    </LayoutProvider>
                 </Suspense>
             </ContextProvider>
         </ReduxProvider>

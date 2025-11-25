@@ -11,7 +11,7 @@
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "strict": false,
-        "jsx": "react",
+        "jsx": "react-jsx",
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
