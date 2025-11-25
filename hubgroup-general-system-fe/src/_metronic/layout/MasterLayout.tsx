@@ -7,9 +7,11 @@ import { ScrollTop } from './components/ScrollTop';
 import { Content } from './components/Content';
 import { MasterInit } from './MasterInit';
 import { PageDataProvider } from './core';
-import { DrawerMessenger, ExploreMain, ActivityDrawer, Main, InviteUsers, UpgradePlan } from '../partials';
-
-const MasterLayout: React.FC = ({ children }) => {
+import { ExploreMain, ActivityDrawer, Main, InviteUsers, UpgradePlan } from '../partials';
+type Props = {
+    children: React.ReactNode;
+};
+const MasterLayout: React.FC<Props> = ({ children }) => {
     return (
         <PageDataProvider>
             <div className="page d-flex flex-row flex-column-fluid">
@@ -30,7 +32,6 @@ const MasterLayout: React.FC = ({ children }) => {
             {/* begin:: Drawers */}
             <ActivityDrawer />
             <ExploreMain />
-            <DrawerMessenger />
             {/* end:: Drawers */}
 
             {/* begin:: Modals */}

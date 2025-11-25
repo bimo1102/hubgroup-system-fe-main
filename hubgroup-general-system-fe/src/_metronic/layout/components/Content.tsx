@@ -4,7 +4,11 @@ import clsx from 'clsx';
 import { useLayout } from '../core';
 import { DrawerComponent } from '../assets/ts/components';
 
-const Content: React.FC = ({ children }) => {
+type Props = {
+    children: React.ReactNode;
+};
+
+const Content: React.FC<Props> = ({ children }) => {
     const { classes } = useLayout();
     const location = useLocation();
     useEffect(() => {

@@ -6,26 +6,23 @@ import { ErrorsPage } from '../modules/errors/ErrorsPage';
 import { privateRoutes } from './PrivateRoutes';
 
 export function AppRoutes() {
-    const isAuthorized = true;
+    const isAuthorized = true; // hoặc lấy từ Redux/AuthContext
 
     const router = createBrowserRouter([
-        // Redirect "/" → /dashboard
+        // Public Area
         {
-            path: '/',
-            element: isAuthorized ? <Navigate to="/dashboard" replace /> : <Navigate to="/auth/login" replace />,
+            path: '/auth/*',
+            element: !isAuthorized ? <AuthPage /> : <Navigate to="/dashboard" replace />,
         },
 
-        // Public
-        ...(!isAuthorized
-            ? [
-                  {
-                      path: '/auth/*',
-                      element: <AuthPage />,
-                  },
-              ]
-            : []),
+        // Private Area
+        {
+            path: '/',
+            element: isAuthorized ? <MasterLayout children={''} /> : <Navigate to="/auth/login" replace />,
+            children: privateRoutes,
+        },
 
-        // Error page
+        // Error pages
         {
             path: '/error/*',
             element: <ErrorsPage />,
@@ -37,16 +34,17 @@ export function AppRoutes() {
             element: <Logout />,
         },
 
-        // Private area
-        ...(isAuthorized
-            ? [
-                  {
-                      path: '/',
-                      element: <MasterLayout />,
-                      children: privateRoutes,
-                  },
-              ]
-            : []),
+        // Root redirect
+        {
+            index: true,
+            element: <Navigate to={isAuthorized ? '/dashboard' : '/auth/login'} replace />,
+        },
+
+        // Catch-all
+        {
+            path: '*',
+            element: <Navigate to="/error/404" replace />,
+        },
     ]);
 
     return <RouterProvider router={router} />;
