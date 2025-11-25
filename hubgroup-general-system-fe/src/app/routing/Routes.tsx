@@ -6,7 +6,7 @@ import { ErrorsPage } from 'src/app/modules/errors/ErrorsPage';
 import { privateRoutes } from './PrivateRoutes';
 
 export function AppRoutes() {
-    const isAuthorized = true; // hoặc lấy từ Redux/AuthContext
+    const isAuthorized = true;
 
     const router = createBrowserRouter([
         // Public Area

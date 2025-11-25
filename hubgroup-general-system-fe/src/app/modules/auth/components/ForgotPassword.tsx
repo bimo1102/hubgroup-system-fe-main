@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { requestPassword } from '../redux/AuthCRUD';
 
 const initialValues = {
     email: 'admin@demo.com',

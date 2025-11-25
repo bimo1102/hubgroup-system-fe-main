@@ -1,6 +1,6 @@
 import React from 'react';
 import { Root, createRoot } from 'react-dom/client';
-import App from './app/modules/app';
+import App from './App';
 
 const bootstrapApplication = () => {
     const element: HTMLDivElement = document.querySelector<HTMLDivElement>('#root');

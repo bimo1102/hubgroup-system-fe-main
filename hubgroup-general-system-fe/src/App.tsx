@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import ContextProvider from '@hubgroup-share-system-fe/react/providers/context';
 import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federation.type';
 import ReduxProvider from 'src/app/shareds/providers/redux';
-import AuthInit from 'src/app/modules/auth/redux/AuthInit';
 import { AppRoutes } from 'src/app/routing/Routes';
 import { LayoutProvider, LayoutSplashScreen } from 'src/app/layout/core';
 
@@ -14,9 +13,9 @@ const App: React.FC<Props> = (props): React.ReactNode => {
             <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
                 <LayoutProvider>
                     <Suspense fallback={<LayoutSplashScreen />}>
-                        <AuthInit>
-                            <AppRoutes />
-                        </AuthInit>
+                        {/* <AuthInit> */}
+                        <AppRoutes />
+                        {/* </AuthInit> */}
                     </Suspense>
                 </LayoutProvider>
             </ContextProvider>

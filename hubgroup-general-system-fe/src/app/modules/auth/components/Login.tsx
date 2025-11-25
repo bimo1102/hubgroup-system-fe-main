@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import * as auth from '../redux/AuthRedux';
-import { login } from '../redux/AuthCRUD';
-import { toAbsoluteUrl } from '../../../_metronic/helpers';
 
 const initialValues = {
     email: 'admin@demo.com',
