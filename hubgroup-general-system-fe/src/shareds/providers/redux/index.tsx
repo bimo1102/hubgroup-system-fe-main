@@ -10,6 +10,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         import('GeneralApplication/store')
             .then((mod) => {
+                console.log('Module loaded:', mod);
                 setStore(mod.store);
                 setLoading(false);
             })
@@ -20,7 +21,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     }, []);
 
     if (loading) return <div>Loading Redux Store...</div>;
-    if (!store) return <div>Failed to load Redux Store</div>;
+    if (!store) return <div>Failed to load Redux Store from host</div>;
 
     return <Provider store={store}>{children}</Provider>;
 };

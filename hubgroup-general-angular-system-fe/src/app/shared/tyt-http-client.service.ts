@@ -118,7 +118,6 @@ export class TytHttpClient implements OnDestroy {
         };
         if (headerObject != null) {
             for (let key of Object.keys(headerObject)) {
-                console.log(`key = ${key} - headerObject = ${headerObject[key]}`);
                 headerData[key] = headerObject[key];
             }
         }

@@ -114,10 +114,8 @@ export class ReactWrapperComponent extends ModuleBaseComponent implements OnInit
             data$: this.data$ as any,
             disableGlobalStylesInReactMFE: true,
         };
-        // console.log(propsData);
         try {
             this.isLoadingModule = true;
-            // console.log(requestModule);
             const module = await loadRemoteModule(requestModule);
             const reactElement = createElement(module.default, propsData);
             this.root = createRoot(this.elementRef.nativeElement);

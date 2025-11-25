@@ -8586,27 +8586,7 @@
             testY: newY
         };
         // useful debugging that I don't want to lose
-        // console.log(candidate.label);
-        // console.table([{
-        //   newY,
-        //   limitY: fittedBox.y,
-        //   boundsY: bounds.y,
-        //   boundsBottom: bounds.bottom,
-        //   newX,
-        //   limitX: fittedBox.x,
-        //   boundsX: bounds.x,
-        //   boundsRight: bounds.right,
-        //   candidateX: candidate.x,
-        //   candidateY: candidate.y,
-        //   width,
-        //   height,
-        //   isPartlyVisible
-        // }]);
-        // console.log(`maxWidth: ${maxWidth}, visibleW: ${visibleW}`);
-        // console.log(`maxHeight: ${maxHeight}, visibleH: ${visibleH}`);
-        // console.log('originInBounds:', originInBounds);
-        // console.log('sizeInBounds:', sizeInBounds);
-        // console.log(originInBounds && sizeInBounds ? 'fit' : 'nofit');
+        
         // Take special note that we don't use the futz values in the nofit case; whether this position is a good fit is separate
         // to ensuring that if we choose it the popup is actually on screen properly.
         return fits || candidate.alwaysFit ? adt$2.fit(reposition) : adt$2.nofit(reposition, visibleW, visibleH, isPartlyVisible);
@@ -8627,9 +8607,7 @@
             const next = layout(anchorBox, elementBox, bubbles, element, bounds);
             const attemptLayout = attempt(next, panelWidth, panelHeight, bounds);
             return attemptLayout.fold(constant$1(attemptLayout), (newReposition, newVisibleW, newVisibleH, newIsVisible) => {
-                // console.log(`label: ${next.label}, newVisibleW: ${newVisibleW}, visibleW: ${visibleW}, newVisibleH: ${newVisibleH}, visibleH: ${visibleH}, newIsVisible: ${newIsVisible}, isVisible: ${isVisible}`);
                 const improved = isVisible === newIsVisible ? (newVisibleH > visibleH || newVisibleW > visibleW) : (!isVisible && newIsVisible);
-                // console.log('improved? ', improved);
                 return improved ? attemptLayout : adt$2.nofit(reposition, visibleW, visibleH, isVisible);
             });
         };
@@ -26046,7 +26024,6 @@
         catch (e) {
             if (e instanceof SyntaxError) {
                 // eslint-disable-next-line no-console
-                console.log('Local storage ' + STORAGE_KEY + ' was not valid JSON', e);
                 return {};
             }
             throw e;

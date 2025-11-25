@@ -10,7 +10,7 @@ type Props = Pick<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
 const ComponentAuthWrapper: React.FC<Props> = ({
     children,
     permissionKey = '',
-    checkPermission
+    checkPermission,
 }): React.ReactNode => {
     const { currentUser } = useSelector(
         (state: { common: CommonReducerState }) =>
@@ -24,8 +24,9 @@ const ComponentAuthWrapper: React.FC<Props> = ({
         if (currentUser?.isAdministrator) {
             return true;
         }
-        const prefixPermissionFinalKey = permissionKey.startsWith('/') ? process.env.PREFIX_PERMISSION_KEY : (process.env.PREFIX_PERMISSION_KEY + '/');
-        // console.log({ prefixPermissionFinalKey, permissionKey, permissions: currentUser?.permissions });
+        const prefixPermissionFinalKey = permissionKey.startsWith('/')
+            ? process.env.PREFIX_PERMISSION_KEY
+            : process.env.PREFIX_PERMISSION_KEY + '/';
 
         return !!currentUser?.permissions?.includes(
             `${prefixPermissionFinalKey}${permissionKey}`.toLowerCase()

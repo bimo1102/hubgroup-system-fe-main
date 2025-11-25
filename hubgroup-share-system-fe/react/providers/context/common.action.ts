@@ -42,7 +42,6 @@ export const mergeLoadingActions = async <T = unknown>({
         }
         return response;
     } catch (error) {
-        console.log('MergeLoadingActions Request Error: ', error);
         dispatchRef(
             commonActions.onEndCall({
                 callType,
