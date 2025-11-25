@@ -1,22 +1,27 @@
-// import React, { Suspense } from 'react';
-// import { LayoutProvider, LayoutSplashScreen } from './_metronic/layout/core';
-// import AuthInit from './modules/auth/redux/AuthInit';
-// import { AppRoutes } from './routing/Routes';
+import React, { Suspense } from 'react';
+import ContextProvider from '@hubgroup-share-system-fe/react/providers/context';
+import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federation.type';
+import ReduxProvider from 'src/app/shareds/providers/redux';
+import AuthInit from 'src/app/modules/auth/redux/AuthInit';
+import { AppRoutes } from 'src/app/routing/Routes';
+import { LayoutProvider, LayoutSplashScreen } from 'src/app/layout/core';
 
-// type Props = {
-//     basename: string;
-// };
+type Props = Partial<FederationAppInitProps>;
 
-// const App: React.FC<Props> = ({ basename }) => {
-//     return (
-//         <Suspense fallback={<LayoutSplashScreen />}>
-//             <LayoutProvider>
-//                 <AuthInit>
-//                     <AppRoutes />
-//                 </AuthInit>
-//             </LayoutProvider>
-//         </Suspense>
-//     );
-// };
+const App: React.FC<Props> = (props): React.ReactNode => {
+    return (
+        <ReduxProvider>
+            <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
+                <LayoutProvider>
+                    <Suspense fallback={<LayoutSplashScreen />}>
+                        <AuthInit>
+                            <AppRoutes />
+                        </AuthInit>
+                    </Suspense>
+                </LayoutProvider>
+            </ContextProvider>
+        </ReduxProvider>
+    );
+};
 
-// export { App };
+export default App;
