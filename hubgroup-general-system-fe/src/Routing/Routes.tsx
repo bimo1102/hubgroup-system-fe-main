@@ -1,47 +1,53 @@
-/**
- * High level router.
- *
- * Note: It's recommended to compose related routes in internal router
- * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
- */
+import React from 'react';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { MasterLayout } from '../_metronic/layout/MasterLayout';
+import { Logout, AuthPage } from '../modules/auth';
+import { ErrorsPage } from '../modules/errors/ErrorsPage';
+import { privateRoutes } from './PrivateRoutes';
 
-import React, {FC} from 'react'
-import {Redirect, Switch, Route} from 'react-router-dom'
-import {shallowEqual, useSelector} from 'react-redux'
-import {MasterLayout} from '../../_metronic/layout/MasterLayout'
-import {PrivateRoutes} from './PrivateRoutes'
-import {Logout, AuthPage} from '../modules/auth'
-import {ErrorsPage} from '../modules/errors/ErrorsPage'
-import {RootState} from '../../setup'
+export function AppRoutes() {
+    const isAuthorized = true;
 
-const Routes: FC = () => {
-  const isAuthorized = useSelector<RootState>(({auth}) => auth.user, shallowEqual)
+    const router = createBrowserRouter([
+        // Redirect "/" → /dashboard
+        {
+            path: '/',
+            element: isAuthorized ? <Navigate to="/dashboard" replace /> : <Navigate to="/auth/login" replace />,
+        },
 
-  return (
-    <Switch>
-      {!isAuthorized ? (
-        /*Render auth page when user at `/auth` and not authorized.*/
-        <Route>
-          <AuthPage />
-        </Route>
-      ) : (
-        /*Otherwise redirect to root page (`/`)*/
-        <Redirect from='/auth' to='/' />
-      )}
+        // Public
+        ...(!isAuthorized
+            ? [
+                  {
+                      path: '/auth/*',
+                      element: <AuthPage />,
+                  },
+              ]
+            : []),
 
-      <Route path='/error' component={ErrorsPage} />
-      <Route path='/logout' component={Logout} />
+        // Error page
+        {
+            path: '/error/*',
+            element: <ErrorsPage />,
+        },
 
-      {!isAuthorized ? (
-        /*Redirect to `/auth` when user is not authorized*/
-        <Redirect to='/auth/login' />
-      ) : (
-        <MasterLayout>
-          <PrivateRoutes />
-        </MasterLayout>
-      )}
-    </Switch>
-  )
+        // Logout
+        {
+            path: '/logout',
+            element: <Logout />,
+        },
+
+        // Private area
+        ...(isAuthorized
+            ? [
+                  {
+                      path: '/',
+                      element: <MasterLayout />,
+                      children: privateRoutes,
+                  },
+              ]
+            : []),
+    ]);
+
+    return <RouterProvider router={router} />;
 }
-
-export {Routes}
