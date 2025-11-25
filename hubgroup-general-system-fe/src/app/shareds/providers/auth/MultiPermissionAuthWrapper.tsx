@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useAppSelector } from 'src/hooks/useStore';
+import { useAppSelector } from 'src/app/shareds/hooks/useStore';
 import { ECareTicketRoleEnum } from '@hubgroup-share-system-fe/enums/ecare-ticket.enum';
 
 type Props = Pick<React.HTMLAttributes<HTMLDivElement>, 'children'> & {

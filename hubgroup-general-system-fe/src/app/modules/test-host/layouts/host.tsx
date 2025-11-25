@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ButtonAdd from '@hubgroup-share-system-fe/react/components/common/buttons/button-add';
-import { useAppSelector, useAppDispatch } from 'src/hooks/useStore';
+import { useAppSelector, useAppDispatch } from 'src/app/shareds/hooks/useStore';
 import { commonActions } from '@hubgroup-share-system-fe/react/providers/context/common.reducer';
 import { additionalInformationGetById } from 'src/shareds/providers/redux/actions/test.action';
 // import { useDispatch } from 'react-redux';

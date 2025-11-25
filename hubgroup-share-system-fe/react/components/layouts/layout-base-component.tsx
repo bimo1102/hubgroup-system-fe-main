@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 import classNames from 'classnames';
 
 type Props = {
@@ -27,26 +26,28 @@ const LayoutBaseComponent: React.FC<Props> = ({
     className,
 }): React.ReactNode => {
     return (
-        <div className={classnames('card card-bordered', className)}>
-            <div className={classnames('card-header',{
-                'bg-white position-sticky top-0 z-index-3': header?.isSticky
-            }, header.className)}>
-                <div
-                    className={classnames(
-                        'card-title',
-                        header.classNameLeftBar
-                    )}>
+        <div className={classNames('card card-bordered', className)}>
+            <div
+                className={classNames(
+                    'card-header',
+                    {
+                        'bg-white position-sticky top-0 z-index-3': header?.isSticky,
+                    },
+                    header.className
+                )}
+            >
+                <div className={classNames('card-title', header.classNameLeftBar)}>
                     {header.title}
                 </div>
                 {header.toolbar && (
-                    <div className={classNames('card-toolbar',header.classNameToolbar)}>{header.toolbar}</div>
+                    <div className={classNames('card-toolbar', header.classNameToolbar)}>
+                        {header.toolbar}
+                    </div>
                 )}
             </div>
-            <div className={classnames('card-body', bodyClass)}>{body}</div>
+            <div className={classNames('card-body', bodyClass)}>{body}</div>
             {footer && (
-                <div className={classnames('card-footer', footerClass)}>
-                    {footer}
-                </div>
+                <div className={classNames('card-footer', footerClass)}>{footer}</div>
             )}
         </div>
     );
