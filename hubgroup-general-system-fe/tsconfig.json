@@ -24,10 +24,9 @@
         "target": "ES2015",
         "paths": {
             "@hubgroup-share-system-fe/*": ["../hubgroup-share-system-fe/*"],
-            "@shareds/*": ["./shareds/*"],
-            "@hooks/*": ["./hooks/*"],
-            "@services/*": ["./services/*"],
-            "@modules/*": ["./modules/*"]
+            "@shareds/*": ["./src/app/shareds/*"],
+            "@modules/*": ["./src/app/modules/*"],
+            "@routing/*": ["./src/app/routing/*"]
         }
     },
     "include": [

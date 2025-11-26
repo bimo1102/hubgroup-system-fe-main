@@ -2,7 +2,7 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import MasterLayout from 'src/app/layout/MasterLayout';
 import { Logout, AuthPage } from 'src/app/modules/auth';
-import { ErrorsPage } from 'src/app/modules/errors/ErrorsPage';
+import { ErrorsPage } from '@modules/errors/ErrorsPage';
 import { privateRoutes } from './PrivateRoutes';
 
 export function AppRoutes() {

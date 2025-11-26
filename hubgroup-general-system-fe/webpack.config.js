@@ -5,6 +5,7 @@ const ExternalRemotesPlugin = require('external-remotes-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const federationConfig = require('./federation.config');
+const WebpackShared = require('./../hubgroup-share-system-fe/tools/webpack.share');
 
 module.exports = {
     mode: 'development',
@@ -20,6 +21,12 @@ module.exports = {
 
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            '@hubgroup-share-system-fe': path.resolve(__dirname, '../hubgroup-share-system-fe'),
+            '@shareds': path.resolve(__dirname, './src/app/shareds'),
+            '@modules': path.resolve(__dirname, './src/app/modules'),
+            '@src': path.resolve(__dirname, 'src'),
+        },
     },
 
     // =============================
@@ -49,13 +56,18 @@ module.exports = {
             },
         ],
     },
-
+    snapshot: {
+        managedPaths: [
+            path.resolve(__dirname, 'node_modules'),
+            path.resolve(__dirname, '../hubgroup-share-system-fe/external-libs'),
+        ],
+    },
     // =============================
     // 🧱 PLUGINS
     // =============================
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html',
+            template: 'src/index.html',
         }),
 
         // 🧱 Module Federation HOST
@@ -63,7 +75,7 @@ module.exports = {
             name: federationConfig.moduleName,
             filename: 'remoteEntry.js',
             remotes: federationConfig.remotes,
-            shared: WebpackShared.CommonSharedLibraryAngular({}),
+            shared: WebpackShared.CommonSharedLibrary({}),
         }),
 
         // 🧱 Cho phép dynamic remote URL
