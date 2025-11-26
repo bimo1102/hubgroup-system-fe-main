@@ -9,6 +9,6 @@ module.exports = {
     },
     exposes: {
         './commonActions': '@hubgroup-share-system-fe/react/providers/context/common.reducer.tsx',
-        './store': './src/shareds/providers/redux/store.tsx',
+        './store': '@shareds/providers/redux/store.tsx',
     },
 };

@@ -10,7 +10,6 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         import('GeneralApplication/store')
             .then((mod) => {
-                console.log('Module loaded:', mod);
                 setStore(mod.store);
                 setLoading(false);
             })
