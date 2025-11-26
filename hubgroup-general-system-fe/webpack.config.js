@@ -46,7 +46,7 @@ const devServerConfigurations = () => {
             },
         ],
         hot: true,
-        historyApiFallback: false,
+        historyApiFallback: true,
         webSocketServer: 'ws',
         headers: {
             'Access-Control-Allow-Origin': '*',
@@ -117,7 +117,7 @@ const webpackConfigurations = (env, args) => {
         devServer: devServerConfigurations(),
         output: {
             path: path.resolve(__dirname, './dist'),
-            publicPath: 'auto',
+            publicPath: '/',
             filename: '[name].bundle.js',
             chunkFilename: 'js/chunks/[name].[contenthash:6].chunks.bundle.js',
             scriptType: 'text/javascript',

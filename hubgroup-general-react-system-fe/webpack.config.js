@@ -167,6 +167,13 @@ const webpackConfigurations = (env, args) => {
             chunkFilename: 'css/[name].chunks.bundle.css',
         }),
         new ExternalRemotesWebpackPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.MFE_CACHE_VERSION': JSON.stringify(Date.now()),
+            'process.env.BASE_API_URL': JSON.stringify(process.env.BASE_API_URL),
+            'process.env.PREFIX_CLASS': JSON.stringify(process.env.PREFIX_CLASS),
+            'process.env.MODULE_NAME': JSON.stringify(process.env.MODULE_NAME),
+            'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION),
+        }),
     ];
     if (!isDev) {
         mainPlugins = [
