@@ -4,7 +4,7 @@ import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federati
 // import ReduxProvider from 'src/app/shareds/providers/redux';
 import ReduxProvider from '@shareds/providers/redux';
 import { AppRoutes } from '@routing/Routes';
-import { LayoutProvider, LayoutSplashScreen } from 'src/app/layout/core';
+import { LayoutProvider, LayoutSplashScreen } from '@app/layout/core';
 
 type Props = Partial<FederationAppInitProps>;
 

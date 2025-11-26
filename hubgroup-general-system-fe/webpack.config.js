@@ -11,21 +11,20 @@ module.exports = {
     mode: 'development',
     name: 'hubgroup-general-system-fe',
     entry: './src/index.tsx',
-
     output: {
         publicPath: 'auto',
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         clean: true,
     },
-
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
         alias: {
             '@hubgroup-share-system-fe': path.resolve(__dirname, '../hubgroup-share-system-fe'),
             '@shareds': path.resolve(__dirname, './src/app/shareds'),
             '@modules': path.resolve(__dirname, './src/app/modules'),
-            '@src': path.resolve(__dirname, 'src'),
+            '@routing': path.resolve(__dirname, './src/app/routing'),
+            '@app': path.resolve(__dirname, './src/app'),
         },
     },
 
@@ -48,7 +47,11 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/,
+                // exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, 'src'), // host src
+                    path.resolve(__dirname, '../hubgroup-share-system-fe/react'), // share-system
+                ],
             },
             {
                 test: /\.css$/,

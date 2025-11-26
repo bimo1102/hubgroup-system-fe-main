@@ -3,7 +3,6 @@ import React from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Error500 } from './components/Error500';
 import { Error404 } from './components/Error404';
-import { toAbsoluteUrl } from '../../_metronic/helpers';
 
 const ErrorsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -13,13 +12,9 @@ const ErrorsPage: React.FC = () => {
 
     return (
         <div className="d-flex flex-column flex-root">
-            <div
-                className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
-                style={{ backgroundImage: `url('${toAbsoluteUrl('/media/illustrations/progress-hd.png')}')` }}>
+            <div className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed">
                 <div className="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
-                    <a href="/dashboard" className="mb-10 pt-lg-20">
-                        <img alt="Logo" src={toAbsoluteUrl('/media/logos/logo-1.svg')} className="h-50px mb-5" />
-                    </a>
+                    <a href="/dashboard" className="mb-10 pt-lg-20"></a>
 
                     <div className="pt-lg-10 mb-10">
                         <Routes>
@@ -48,10 +43,7 @@ const ErrorsPage: React.FC = () => {
                             bgi-size-contain
                             bgi-position-y-bottom
                             min-h-100px min-h-lg-350px
-                        "
-                        style={{
-                            backgroundImage: `url('${toAbsoluteUrl('/media/illustrations/sketchy-1/17.png')}')`,
-                        }}></div>
+                        "></div>
                 </div>
 
                 <div className="d-flex flex-center flex-column-auto p-10">

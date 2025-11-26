@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
-import FallbackView from 'src/app/partials/FallbackView';
+import FallbackView from '@app/partials/FallbackView';
 
 const ServiceCategoryModule = lazy(() => import('GeneralReactModule/service-category'));
 

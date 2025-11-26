@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import MasterLayout from 'src/app/layout/MasterLayout';
-import { Logout, AuthPage } from 'src/app/modules/auth';
+import MasterLayout from '@app/layout/MasterLayout';
+import { Logout, AuthPage } from '@app/modules/auth';
 import { ErrorsPage } from '@modules/errors/ErrorsPage';
 import { privateRoutes } from './PrivateRoutes';
 
