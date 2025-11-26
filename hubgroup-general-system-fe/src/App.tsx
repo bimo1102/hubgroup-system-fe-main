@@ -1,25 +1,27 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { LayoutProvider, LayoutSplashScreen } from './_metronic/layout/core';
-import AuthInit from './modules/auth/redux/AuthInit';
-import { AppRoutes } from './routing/Routes';
+import ContextProvider from '@hubgroup-share-system-fe/react/providers/context';
+import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federation.type';
+// import ReduxProvider from 'src/app/shareds/providers/redux';
+import ReduxProvider from '@shareds/providers/redux';
+import { AppRoutes } from '@routing/Routes';
+import { LayoutProvider, LayoutSplashScreen } from '@app/layout/core';
 
-type Props = {
-    basename: string;
-};
+type Props = Partial<FederationAppInitProps>;
 
-const App: React.FC<Props> = ({ basename }) => {
+const App: React.FC<Props> = (props): React.ReactNode => {
     return (
-        <Suspense fallback={<LayoutSplashScreen />}>
-            <BrowserRouter basename={basename}>
+        <ReduxProvider>
+            <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
                 <LayoutProvider>
-                    <AuthInit>
+                    <Suspense fallback={<LayoutSplashScreen />}>
+                        {/* <AuthInit> */}
                         <AppRoutes />
-                    </AuthInit>
+                        {/* </AuthInit> */}
+                    </Suspense>
                 </LayoutProvider>
-            </BrowserRouter>
-        </Suspense>
+            </ContextProvider>
+        </ReduxProvider>
     );
 };
 
-export { App };
+export default App;

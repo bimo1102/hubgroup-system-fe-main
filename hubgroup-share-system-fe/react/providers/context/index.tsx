@@ -1,5 +1,5 @@
-import { App as AntdAppProvider, message, Modal, type ThemeConfig } from 'antd';
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import { App as AntdAppProvider, message, Modal } from 'antd';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     FederationAppInitProps,
