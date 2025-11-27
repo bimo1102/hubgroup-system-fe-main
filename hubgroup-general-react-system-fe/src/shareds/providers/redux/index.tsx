@@ -1,17 +1,16 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
-
+import { store } from './store';
 type Props = { children: React.ReactNode };
 
 const ReduxProvider: React.FC<Props> = ({ children }) => {
-    const [store, setStore] = useState<any>(null);
+    const [hostStore, setHostStore] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         import('GeneralApplication/store')
             .then((mod) => {
-                console.log('Module loaded:', mod);
-                setStore(mod.store);
+                setHostStore(mod.store);
                 setLoading(false);
             })
             .catch((error) => {
@@ -21,9 +20,9 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     }, []);
 
     if (loading) return <div>Loading Redux Store...</div>;
-    if (!store) return <div>Failed to load Redux Store react remote app</div>;
+    if (!hostStore) return <div>Failed to load Redux Store react remote app</div>;
 
-    return <Provider store={store}>{children}</Provider>;
+    return <Provider store={hostStore ?? store}>{children}</Provider>;
 };
 
 export default ReduxProvider;

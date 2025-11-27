@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import ContextProvider from '@hubgroup-share-system-fe/react/providers/context';
 import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federation.type';
-// import ReduxProvider from 'src/app/shareds/providers/redux';
 import ReduxProvider from '@shareds/providers/redux';
 import { AppRoutes } from '@routing/Routes';
 import { LayoutProvider, LayoutSplashScreen } from '@app/layout/core';
