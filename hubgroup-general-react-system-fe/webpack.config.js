@@ -173,6 +173,7 @@ const webpackConfigurations = (env, args) => {
             'process.env.PREFIX_CLASS': JSON.stringify(process.env.PREFIX_CLASS),
             'process.env.MODULE_NAME': JSON.stringify(process.env.MODULE_NAME),
             'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION),
+            'process.env.STANDALONE': JSON.stringify(process.env.STANDALONE),
         }),
     ];
     if (!isDev) {
@@ -254,6 +255,12 @@ const webpackConfigurations = (env, args) => {
                 }),
             ],
             modules: [path.resolve(__dirname, 'node_modules')],
+            alias:
+                process.env.STANDALONE === 'true'
+                    ? {
+                          'GeneralApplication/store': path.resolve(__dirname, './src/mfe-stub/GeneralApplication.ts'),
+                      }
+                    : {},
         },
         module: {
             rules: [
