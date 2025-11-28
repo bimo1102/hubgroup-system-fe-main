@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = { value: 0 };
 
-const mySlice = createSlice({
-    name: 'myRemote',
+const myRemoteReducer = createSlice({
+    name: 'myRemoteReducer',
     initialState,
     reducers: {
         increment: (state) => {
@@ -16,5 +16,5 @@ const mySlice = createSlice({
     },
 });
 
-export const { increment, decrement } = mySlice.actions;
-export default mySlice.reducer;
+export const { increment, decrement } = myRemoteReducer.actions;
+export default myRemoteReducer.reducer;

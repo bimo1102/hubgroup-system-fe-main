@@ -36,7 +36,6 @@ const commonReducer = createSlice({
             prefixClass: null,
             appVersion: null,
         },
-        count: 0,
     } as CommonReducerState,
     reducers: {
         onStartCall(
@@ -124,9 +123,6 @@ const commonReducer = createSlice({
             if (Object.keys(state.federationResolver).length > 0) {
                 state.federationResolver.params = action.payload;
             }
-        },
-        setCount(state, action: PayloadAction<number>) {
-            state.count = action.payload;
         },
         initConfig(
             state,

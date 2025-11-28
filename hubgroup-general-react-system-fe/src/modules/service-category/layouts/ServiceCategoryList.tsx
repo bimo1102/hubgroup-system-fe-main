@@ -7,7 +7,7 @@ import ButtonAdd from '@hubgroup-share-system-fe/react/components/common/buttons
 import LayoutBaseComponent from '@hubgroup-share-system-fe/react/components/layouts/layout-base-component';
 import { useMasterLayout } from '@hubgroup-share-system-fe/react/components/layouts/master-layout';
 
-import { useAppDispatch, useAppSelector } from 'src/hooks/useStore';
+import { useAppDispatch, useAppSelector } from 'src/hooks/useAppStore';
 
 import ButtonSearch from '@hubgroup-share-system-fe/react/components/common/buttons/button-search';
 import { Option } from '@hubgroup-share-system-fe/types/common.type';
@@ -15,7 +15,8 @@ import { onShowTotalConfig, pageSizeOptions } from '@hubgroup-share-system-fe/ut
 import { SorterResult } from 'antd/es/table/interface';
 import { getloyaltyServiceCategoryColumns } from '../components/columns/loyalty-service-category';
 import AddOrChangeloyaltyServiceCategory from '../components/modal/add-or-change-loyalty-service-category';
-import { commonActions } from 'GeneralApplication/commonActions';
+import myReducer, { decrement, increment } from '@shareds/providers/redux/reducers/test.reducer';
+import {} from 'GeneralApplication/store';
 type Props = {};
 interface DataType {
     key: React.ReactNode;
@@ -27,8 +28,10 @@ const ServiceCategoryList: React.FC<Props> = () => {
     const [form] = Form.useForm<any>();
     const { getMessageByResponse, onShowMessageSuccess } = useMasterLayout();
     const { onShowDialogModalSmall } = useAppSelector((state) => state.common);
-    const { count } = useAppSelector((state) => state.common);
-    console.log(count);
+    const value = useAppSelector((state) => state?.myRemote?.value) ?? 0;
+    const a = useAppSelector((state) => state);
+    console.log(a);
+    console.log(value);
     const { actionLoading } = useAppSelector((state) => state.common.process);
     const federationResolver = useAppSelector((state) => state.common.federationResolver);
     const [option, setOption] = useState<Option[]>([]);
@@ -201,7 +204,7 @@ const ServiceCategoryList: React.FC<Props> = () => {
     };
 
     return (
-        <Spin spinning={!!actionLoading.loyaltyServiceCategoryList}>
+        <Spin spinning={false}>
             <div className="main-wrapper">
                 <LayoutBaseComponent
                     header={{
@@ -213,12 +216,8 @@ const ServiceCategoryList: React.FC<Props> = () => {
                                     onClick={() => onOpenAddOrChangeModal()}
                                     text="addNewServiceCategory"
                                 />
-                                <ButtonAdd onClick={() => dispatch(commonActions.setCount(count + 1))} text="plus" />
-                                <ButtonAdd
-                                    onClick={() => dispatch(commonActions.setCount(count - 1))}
-                                    text="minus"
-                                    keenIconName="minus"
-                                />
+                                <ButtonAdd onClick={() => dispatch(increment())} text="plus" />
+                                <ButtonAdd onClick={() => dispatch(decrement())} text="minus" keenIconName="minus" />
                             </Space>
                         ),
                     }}

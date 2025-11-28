@@ -1,12 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import commonReducer from '@hubgroup-share-system-fe/react/providers/context/common.reducer';
-import testReducer from './reducers/test.reducer';
+import myRemoteReducer from './reducers/test.reducer';
 const rootReducer = combineReducers({
     common: commonReducer,
-    test: testReducer,
+    myRemote: myRemoteReducer,
 });
 
-export const store = configureStore({
+export const remoteStore = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -16,5 +16,5 @@ export const store = configureStore({
         }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type Dispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof remoteStore.getState>;
+export type Dispatch = typeof remoteStore.dispatch;
