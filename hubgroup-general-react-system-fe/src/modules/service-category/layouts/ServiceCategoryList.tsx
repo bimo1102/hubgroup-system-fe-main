@@ -7,7 +7,7 @@ import ButtonAdd from '@hubgroup-share-system-fe/react/components/common/buttons
 import LayoutBaseComponent from '@hubgroup-share-system-fe/react/components/layouts/layout-base-component';
 import { useMasterLayout } from '@hubgroup-share-system-fe/react/components/layouts/master-layout';
 
-import { useAppDispatch, useAppSelector } from 'src/hooks/useAppStore';
+import { useAppDispatch, useAppSelector } from '@hooks/useAppStore';
 
 import ButtonSearch from '@hubgroup-share-system-fe/react/components/common/buttons/button-search';
 import { Option } from '@hubgroup-share-system-fe/types/common.type';
