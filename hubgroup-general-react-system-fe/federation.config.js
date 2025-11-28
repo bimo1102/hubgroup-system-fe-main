@@ -6,7 +6,11 @@ module.exports = {
     exposes: {
         './service-category': './src/modules/service-category/app.tsx',
     },
-    remotes: {
-        GeneralApplication: `GeneralApplication@${process.env.GeneralApplicationModuleUrl}/remoteEntry.js${params}`,
-    },
+
+    remotes:
+        process.env.STANDALONE === 'true'
+            ? {}
+            : {
+                  GeneralApplication: `GeneralApplication@${process.env.GeneralApplicationModuleUrl}/remoteEntry.js`,
+              },
 };

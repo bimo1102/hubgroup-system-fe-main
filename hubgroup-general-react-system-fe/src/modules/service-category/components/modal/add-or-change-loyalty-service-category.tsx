@@ -7,7 +7,7 @@ import ButtonSave from '@hubgroup-share-system-fe/react/components/common/button
 import LayoutBaseComponent from '@hubgroup-share-system-fe/react/components/layouts/layout-base-component';
 import { useMasterLayout } from '@hubgroup-share-system-fe/react/components/layouts/master-layout';
 
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useStore';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useAppStore';
 
 type Props = React.HTMLAttributes<HTMLDivElement> & {};
 

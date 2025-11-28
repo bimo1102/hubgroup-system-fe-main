@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { remoteStore } from './store';
 type Props = { children: React.ReactNode };
 
 const ReduxProvider: React.FC<Props> = ({ children }) => {
@@ -18,11 +18,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
                 setLoading(false);
             });
     }, []);
-
-    if (loading) return <div>Loading Redux Store...</div>;
-    if (!hostStore) return <div>Failed to load Redux Store react remote app</div>;
-
-    return <Provider store={hostStore ?? store}>{children}</Provider>;
+    return <Provider store={hostStore ?? remoteStore}>{children}</Provider>;
 };
 
 export default ReduxProvider;

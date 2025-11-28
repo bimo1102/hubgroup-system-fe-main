@@ -47,7 +47,6 @@ export type CommonReducerState = {
         prefixClass: string;
         appVersion: string;
     };
-    count: number;
 };
 
 export type CommonModalPropsConfiguration = {
