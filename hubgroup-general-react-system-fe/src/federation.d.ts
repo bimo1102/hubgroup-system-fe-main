@@ -1,14 +1,18 @@
 declare module 'GeneralApplication/store' {
-    export const store: any;
-    export type RootState = any;
-    export type Dispatch = any;
+    import { Store, Reducer, AnyAction } from '@reduxjs/toolkit';
+
+    export const store: Store<any>;
+    export type RootState = ReturnType<typeof store.getState>;
+    export type Dispatch = typeof store.dispatch;
+
+    export function injectReducer(key: string, reducer: Reducer<any, AnyAction>): boolean;
+    export function ejectReducer(key: string): boolean;
+    export function hasReducer(key: string): boolean;
+    export function getReducers(): Record<string, Reducer>;
 }
 
-// declare module 'GeneralApplication/commonActions' {
-//     export const commonActions: any;
-// }
-
 declare module 'GeneralReactModule/*' {
-    const Component: React.ComponentType<any>;
+    import { ComponentType } from 'react';
+    const Component: ComponentType<any>;
     export default Component;
 }

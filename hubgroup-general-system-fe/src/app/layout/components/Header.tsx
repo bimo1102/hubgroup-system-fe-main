@@ -1,10 +1,15 @@
 import React from 'react';
-
+import { useAppDispatch, useAppSelector } from '@shareds/hooks/useAppStore';
 type HeaderProps = {
     onToggleSidebar?: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
+    const dispatch = useAppDispatch();
+    const a = useAppSelector((state) => state);
+    console.log(a);
+    const value = useAppSelector((state) => state?.myRemote?.value) ?? 0;
+    console.log(value);
     return (
         <header
             style={{
@@ -68,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                         cursor: 'pointer',
                         color: '#595959',
                     }}>
-                    🔔
+                    🔔{value}
                 </button>
 
                 {/* User Menu */}

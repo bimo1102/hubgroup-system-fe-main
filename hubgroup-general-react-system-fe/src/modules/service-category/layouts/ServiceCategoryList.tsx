@@ -16,7 +16,7 @@ import { SorterResult } from 'antd/es/table/interface';
 import { getloyaltyServiceCategoryColumns } from '../components/columns/loyalty-service-category';
 import AddOrChangeloyaltyServiceCategory from '../components/modal/add-or-change-loyalty-service-category';
 import myReducer, { decrement, increment } from '@shareds/providers/redux/reducers/test.reducer';
-import {} from 'GeneralApplication/store';
+import { injectReducer } from 'GeneralApplication/store';
 type Props = {};
 interface DataType {
     key: React.ReactNode;
@@ -129,6 +129,10 @@ const ServiceCategoryList: React.FC<Props> = () => {
         ];
 
         setData(sampleData);
+    }, []);
+
+    useEffect(() => {
+        injectReducer('myRemote', myReducer);
     }, []);
 
     useEffect(() => {
