@@ -30,8 +30,8 @@ const ServiceCategoryList: React.FC<Props> = () => {
     const { onShowDialogModalSmall } = useAppSelector((state) => state.common);
     const value = useAppSelector((state) => state?.myRemote?.value) ?? 0;
     const a = useAppSelector((state) => state);
-    console.log(a);
-    console.log(value);
+    console.log('remote', a);
+    console.log('remote', value);
     const { actionLoading } = useAppSelector((state) => state.common.process);
     const federationResolver = useAppSelector((state) => state.common.federationResolver);
     const [option, setOption] = useState<Option[]>([]);

@@ -175,7 +175,7 @@ const webpackConfigurations = (env, args) => {
                 filename: 'remoteEntry.js',
                 remotes: federationConfig.remotes,
                 exposes: federationConfig.exposes,
-                shared: WebpackShared.CommonSharedLibrary({}),
+                shared: WebpackShared.CommonSharedLibrary({ eager: true }),
             }),
 
             // 🧱 Cho phép dynamic remote URL

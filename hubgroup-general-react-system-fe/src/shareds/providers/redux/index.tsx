@@ -1,6 +1,7 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { remoteStore } from './store';
+import { Spin } from 'antd';
 type Props = { children: React.ReactNode };
 
 const ReduxProvider: React.FC<Props> = ({ children }) => {
@@ -18,7 +19,14 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
                 setLoading(false);
             });
     }, []);
-    return <Provider store={hostStore ?? remoteStore}>{children}</Provider>;
+
+    return (
+        <Provider store={hostStore ?? remoteStore}>
+            <Spin spinning={loading} size="large" tip="Loading Host Redux Store...">
+                <>{children}</>
+            </Spin>
+        </Provider>
+    );
 };
 
 export default ReduxProvider;

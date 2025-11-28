@@ -132,7 +132,7 @@ const getExposeFederationModules = (isDev) => {
         filename: 'remoteEntry.js',
         name: federationConfigurations.moduleName,
         exposes: federationConfigurations.exposes,
-        shared: WebpackShared.CommonSharedLibrary({}),
+        shared: WebpackShared.CommonSharedLibrary({ eager: true }),
         remotes: federationConfigurations.remotes,
     });
 };
