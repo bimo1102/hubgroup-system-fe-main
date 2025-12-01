@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import FallbackView from '@app/partials/FallbackView';
+import { safeRemoteLoader } from '@shareds/utils/safeRemoteLoader';
 
-const ServiceCategoryModule = lazy(() => import('GeneralReactModule/service-category'));
-
+const ServiceCategoryModule = lazy(safeRemoteLoader(() => import('GeneralReactModule/service-category')));
 export const privateRoutes = [
     {
         path: 'dashboard',

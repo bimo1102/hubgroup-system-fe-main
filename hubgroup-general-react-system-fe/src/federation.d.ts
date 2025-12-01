@@ -2,6 +2,7 @@ declare module 'GeneralApplication/store' {
     import { Store, Reducer, AnyAction } from '@reduxjs/toolkit';
 
     export const store: Store<any>;
+    export const storeReady: Promise<any>;
     export type RootState = ReturnType<typeof store.getState>;
     export type Dispatch = typeof store.dispatch;
 
