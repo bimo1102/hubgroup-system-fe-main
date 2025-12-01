@@ -6,7 +6,6 @@ import { ErrorsPage } from '@modules/errors/ErrorsPage';
 import { privateRoutes } from './PrivateRoutes';
 
 export function AppRoutes() {
-    console.log('ahihi');
     const isAuthorized = true;
 
     const router = createBrowserRouter([

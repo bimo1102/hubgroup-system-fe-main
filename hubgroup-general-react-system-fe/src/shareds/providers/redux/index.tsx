@@ -12,7 +12,6 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         let cancelled = false;
 
-        // dynamic import host store nếu có
         import('GeneralApplication/store')
             .then(async (mod) => {
                 if (mod.storeReady) {

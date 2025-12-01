@@ -1,20 +1,11 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@shareds/hooks/useAppStore';
+import React from 'react';
+import { useAppSelector } from '@shareds/hooks/useAppStore';
 type HeaderProps = {
     onToggleSidebar?: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
-    const dispatch = useAppDispatch();
-    const a = useAppSelector((state) => state);
-    console.log('host', a);
     const value = useAppSelector((state) => state?.myRemote?.value) ?? 0;
-    console.log('host', value);
-    useEffect(() => {
-        // Log này phải chạy lại và hiển thị {myRemote: {value: NEW_VALUE}}
-        console.log('Header State Update:', a);
-        console.log('Header Value:', value);
-    }, [a, value]);
     return (
         <header
             style={{

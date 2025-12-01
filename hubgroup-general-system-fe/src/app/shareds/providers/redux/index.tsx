@@ -10,8 +10,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         import('GeneralApplication/store')
             .then(async ({ storeReady }) => {
-                const store = await storeReady; // đảm bảo store sẵn sàng
-                console.log('Loaded Host Store:', store);
+                const store = await storeReady;
                 setHostStore(store);
             })
             .catch((error) => {
