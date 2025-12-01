@@ -117,7 +117,7 @@ const webpackConfigurations = (env, args) => {
         devServer: devServerConfigurations(),
         output: {
             path: path.resolve(__dirname, './dist'),
-            publicPath: '/',
+            publicPath: 'auto',
             filename: '[name].bundle.js',
             chunkFilename: 'js/chunks/[name].[contenthash:6].chunks.bundle.js',
             scriptType: 'text/javascript',
@@ -175,7 +175,7 @@ const webpackConfigurations = (env, args) => {
                 filename: 'remoteEntry.js',
                 remotes: federationConfig.remotes,
                 exposes: federationConfig.exposes,
-                shared: WebpackShared.CommonSharedLibrary({}),
+                shared: WebpackShared.CommonSharedLibrary({ eager: true }),
             }),
 
             // 🧱 Cho phép dynamic remote URL

@@ -132,7 +132,7 @@ const getExposeFederationModules = (isDev) => {
         filename: 'remoteEntry.js',
         name: federationConfigurations.moduleName,
         exposes: federationConfigurations.exposes,
-        shared: WebpackShared.CommonSharedLibrary({}),
+        shared: WebpackShared.CommonSharedLibrary({ eager: true }),
         remotes: federationConfigurations.remotes,
     });
 };
@@ -197,7 +197,7 @@ const webpackConfigurations = (env, args) => {
     }
     return {
         // context: path.resolve(__dirname,'../'),
-        name: 'tyt-reception-system-fe',
+        name: 'hubgroup-general-react-system-fe',
         devtool: isDev ? 'cheap-source-map' : false,
         target: 'web',
         mode: args.mode,
@@ -206,8 +206,8 @@ const webpackConfigurations = (env, args) => {
         output: {
             path: path.resolve(__dirname, './dist'),
             publicPath: 'auto',
-            filename: '[name].bundle.js',
-            chunkFilename: 'js/chunks/[name].[contenthash:6].chunks.bundle.js',
+            filename: 'js/[name].js',
+            chunkFilename: 'js/chunks/[id].[contenthash].js',
             scriptType: 'text/javascript',
             environment: {
                 asyncFunction: false,

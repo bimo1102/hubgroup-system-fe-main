@@ -1,11 +1,8 @@
 declare module 'GeneralApplication/store' {
     export const store: any;
+    export const storeReady: Promise<any>;
     export type RootState = any;
     export type Dispatch = any;
-}
-
-declare module 'GeneralApplication/commonActions' {
-    export const commonActions: any;
 }
 
 declare module 'GeneralReactModule/*' {

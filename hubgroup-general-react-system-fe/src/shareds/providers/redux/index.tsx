@@ -1,24 +1,46 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import { Spin } from 'antd';
 import { remoteStore } from './store';
+
 type Props = { children: React.ReactNode };
 
 const ReduxProvider: React.FC<Props> = ({ children }) => {
-    const [hostStore, setHostStore] = useState<any>(null);
+    const [store, setStore] = useState(remoteStore);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let cancelled = false;
+
+        // dynamic import host store nếu có
         import('GeneralApplication/store')
-            .then((mod) => {
-                setHostStore(mod.store);
-                setLoading(false);
+            .then(async (mod) => {
+                if (mod.storeReady) {
+                    const hostStore = await mod.storeReady;
+                    if (!cancelled) {
+                        setStore(hostStore);
+                    }
+                } else if (mod.store) {
+                    if (!cancelled) setStore(mod.store);
+                }
             })
-            .catch((error) => {
-                console.error('Failed to load store from host:', error);
-                setLoading(false);
+            .catch((err) => {
+                console.warn('Host store not found, using local store', err);
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
             });
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
-    return <Provider store={hostStore ?? remoteStore}>{children}</Provider>;
+
+    return (
+        <Spin spinning={loading} size="large" style={{ width: '100%', height: '100%' }}>
+            <Provider store={store}>{children}</Provider>
+        </Spin>
+    );
 };
 
 export default ReduxProvider;

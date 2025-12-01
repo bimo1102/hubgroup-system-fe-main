@@ -7,7 +7,7 @@ import ButtonAdd from '@hubgroup-share-system-fe/react/components/common/buttons
 import LayoutBaseComponent from '@hubgroup-share-system-fe/react/components/layouts/layout-base-component';
 import { useMasterLayout } from '@hubgroup-share-system-fe/react/components/layouts/master-layout';
 
-import { useAppDispatch, useAppSelector } from 'src/hooks/useAppStore';
+import { useAppDispatch, useAppSelector } from '@hooks/useAppStore';
 
 import ButtonSearch from '@hubgroup-share-system-fe/react/components/common/buttons/button-search';
 import { Option } from '@hubgroup-share-system-fe/types/common.type';
@@ -16,7 +16,7 @@ import { SorterResult } from 'antd/es/table/interface';
 import { getloyaltyServiceCategoryColumns } from '../components/columns/loyalty-service-category';
 import AddOrChangeloyaltyServiceCategory from '../components/modal/add-or-change-loyalty-service-category';
 import myReducer, { decrement, increment } from '@shareds/providers/redux/reducers/test.reducer';
-import {} from 'GeneralApplication/store';
+import { injectReducer } from 'GeneralApplication/store';
 type Props = {};
 interface DataType {
     key: React.ReactNode;
@@ -30,8 +30,8 @@ const ServiceCategoryList: React.FC<Props> = () => {
     const { onShowDialogModalSmall } = useAppSelector((state) => state.common);
     const value = useAppSelector((state) => state?.myRemote?.value) ?? 0;
     const a = useAppSelector((state) => state);
-    console.log(a);
-    console.log(value);
+    console.log('remote', a);
+    console.log('remote', value);
     const { actionLoading } = useAppSelector((state) => state.common.process);
     const federationResolver = useAppSelector((state) => state.common.federationResolver);
     const [option, setOption] = useState<Option[]>([]);
@@ -129,6 +129,10 @@ const ServiceCategoryList: React.FC<Props> = () => {
         ];
 
         setData(sampleData);
+    }, []);
+
+    useEffect(() => {
+        injectReducer('myRemote', myReducer);
     }, []);
 
     useEffect(() => {

@@ -25,7 +25,7 @@ const store = configureStore({
             serializableCheck: false,
         }),
 });
-
+export const storeReady = Promise.resolve(store);
 // Type exports for use throughout app
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -39,9 +39,6 @@ export type AppDispatch = typeof store.dispatch;
  * ```tsx
  * import { injectReducer } from 'src/app/shareds/providers/redux/store';
  * import userReducer from './slices/userSlice';
- *
- * injectReducer('user', userReducer);
- * store.replaceReducer(reducerManager.reduce);
  * ```
  */
 export function injectReducer<S = any, A extends Action = Action>(key: string, reducer: Reducer<S, A>): boolean {

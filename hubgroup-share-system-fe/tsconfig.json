@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
         "module": "ESNext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowJs": true,
         "sourceMap": false,
         "outDir": "./build",
-        "baseUrl": "./",
+        // "baseUrl": "./",
         "checkJs": false,
         "allowUnusedLabels": true,
         "allowSyntheticDefaultImports": true,
@@ -25,7 +25,12 @@
         "resolveJsonModule": true,
         "strictNullChecks": false,
         "paths": {
-            "types/*": ["./types/*"]
+            "types/*": ["./types/*"],
+            "@hubgroup-share-system-fe/*": ["../hubgroup-share-system-fe/*"],
+            "@shareds/*": ["./src/shareds/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@services/*": ["./src/services/*"],
+            "@modules/*": ["./src/modules/*"]
         },
         "types": [
             "node"
