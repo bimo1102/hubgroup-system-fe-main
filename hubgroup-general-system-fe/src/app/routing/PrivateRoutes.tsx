@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import FallbackView from '@app/partials/FallbackView';
-import { safeRemoteLoader } from '@shareds/utils/safeRemoteLoader';
+import { safeRemoteLoader } from '@hubgroup-share-system-fe/utils/safeRemoteLoader';
 
 const ServiceCategoryModule = lazy(safeRemoteLoader(() => import('GeneralReactModule/service-category')));
 export const privateRoutes = [

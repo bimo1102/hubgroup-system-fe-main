@@ -7,7 +7,9 @@ export function safeRemoteLoader<T>(loader: () => Promise<T>) {
         } catch (err) {
             console.error('Cannot load remote module:', err);
             return {
-                default: () => <div>Module is unavailable (remote offline)</div>,
+                default: () => (
+                    <div>Module is unavailable (remote offline)</div>
+                ),
             } as T;
         }
     };
