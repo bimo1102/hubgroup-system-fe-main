@@ -27,7 +27,8 @@
             "@modules/*": ["./src/app/modules/*"],
             "@routing/*": ["./src/app/routing/*"],
             "@app/*": ["./src/app/*"],
-            "src/*": ["./src/*"]
+            "src/*": ["./src/*"],
+            "@_metronic/*": ["./src/_metronic/*"]
         }
     },
     "include": [

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 type LayoutProviderProps = { children: React.ReactNode };
 
-export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+export const LayoutProvider: FC<LayoutProviderProps> = ({ children }) => {
     return <>{children}</>;
 };
 
-export const LayoutSplashScreen: React.FC = () => {
+export const LayoutSplashScreen: FC = () => {
     return (
         <div
             style={{

@@ -249,6 +249,7 @@ const webpackConfigurations = (env, args) => {
                 '@modules': path.resolve(__dirname, './src/app/modules'),
                 '@routing': path.resolve(__dirname, './src/app/routing'),
                 '@app': path.resolve(__dirname, './src/app'),
+                '@_metronic': ['./src/_metronic'],
             },
             modules: [path.resolve(__dirname, 'node_modules')],
         },
