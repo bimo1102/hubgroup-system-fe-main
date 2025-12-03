@@ -1,8 +1,9 @@
 {
-    "name": "ReceptionModule",
+    "name": "general-system-module",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
+    "private": true,
     "devDependencies": {
         "@babel/core": "^7.26.10",
         "@babel/plugin-transform-runtime": "^7.26.10",
