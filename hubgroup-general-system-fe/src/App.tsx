@@ -4,32 +4,19 @@ import { FederationAppInitProps } from '@hubgroup-share-system-fe/types/federati
 import ReduxProvider from '@shareds/providers/redux';
 import { AppRoutes } from '@routing/Routes';
 import { LayoutProvider, LayoutSplashScreen } from '@app/layout/core';
-import { ThemeModeProvider } from '@_metronic/partials';
 
 type Props = Partial<FederationAppInitProps>;
 
 const App: React.FC<Props> = (props): React.ReactNode => {
     return (
-        // <ReduxProvider>
-        //     <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
-        //         <LayoutProvider>
-        //             <Suspense fallback={<LayoutSplashScreen />}>
-        //                 {/* <AuthInit> */}
-        //                 <AppRoutes />
-        //                 {/* </AuthInit> */}
-        //             </Suspense>
-        //         </LayoutProvider>
-        //     </ContextProvider>
-        // </ReduxProvider>
         <ReduxProvider>
             <ContextProvider prefixClass={process.env.PREFIX_CLASS} moduleName={process.env.MODULE_NAME} {...props}>
                 <LayoutProvider>
-                    <ThemeModeProvider>
-                        <AuthInit>
-                            <Outlet />
-                            <MasterInit />
-                        </AuthInit>
-                    </ThemeModeProvider>
+                    <Suspense fallback={<LayoutSplashScreen />}>
+                        {/* <AuthInit> */}
+                        <AppRoutes />
+                        {/* </AuthInit> */}
+                    </Suspense>
                 </LayoutProvider>
             </ContextProvider>
         </ReduxProvider>
