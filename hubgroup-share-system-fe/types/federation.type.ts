@@ -1,8 +1,6 @@
 import StatusResponseEnum from '../enums/status-response.enum';
 import { DataObservableTypeEnum } from '../enums/federation.enum';
 import { UserInfoResponse } from './account.type';
-import { ImageResponseType } from './file-manager.type';
-import { FileManagerSettingParams } from './file.type';
 import { SignalStatusEnum } from '../enums/signal-message.enum';
 import { SignalMessageResponse } from './signal-message.type';
 import { ThemeTypeConfigEnum } from '../enums/themes.enum';
@@ -32,10 +30,6 @@ export type FederationAppInitProps = {
     updateResponseStatus?: (
         status: StatusResponseEnum,
         callBackFunc?: Function
-    ) => void;
-    showFileManagerDialog: (
-        data: Partial<FileManagerSettingParams>,
-        callback?: (files?: ImageResponseType[]) => void
     ) => void;
     setLoading: (isMultipleProcess?: boolean) => void;
     unSetLoading: () => void;
